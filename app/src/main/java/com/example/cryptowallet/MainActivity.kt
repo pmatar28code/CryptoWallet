@@ -8,7 +8,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.cryptowallet.database.CoinBaseDatabase
+import com.example.cryptowallet.database.JustCode
 import com.example.cryptowallet.databinding.ActivityMainBinding
+import com.example.cryptowallet.network.apis.CoinBaseClient
+import com.example.cryptowallet.network.apis.RevokeTokenApi
+import com.example.cryptowallet.network.networkcalls.AddressNetwork
+import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
+import com.example.cryptowallet.network.networkcalls.UserNetwork
+import com.example.cryptowallet.network.classesapi.AccessToken
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import retrofit2.Call
@@ -23,10 +31,10 @@ class MainActivity : AppCompatActivity() {
         const val MY_CLIENT_ID = "e4faf6ec45843a2f1e8a42c6242f3d8e82ce5603d3ee9c86c85be29a6361104f"
         const val CLIENT_SECRET = "84e2a6a63dc56f5d5be617f77cf71c0c4069a7e3a49cb9e2ce7e5d2bddea007f"
         const val MY_REDIRECT_URI = "cryptowallet://callback"
-        lateinit var ROOM_DATABASE:CoinBaseDatabase
+        lateinit var ROOM_DATABASE: CoinBaseDatabase
     }
     var accessToken:AccessTokenDCLass?=null
-    var database:CoinBaseDatabase ?= null
+    var database: CoinBaseDatabase?= null
     var token:String ?= ""
     var testingCodeList:List<JustCode>?=null
     var testingTokenList:List<AccessTokenDCLass>?=null

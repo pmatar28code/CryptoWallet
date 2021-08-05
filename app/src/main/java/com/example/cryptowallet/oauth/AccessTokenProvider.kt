@@ -1,4 +1,6 @@
-package com.example.cryptowallet
+package com.example.cryptowallet.oauth
+
+import com.example.cryptowallet.AccessTokenDCLass
 
 interface AccessTokenProvider {
     /**

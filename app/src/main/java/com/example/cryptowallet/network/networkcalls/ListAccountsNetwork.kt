@@ -1,6 +1,11 @@
-package com.example.cryptowallet
+package com.example.cryptowallet.network.networkcalls
 
 import android.util.Log
+import com.example.cryptowallet.network.classesapi.ListAccounts
+import com.example.cryptowallet.network.apis.ListAccountsApi
+import com.example.cryptowallet.oauth.AccessTokenProviderImp
+import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
+import com.example.cryptowallet.oauth.TokenRefreshAuthenticatorCoinBase
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback

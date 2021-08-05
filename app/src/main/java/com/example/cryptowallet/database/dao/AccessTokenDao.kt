@@ -1,4 +1,4 @@
-package com.example.cryptowallet.dao
+package com.example.cryptowallet.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

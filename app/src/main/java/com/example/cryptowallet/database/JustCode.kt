@@ -1,4 +1,4 @@
-package com.example.cryptowallet
+package com.example.cryptowallet.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
