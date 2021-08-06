@@ -1,6 +1,9 @@
-package com.example.cryptowallet
+package com.example.cryptowallet.oauth
 
 import android.util.Log
+import com.example.cryptowallet.*
+import com.example.cryptowallet.network.apis.RefreshTokenApi
+import com.example.cryptowallet.network.classesapi.AccessToken
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import retrofit2.Call
@@ -9,9 +12,9 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class AccessTokenProviderImp :AccessTokenProvider {
+class AccessTokenProviderImp : AccessTokenProvider {
     var token: AccessTokenDCLass?=null
-    var newAccessToken:AccessTokenDCLass?=null
+    var newAccessToken: AccessTokenDCLass?=null
 
     override fun token(): AccessTokenDCLass? {
         runBlocking {
@@ -89,7 +92,7 @@ class AccessTokenProviderImp :AccessTokenProvider {
     }
 
     private suspend fun deleteActualToken() {
-        var actualToken:AccessTokenDCLass ?=null
+        var actualToken: AccessTokenDCLass?=null
             getTokenDatabase {
                 actualToken = it
             }
@@ -98,7 +101,7 @@ class AccessTokenProviderImp :AccessTokenProvider {
             database.AccessTokenDao().removeToken(actualToken?.key)
     }
 
-    private suspend fun addNewToken(newToken:AccessTokenDCLass){
+    private suspend fun addNewToken(newToken: AccessTokenDCLass){
         val database = MainActivity.ROOM_DATABASE
 
         database.AccessTokenDao().addToken(newToken)

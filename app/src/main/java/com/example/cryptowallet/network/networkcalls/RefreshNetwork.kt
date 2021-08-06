@@ -1,6 +1,9 @@
-package com.example.cryptowallet
+package com.example.cryptowallet.network.networkcalls
 
 import android.util.Log
+import com.example.cryptowallet.network.classesapi.AccessToken
+import com.example.cryptowallet.network.apis.RefreshTokenApi
+import com.example.cryptowallet.oauth.AccessTokenProviderImp
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,7 +21,7 @@ object RefreshNetwork {
         //.addNetworkInterceptor(TokenAuthorizationInterceptor(accessTokenProvider))
        // .authenticator(TokenRefreshAuthenticator(accessTokenProvider))
         //.build()
-    private val refreshTokenApi:RefreshTokenApi
+    private val refreshTokenApi: RefreshTokenApi
     get(){
         return Retrofit.Builder()
             .baseUrl("https://api.coinbase.com/")
@@ -62,6 +65,8 @@ object RefreshNetwork {
     fun refreshToken (onSuccess: (AccessToken) -> Unit){
         val refreshToken = AccessTokenProviderImp().token()?.refresh_token?:""
         Log.e("REFRESH NETWORK REFRESH TOKEN FROM Actual TOKEN:", refreshToken)
-        refreshTokenApi.refreshToken("refresh_token", MY_CLIENT_ID, CLIENT_SECRET,refreshToken).enqueue(RefreshCallBack(onSuccess))
+        refreshTokenApi.refreshToken("refresh_token", MY_CLIENT_ID, CLIENT_SECRET,refreshToken).enqueue(
+            RefreshCallBack(onSuccess)
+        )
     }
 }

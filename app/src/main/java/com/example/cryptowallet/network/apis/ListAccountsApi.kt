@@ -1,5 +1,6 @@
-package com.example.cryptowallet
+package com.example.cryptowallet.network.apis
 
+import com.example.cryptowallet.network.classesapi.ListAccounts
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header

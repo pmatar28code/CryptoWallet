@@ -1,6 +1,8 @@
-package com.example.cryptowallet
+package com.example.cryptowallet.oauth
 
 import android.util.Log
+import com.example.cryptowallet.AccessTokenDCLass
+import com.example.cryptowallet.MainActivity
 import okhttp3.*
 
 class TokenRefreshAuthenticatorCoinBase(

@@ -1,14 +1,15 @@
-package com.example.cryptowallet
+package com.example.cryptowallet.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.cryptowallet.dao.AccessTokenDao
-import com.example.cryptowallet.dao.JustCodeDao
+import com.example.cryptowallet.AccessTokenDCLass
+import com.example.cryptowallet.database.dao.AccessTokenDao
+import com.example.cryptowallet.database.dao.JustCodeDao
 
 @Database(
-    entities=[AccessTokenDCLass::class,JustCode::class],
+    entities=[AccessTokenDCLass::class, JustCode::class],
     version = 2
 )
 abstract class CoinBaseDatabase: RoomDatabase(){

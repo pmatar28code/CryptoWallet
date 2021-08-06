@@ -1,6 +1,11 @@
-package com.example.cryptowallet
+package com.example.cryptowallet.network.networkcalls
 
 import android.util.Log
+import com.example.cryptowallet.network.apis.CoinBaseClientApiCalls
+import com.example.cryptowallet.network.classesapi.UserData
+import com.example.cryptowallet.oauth.AccessTokenProviderImp
+import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
+import com.example.cryptowallet.oauth.TokenRefreshAuthenticatorCoinBase
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,7 +22,7 @@ object UserNetwork {
         .addNetworkInterceptor(accessTokenInterceptor)
         .authenticator(TokenRefreshAuthenticatorCoinBase(accessTokenProvider))
         .build()
-    private val coinBaseClientApiCalls:CoinBaseClientApiCalls
+    private val coinBaseClientApiCalls: CoinBaseClientApiCalls
         get(){
             return Retrofit.Builder()
                 .baseUrl("https://api.coinbase.com/")
@@ -32,15 +37,15 @@ object UserNetwork {
         override fun onResponse(call: Call<UserData>, response: Response<UserData>) {
             Log.e("ON Response User:"," ${response.body()?.data?.name} ok? ${response.isSuccessful}")
             val newClient = UserData.Data(
-                name = response.body()?.data?.name?:"",
-                avatarUrl = response.body()?.data?.avatarUrl?:"",
-                id = response.body()?.data?.id?:"",
-                profileBio = response.body()?.data?.profileBio?:"",
-                profileLocation = response.body()?.data?.profileLocation?:"",
-                profileUrl = response.body()?.data?.profileUrl ?:"",
-                resource = response.body()?.data?.resource?:"",
-                resourcePath = response.body()?.data?.resourcePath?:"",
-                username = response.body()?.data?.username?:""
+                name = response.body()?.data?.name ?: "",
+                avatarUrl = response.body()?.data?.avatarUrl ?: "",
+                id = response.body()?.data?.id ?: "",
+                profileBio = response.body()?.data?.profileBio ?: "",
+                profileLocation = response.body()?.data?.profileLocation ?: "",
+                profileUrl = response.body()?.data?.profileUrl ?: "",
+                resource = response.body()?.data?.resource ?: "",
+                resourcePath = response.body()?.data?.resourcePath ?: "",
+                username = response.body()?.data?.username ?: ""
             )
             Log.e("RESPONDED WITH:","Client: ${newClient.name},${newClient.id} ${response.isSuccessful}")
             onSuccess(newClient)

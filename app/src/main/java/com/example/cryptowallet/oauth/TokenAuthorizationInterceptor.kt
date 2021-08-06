@@ -1,4 +1,4 @@
-package com.example.cryptowallet
+package com.example.cryptowallet.oauth
 
 import android.util.Log
 import okhttp3.Interceptor

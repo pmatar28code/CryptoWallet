@@ -1,9 +1,9 @@
-package com.example.cryptowallet.dao
+package com.example.cryptowallet.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.cryptowallet.JustCode
+import com.example.cryptowallet.database.JustCode
 
 @Dao
 interface JustCodeDao {
