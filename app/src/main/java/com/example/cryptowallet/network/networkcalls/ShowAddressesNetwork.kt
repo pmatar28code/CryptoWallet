@@ -29,7 +29,7 @@ object ShowAddressesNetwork {
                 .create(ShowAddressesApi::class.java)
         }
 
-    private class AddressCallBack(
+    private class ShowAddressesCallBack(
         private val onSuccess: (List<ShowAddresses.Data>) -> Unit
     ) : Callback<ShowAddresses> {
         override fun onResponse(call: Call<ShowAddresses>, response: Response<ShowAddresses>) {
@@ -66,6 +66,6 @@ object ShowAddressesNetwork {
     fun getAddresses(onSuccess: (List<ShowAddresses.Data>) -> Unit) {
         val token = AccessTokenProviderImp().token()?.access_token ?: ""
         Log.e("On Actual ADDRESS NETWORK TOKEN:", token)
-        showAddressesApi.getAddress("Bearer $token").enqueue(AddressCallBack(onSuccess))
+        showAddressesApi.getAddress("Bearer $token").enqueue(ShowAddressesCallBack(onSuccess))
     }
 }

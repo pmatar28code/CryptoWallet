@@ -13,11 +13,8 @@ import com.example.cryptowallet.database.JustCode
 import com.example.cryptowallet.databinding.ActivityMainBinding
 import com.example.cryptowallet.network.apis.CoinBaseClient
 import com.example.cryptowallet.network.apis.RevokeTokenApi
-import com.example.cryptowallet.network.networkcalls.AddressNetwork
-import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
-import com.example.cryptowallet.network.networkcalls.UserNetwork
 import com.example.cryptowallet.network.classesapi.AccessToken
-import com.example.cryptowallet.network.networkcalls.ShowAddressesNetwork
+import com.example.cryptowallet.network.networkcalls.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import retrofit2.Call
@@ -29,8 +26,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        const val MY_CLIENT_ID = "e4faf6ec45843a2f1e8a42c6242f3d8e82ce5603d3ee9c86c85be29a6361104f"
-        const val CLIENT_SECRET = "84e2a6a63dc56f5d5be617f77cf71c0c4069a7e3a49cb9e2ce7e5d2bddea007f"
+        const val MY_CLIENT_ID = "2bc5e4b5b4446ad9b730b8561f7aeff463e648cd9146ffb6b5dd885164c300f1"
+        const val CLIENT_SECRET = "411f668a4b106cde166902e8b73c02d7938a501b6e90f6b8ddd2809c4250cba7"
         const val MY_REDIRECT_URI = "cryptowallet://callback"
         lateinit var ROOM_DATABASE: CoinBaseDatabase
     }
@@ -60,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         if (testingCodeList!!.isEmpty()) {
             val intent = Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=e4faf6ec45843a2f1e8a42c6242f3d8e82ce5603d3ee9c86c85be29a6361104f&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread")
+                Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate")
             )
             startActivity(intent)
             Log.e("FIRST Run", "getting the code")
@@ -81,6 +78,9 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+            //UpdateAccountNetwork.updateAccount {
+              //  Log.e("UPDATE ACCOUNT MAIN BEFORE LIST ACCOUNTS:","name: ${it.name}, ${it.createdAt}, currency: ${it.currency}, id: ${it.id} ")
+            //}
             ListAccountsNetwork.getAccounts {
                 Repository.accountId = it[0].id?:""
                 runBlocking {
@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            AddressNetwork.getAddresses {
+            /*AddressNetwork.getAddresses {
                 runBlocking {
                     var job: Job = launch(IO) {
                         var token = database?.AccessTokenDao()?.getAllTokens()?.get(0)
@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
                 }
-            }
+            }*/
 
             ShowAddressesNetwork.getAddresses {
                 Log.e("Showing Addresses = ","$it")

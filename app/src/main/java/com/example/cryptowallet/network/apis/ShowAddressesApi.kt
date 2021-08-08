@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 
 interface ShowAddressesApi {
-    @GET("v2/accounts/0b125b64-619e-5cf8-a719-963534b52bca/addresses")
+    @GET("v2/accounts/ef804b1f-c74d-5679-bda7-9b2a25863f22/addresses")
     fun getAddress(@Header("Authorization") token:String
     ): Call<ShowAddresses>
 }

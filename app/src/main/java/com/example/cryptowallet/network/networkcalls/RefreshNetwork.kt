@@ -12,8 +12,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 object RefreshNetwork {
-    const val MY_CLIENT_ID = "e4faf6ec45843a2f1e8a42c6242f3d8e82ce5603d3ee9c86c85be29a6361104f"
-    const val CLIENT_SECRET = "84e2a6a63dc56f5d5be617f77cf71c0c4069a7e3a49cb9e2ce7e5d2bddea007f"
+    const val MY_CLIENT_ID = "2bc5e4b5b4446ad9b730b8561f7aeff463e648cd9146ffb6b5dd885164c300f1"
+    const val CLIENT_SECRET = "411f668a4b106cde166902e8b73c02d7938a501b6e90f6b8ddd2809c4250cba7"
     //private val logger = HttpLoggingInterceptor()
     //   .setLevel(HttpLoggingInterceptor.Level.BODY )
     private val accessTokenProvider = AccessTokenProviderImp()

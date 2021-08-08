@@ -7,7 +7,7 @@ import retrofit2.http.POST
 
 interface AddressApi {
     companion object{
-        const val postValue = "v2/accounts/0b125b64-619e-5cf8-a719-963534b52bca/addresses"
+        const val postValue = "v2/accounts/ef804b1f-c74d-5679-bda7-9b2a25863f22/addresses"
     }
     @POST(postValue)
     fun getAddress(
