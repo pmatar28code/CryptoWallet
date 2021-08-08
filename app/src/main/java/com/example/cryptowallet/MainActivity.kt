@@ -17,6 +17,7 @@ import com.example.cryptowallet.network.networkcalls.AddressNetwork
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 import com.example.cryptowallet.network.networkcalls.UserNetwork
 import com.example.cryptowallet.network.classesapi.AccessToken
+import com.example.cryptowallet.network.networkcalls.ShowAddressesNetwork
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import retrofit2.Call
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         if (testingCodeList!!.isEmpty()) {
             val intent = Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=e4faf6ec45843a2f1e8a42c6242f3d8e82ce5603d3ee9c86c85be29a6361104f&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate")
+                Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=e4faf6ec45843a2f1e8a42c6242f3d8e82ce5603d3ee9c86c85be29a6361104f&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread")
             )
             startActivity(intent)
             Log.e("FIRST Run", "getting the code")
@@ -102,6 +103,10 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
                 }
+            }
+
+            ShowAddressesNetwork.getAddresses {
+                Log.e("Showing Addresses = ","$it")
             }
 
         //AccessTokenProviderImp().refreshToken {
