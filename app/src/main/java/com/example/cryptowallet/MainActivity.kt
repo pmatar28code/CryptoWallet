@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         if (testingCodeList!!.isEmpty()) {
             val intent = Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate+wallet%3Atransactions%3Asend&meta[send_limit_amount]=1&meta[send_limit_currency]=BTC&meta[send_limit_period]=day")
+                Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate+wallet%3Atransactions%3Asend&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day")
             )
             startActivity(intent)
             Log.e("FIRST Run", "getting the code")
@@ -110,7 +110,16 @@ class MainActivity : AppCompatActivity() {
                 Log.e("Showing Addresses = ","$it")
             }
             SendMoneyNetwork.sendMoney {
-                Log.e("Showing Send Money Main:","${it.status}, ${it.amount}, ${it.details}")
+                //Log.e("Showing Send Money Main:","${it.status}, ${it.amount}, ${it.details}")
+                Toast.makeText(applicationContext,"GOT THE MESSAGE WITH 2FA TOKEN",Toast.LENGTH_SHORT).show()
+            }
+            binding.send2fabutton.setOnClickListener {
+                var tfToken = binding.editText2fa.text.toString()
+                Log.e("TOKEN 2FA FROM EDIT TEXT MAIN", tfToken)
+                Repository.token2fa = tfToken
+                SendMoney2FANetwork.sendMoney {
+                    Log.e("2FA SEND MONEY NETWORK MAIN:","${it.status}, ${it.amount}")
+                }
             }
 
         //AccessTokenProviderImp().refreshToken {
