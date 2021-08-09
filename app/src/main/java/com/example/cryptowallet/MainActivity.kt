@@ -3,10 +3,12 @@ package com.example.cryptowallet
 import android.content.Intent
 import android.net.Uri
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cryptowallet.database.CoinBaseDatabase
 import com.example.cryptowallet.database.JustCode
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     var testingCodeList:List<JustCode>?=null
     var testingTokenList:List<AccessTokenDCLass>?=null
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val inflater = LayoutInflater.from(this)
@@ -52,12 +55,10 @@ class MainActivity : AppCompatActivity() {
                 joinAll()
             }
         }
-
-
         if (testingCodeList!!.isEmpty()) {
             val intent = Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate")
+                Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate+wallet%3Atransactions%3Asend&meta[send_limit_amount]=1&meta[send_limit_currency]=BTC&meta[send_limit_period]=day")
             )
             startActivity(intent)
             Log.e("FIRST Run", "getting the code")
@@ -93,7 +94,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            /*AddressNetwork.getAddresses {
+            /*
+            AddressNetwork.getAddresses {
                 runBlocking {
                     var job: Job = launch(IO) {
                         var token = database?.AccessTokenDao()?.getAllTokens()?.get(0)
@@ -104,9 +106,11 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }*/
-
             ShowAddressesNetwork.getAddresses {
                 Log.e("Showing Addresses = ","$it")
+            }
+            SendMoneyNetwork.sendMoney {
+                Log.e("Showing Send Money Main:","${it.status}, ${it.amount}, ${it.details}")
             }
 
         //AccessTokenProviderImp().refreshToken {
