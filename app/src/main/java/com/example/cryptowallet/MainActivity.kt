@@ -16,9 +16,16 @@ import com.example.cryptowallet.databinding.ActivityMainBinding
 import com.example.cryptowallet.network.apis.CoinBaseClient
 import com.example.cryptowallet.network.apis.RevokeTokenApi
 import com.example.cryptowallet.network.classesapi.AccessToken
+import com.example.cryptowallet.network.classesapi.CompleteRequestMoneyApi
 import com.example.cryptowallet.network.networkcalls.*
+import com.example.cryptowallet.oauth.AccessTokenProviderImp
+import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
+import com.example.cryptowallet.oauth.TokenRefreshAuthenticatorCoinBase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
+import okhttp3.OkHttp
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -58,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         if (testingCodeList!!.isEmpty()) {
             val intent = Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate+wallet%3Atransactions%3Asend&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day")
+                Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate+wallet%3Atransactions%3Asend+wallet%3Atransactions%3Arequest&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day")
             )
             startActivity(intent)
             Log.e("FIRST Run", "getting the code")
@@ -89,7 +96,7 @@ class MainActivity : AppCompatActivity() {
                         var token = database?.AccessTokenDao()?.getAllTokens()?.get(0)
                         Log.e(
                             "LIST OF ACCOUNTS MAIN OJO: ",
-                            "ID: ${it[0].id}, ${it[0].name}, ${it[0].balance}, ${it[0].currency} WITH TOKEN = ${token?.access_token}"
+                            "ID: ${it[0].id}, ${it[0].name},type = ${it[0].type},primary = ${it[0].primary}, ${it[0].balance}, ${it[0].currency} WITH TOKEN = ${token?.access_token}"
                         )
                     }
                 }
@@ -109,6 +116,41 @@ class MainActivity : AppCompatActivity() {
             ShowAddressesNetwork.getAddresses {
                 Log.e("Showing Addresses = ","$it")
             }
+
+            RequestMoneyNetwork.getRequestMoney {
+                Log.e("REQUEST MONEY MAIN: ","To: ${it.to}, amount: ${it.amount?.amount}, currency: ${it.amount?.currency} ")
+                val logger = HttpLoggingInterceptor()
+                    .setLevel(HttpLoggingInterceptor.Level.BODY )
+                val client = OkHttpClient.Builder()
+                    .addNetworkInterceptor(TokenAuthorizationInterceptor(AccessTokenProviderImp()))
+                    //.addInterceptor(logger)
+                    .authenticator(TokenRefreshAuthenticatorCoinBase(AccessTokenProviderImp()))
+                    .build()
+                val retrofitBuilder = Retrofit.Builder()
+                    .client(client)
+                    .baseUrl("https://api.coinbase.com/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                val retrofit = retrofitBuilder.build()
+                val completeMoneyRequestClient = retrofit.create(CompleteRequestMoneyApi::class.java)
+                val completeMoneyRequestCall = completeMoneyRequestClient.completeRequestMoney(
+                    "authorization_code",
+                    it.id?:""
+                )
+                completeMoneyRequestCall.enqueue(object: Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        Log.e("ON RESPONSE COMPLETE REQUEST MAIN: ","success? ${response.isSuccessful}, message: ${response.message()}")
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Log.e("COMPLETE REQUEST MAIN ON FAILURE:","$t")
+                    }
+
+                })
+
+            }
+
+
+            /*
             SendMoneyNetwork.sendMoney {
                 //Log.e("Showing Send Money Main:","${it.status}, ${it.amount}, ${it.details}")
                 Toast.makeText(applicationContext,"GOT THE MESSAGE WITH 2FA TOKEN",Toast.LENGTH_SHORT).show()
@@ -121,6 +163,10 @@ class MainActivity : AppCompatActivity() {
                     Log.e("2FA SEND MONEY NETWORK MAIN:","${it.status}, ${it.amount}")
                 }
             }
+
+             */
+
+
 
         //AccessTokenProviderImp().refreshToken {
         //  Log.e("USING IMP ON MAIN FOR REFRESH","${it.access_token}")
