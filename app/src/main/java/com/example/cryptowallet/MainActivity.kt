@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         if (testingCodeList!!.isEmpty()) {
             val intent = Intent(
                 Intent.ACTION_VIEW,
-                Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate+wallet%3Atransactions%3Asend+wallet%3Atransactions%3Arequest&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day")
+                Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&account=all&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate+wallet%3Aaccounts%3Acreate+wallet%3Atransactions%3Asend+wallet%3Atransactions%3Arequest&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day")
             )
             startActivity(intent)
             Log.e("FIRST Run", "getting the code")
@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             //UpdateAccountNetwork.updateAccount {
-              //  Log.e("UPDATE ACCOUNT MAIN BEFORE LIST ACCOUNTS:","name: ${it.name}, ${it.createdAt}, currency: ${it.currency}, id: ${it.id} ")
+            //    Log.e("UPDATE ACCOUNT MAIN BEFORE LIST ACCOUNTS:","name: ${it.name}, ${it.createdAt}, currency: ${it.currency}, id: ${it.id} ")
             //}
             ListAccountsNetwork.getAccounts {
                 Repository.accountId = it[0].id?:""
@@ -98,6 +98,7 @@ class MainActivity : AppCompatActivity() {
                             "LIST OF ACCOUNTS MAIN OJO: ",
                             "ID: ${it[0].id}, ${it[0].name},type = ${it[0].type},primary = ${it[0].primary}, ${it[0].balance}, ${it[0].currency} WITH TOKEN = ${token?.access_token}"
                         )
+                        Log.e("ALL THE LIST OFF ACCOUNTS MAIN:","$it")
                     }
                 }
             }
@@ -110,9 +111,12 @@ class MainActivity : AppCompatActivity() {
                             "CREATE ADDRESS MAIN: ",
                             "${it.address} , ${it.name} , ${it.createdAt} , WITH TOKEN = ${token?.access_token}"
                         )
+                        Log.e("LIST OF CREATED ADDRESSES MAIN:","$it")
                     }
                 }
-            }*/
+            }
+            */
+
             ShowAddressesNetwork.getAddresses {
                 Log.e("Showing Addresses = ","$it")
             }
