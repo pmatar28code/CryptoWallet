@@ -1,12 +1,13 @@
 package com.example.cryptowallet.oauth
 
 import com.example.cryptowallet.AccessTokenDCLass
+import com.example.cryptowallet.network.classesapi.AccessToken
 
 interface AccessTokenProvider {
     /**
      * Returns an access token. In the event that you don't have a token return null.
      */
-    fun token(): AccessTokenDCLass?
+    fun token(): AccessToken?
 
     /**
      * Refreshes the token and returns it. This call should be made synchronously.

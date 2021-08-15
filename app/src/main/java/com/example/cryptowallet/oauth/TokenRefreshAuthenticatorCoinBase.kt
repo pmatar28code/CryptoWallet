@@ -1,13 +1,19 @@
 package com.example.cryptowallet.oauth
 
 import android.util.Log
-import com.example.cryptowallet.AccessTokenDCLass
-import com.example.cryptowallet.MainActivity
-import okhttp3.*
+import com.example.cryptowallet.network.classesapi.AccessToken
+import com.example.cryptowallet.utilities.EncSharedPreferences
+import com.example.cryptowallet.utilities.Utility
+import okhttp3.Authenticator
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.Route
 
 class TokenRefreshAuthenticatorCoinBase(
     private val tokenProvider: AccessTokenProvider
 ) : Authenticator {
+    private val keyStringAccessKey = "Access_key"
+    val utilityApplicationContext = Utility.getInstance()?.applicationContext
 
     override fun authenticate(route: Route?, response: Response): Request? {
         // We need to have a token in order to refresh it.
@@ -28,13 +34,19 @@ class TokenRefreshAuthenticatorCoinBase(
                         .build()
                 }
 
-                var updatedToken: AccessTokenDCLass? = null
+                var updatedToken: AccessToken? = null
                 tokenProvider.refreshToken {
                     if(it){
-                        updatedToken = MainActivity.ROOM_DATABASE.AccessTokenDao().getAllTokens()[0]
+                        val stringUpdatedToken = utilityApplicationContext?.let { it1 ->
+                            EncSharedPreferences.getValueString(keyStringAccessKey,
+                                it1
+                            )
+                        }
+                            ?:""
+                        updatedToken = EncSharedPreferences.convertJsonStringToTestClass(stringUpdatedToken)
                         Log.e("NEW UPDATED TOKEN ON AUTHENTICATOR CONBASE","$updatedToken")
                     }else{
-                        Log.e("RECIEVED FALSE FROM REFRESG ON AUTHENTICATOR COINBASE","FALSE DO NOTHING")
+                        Log.e("RECIEVED FALSE FROM REFRESH ON AUTHENTICATOR COINBASE","FALSE DO NOTHING")
                         //updatedToken = null
                         //Log.e("NEW UPDATED TOKEN ON AUTHENTICATOR CONBASE","$updatedToken")
 

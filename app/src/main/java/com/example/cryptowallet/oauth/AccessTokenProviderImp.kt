@@ -1,11 +1,16 @@
 package com.example.cryptowallet.oauth
 
 import android.util.Log
-import com.example.cryptowallet.*
+import com.example.cryptowallet.MainActivity
 import com.example.cryptowallet.network.apis.RefreshTokenApi
 import com.example.cryptowallet.network.classesapi.AccessToken
-import kotlinx.coroutines.*
+import com.example.cryptowallet.utilities.EncSharedPreferences
+import com.example.cryptowallet.utilities.Utility
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -13,15 +18,24 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class AccessTokenProviderImp : AccessTokenProvider {
-    var token: AccessTokenDCLass?=null
-    var newAccessToken: AccessTokenDCLass?=null
+    var token: AccessToken?=null
+    var newAccessToken: AccessToken?=null
+    val keyStringAccessKey = "Access_key"
+    val utilityApplicationContext = Utility.getInstance()?.applicationContext
 
-    override fun token(): AccessTokenDCLass? {
+    override fun token(): AccessToken? {
         runBlocking {
             val job: Job = launch(IO) {
-                val database = MainActivity.ROOM_DATABASE.AccessTokenDao()
-                val listOfTokens = database.getAllTokens()
-                token = listOfTokens[0]
+                var stringTokenFromSharedPrefs = utilityApplicationContext?.let {
+                    EncSharedPreferences.getValueString(keyStringAccessKey,
+                        it
+                    )
+                }
+                token = stringTokenFromSharedPrefs?.let {
+                    EncSharedPreferences.convertJsonStringToTestClass(
+                        it
+                    )
+                }
             }
         }
         /*
@@ -55,7 +69,7 @@ class AccessTokenProviderImp : AccessTokenProvider {
         refreshTokenCall?.enqueue(object: Callback<AccessToken>{
             override fun onResponse(call: Call<AccessToken>, response: Response<AccessToken>) {
                 Log.e("GOOD RESPONSE IMP:", "TOKEN: ${response.body()?.access_token}")
-                newAccessToken = AccessTokenDCLass(
+                newAccessToken = AccessToken(
                     access_token = response.body()?.access_token ?: "",
                     expires_in = response.body()?.expires_in ?: 0,
                     refresh_token = response.body()?.refresh_token ?: "",
@@ -65,10 +79,13 @@ class AccessTokenProviderImp : AccessTokenProvider {
                 if (newAccessToken!!.access_token != "" && newAccessToken != null){
                     runBlocking {
                         val job: Job = launch(IO) {
-                            val database = MainActivity.ROOM_DATABASE.AccessTokenDao()
-                            database.deleteAllTokens()
+                            var stringAccessToken = EncSharedPreferences.convertTestClassToJsonString(
+                                newAccessToken!!
+                            )
+                            if (utilityApplicationContext != null) {
+                                EncSharedPreferences.saveToEncryptedSharedPrefsString(keyStringAccessKey,stringAccessToken,utilityApplicationContext)
+                            }
                             Log.e("NEW ACCESS TOKen ADDED TO DATABASE FROM IMP", "$newAccessToken")
-                            database.addToken(newAccessToken!!)
                             refreshCallback(true)
                             joinAll()
                         }
@@ -83,33 +100,5 @@ class AccessTokenProviderImp : AccessTokenProvider {
                 refreshCallback(false)
             }
         })
-    }
-
-    private suspend fun getTokenDatabase(tokenCallBack:(AccessTokenDCLass)-> Unit) {
-        val database = MainActivity.ROOM_DATABASE
-        val listTokens = database.AccessTokenDao().getAllTokens()
-        tokenCallBack(listTokens[0])
-    }
-
-    private suspend fun deleteActualToken() {
-        var actualToken: AccessTokenDCLass?=null
-            getTokenDatabase {
-                actualToken = it
-            }
-            Log.e("Actual token for delete", "$actualToken")
-        val database = MainActivity.ROOM_DATABASE
-            database.AccessTokenDao().removeToken(actualToken?.key)
-    }
-
-    private suspend fun addNewToken(newToken: AccessTokenDCLass){
-        val database = MainActivity.ROOM_DATABASE
-
-        database.AccessTokenDao().addToken(newToken)
-        Log.e("NEW TOKEN ADDED IMP","$newToken")
-    }
-
-    private suspend fun deleteAllTokens(){
-        val database = MainActivity.ROOM_DATABASE.AccessTokenDao()
-        database.deleteAllTokens()
     }
 }
