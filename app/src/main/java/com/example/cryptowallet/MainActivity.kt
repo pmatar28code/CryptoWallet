@@ -53,6 +53,11 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(inflater)
         setContentView(binding.root)
 
+        binding.toShowAddressesForDifferentWalletsActivity.setOnClickListener {
+            var intent = Intent(this,ShowAddressesForDifferentWalletsActivity::class.java)
+            startActivity(intent)
+        }
+
         database = CoinBaseDatabase.getInstance(applicationContext)
         ROOM_DATABASE = database as CoinBaseDatabase
         runBlocking {
@@ -89,6 +94,7 @@ class MainActivity : AppCompatActivity() {
             //UpdateAccountNetwork.updateAccount {
             //    Log.e("UPDATE ACCOUNT MAIN BEFORE LIST ACCOUNTS:","name: ${it.name}, ${it.createdAt}, currency: ${it.currency}, id: ${it.id} ")
             //}
+            /*
             ListAccountsNetwork.getAccounts {
                 Repository.accountId = it[0].id?:""
                 runBlocking {
@@ -102,6 +108,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
+             */
             /*
             AddressNetwork.getAddresses {
                 runBlocking {
@@ -111,15 +119,17 @@ class MainActivity : AppCompatActivity() {
                             "CREATE ADDRESS MAIN: ",
                             "${it.address} , ${it.name} , ${it.createdAt} , WITH TOKEN = ${token?.access_token}"
                         )
-                        Log.e("LIST OF CREATED ADDRESSES MAIN:","$it")
+                        //Log.e("LIST OF CREATED ADDRESSES MAIN:","$it")
                     }
                 }
             }
             */
-
+            /*
             ShowAddressesNetwork.getAddresses {
                 Log.e("Showing Addresses = ","$it")
             }
+            */
+
 
             RequestMoneyNetwork.getRequestMoney {
                 Log.e("REQUEST MONEY MAIN: ","To: ${it.to}, amount: ${it.amount?.amount}, currency: ${it.amount?.currency} ")

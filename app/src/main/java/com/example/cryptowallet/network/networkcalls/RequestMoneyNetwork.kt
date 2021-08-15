@@ -3,16 +3,20 @@ package com.example.cryptowallet.network.networkcalls
 import android.util.Log
 import com.example.cryptowallet.network.apis.RequestMoneyApi
 import com.example.cryptowallet.network.classesapi.RequestMoney
+import com.example.cryptowallet.network.classesapi.RequestMoneyApiBody
 import com.example.cryptowallet.oauth.AccessTokenProviderImp
 import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
 import com.example.cryptowallet.oauth.TokenRefreshAuthenticatorCoinBase
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object RequestMoneyNetwork {
     private val logger = HttpLoggingInterceptor()
@@ -28,7 +32,7 @@ object RequestMoneyNetwork {
             return Retrofit.Builder()
                 .baseUrl("https://api.coinbase.com/")
                 .client(client)
-                .addConverterFactory(MoshiConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(RequestMoneyApi::class.java)
         }
@@ -67,6 +71,21 @@ object RequestMoneyNetwork {
         val type = "request"
         val token = AccessTokenProviderImp().token()?.access_token ?: ""
         Log.e("On Actual REQUEST MONEY NETWORK TOKEN:", token)
-        requestMoneyApi.requestMoney(token,"request","phil@nevie.com",".0001","BTC","this description").enqueue(RequestMoneyCallBack(onSuccess))
+        val requestMoney = RequestMoneyApiBody(
+            "request",
+            "Phil@nevie.com",
+            ".0001",
+            "BTC",
+            "this is a test for requesting money =)"
+        )
+        val test = JSONObject()
+        test.put("type","request")
+        test.put("to","phil@nevie.com")
+        test.put("amount",".0001")
+        test.put("currency","BTC")
+        test.put("description","request test")
+        requestMoneyApi.requestMoney(requestMoney).enqueue(RequestMoneyCallBack(onSuccess))
+
+        //token,"request","phil@nevie.com",".0001","BTC","this description"
     }
 }

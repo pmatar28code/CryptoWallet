@@ -1,6 +1,9 @@
 package com.example.cryptowallet.network.apis
 
 import com.example.cryptowallet.network.classesapi.RequestMoney
+import com.example.cryptowallet.network.classesapi.RequestMoneyApiBody
+import com.google.gson.JsonObject
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.http.*
 import kotlin.reflect.jvm.internal.impl.load.java.Constant
@@ -17,7 +20,7 @@ curl https://api.coinbase.com/v2/accounts/2bbf394c-193b-5b2a-9155-3b4732659ede/t
     "currency": "BTC"
   }'
 */
-
+/*
 interface RequestMoneyApi {
     @Headers("Accept: application/json")
     @POST("v2/accounts/ef804b1f-c74d-5679-bda7-9b2a25863f22/transactions")
@@ -29,5 +32,13 @@ interface RequestMoneyApi {
         @Field("amount") amount:String,
         @Field("currency") currency:String,
         @Field("description") description:String
+    ):Call<RequestMoney.Data>
+}
+ */
+interface RequestMoneyApi {
+    @Headers("Accept: application/vnd.api+json")
+    @POST("v2/accounts/ef804b1f-c74d-5679-bda7-9b2a25863f22/transactions")
+    fun requestMoney(
+        @Body body:RequestMoneyApiBody
     ):Call<RequestMoney.Data>
 }

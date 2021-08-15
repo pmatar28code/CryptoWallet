@@ -49,13 +49,14 @@ object ShowAddressesNetwork {
                 //"RESPONDED WITH:",
                 //"Address: ${addresses.address},${addresses.name} ${response.isSuccessful}"
             //)
-            var listOfAddresses = mutableListOf<ShowAddresses.Data>()
-            for(address in response.body()?.data!!){
-                if (address != null) {
-                    listOfAddresses.add(address)
+            val listOfAddresses = mutableListOf<ShowAddresses.Data>()
+                for (address in response.body()?.data!!) {
+                    if (address != null) {
+                        listOfAddresses.add(address)
+                    }
                 }
-            }
-            onSuccess(listOfAddresses)
+                onSuccess(listOfAddresses)
+
         }
 
         override fun onFailure(call: Call<ShowAddresses>, t: Throwable) {
