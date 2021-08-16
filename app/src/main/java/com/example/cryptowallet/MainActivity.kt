@@ -2,13 +2,12 @@ package com.example.cryptowallet
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import com.example.cryptowallet.databinding.ActivityMainBinding
 import com.example.cryptowallet.network.apis.CoinBaseClient
 import com.example.cryptowallet.network.classesapi.AccessToken
@@ -40,8 +39,6 @@ class MainActivity : AppCompatActivity() {
         var accessTokenFromShared:AccessToken ?= null
     }
 
-
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val inflater = LayoutInflater.from(this)
@@ -61,12 +58,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
         if (codeFromShared == null) {
+            val url = "https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&account=all&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate+wallet%3Aaccounts%3Acreate+wallet%3Atransactions%3Asend+wallet%3Atransactions%3Arequest&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day"
+            val customTabsIntentBuilder  =  CustomTabsIntent.Builder()
+            val customTabsIntent = customTabsIntentBuilder.build()
+            //customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+            customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            //customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
+            //customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+            //customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            //customTabsIntent.intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+
+            customTabsIntent.launchUrl(this, Uri.parse(url))
+
+/*
             val intent = Intent(
-                Intent.ACTION_VIEW,
+               Intent.ACTION_VIEW,
                 Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&account=all&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate+wallet%3Aaccounts%3Acreate+wallet%3Atransactions%3Asend+wallet%3Atransactions%3Arequest&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day")
             )
             startActivity(intent)
-            Log.e("FIRST Run", "getting the code")
+            Log.e("FIRST Run", "getting the code")*/
         } else {
             val jsonStringAccessToken = EncSharedPreferences.getValueString(keyStringAccesskey,applicationContext)?:""
             accessTokenFromShared = EncSharedPreferences.convertJsonStringToTestClass(jsonStringAccessToken)
