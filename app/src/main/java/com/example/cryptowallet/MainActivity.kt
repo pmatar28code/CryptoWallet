@@ -8,10 +8,15 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.fragment.app.Fragment
 import com.example.cryptowallet.databinding.ActivityMainBinding
+import com.example.cryptowallet.fragments.RequestFragment
+import com.example.cryptowallet.fragments.SendFragment
+import com.example.cryptowallet.fragments.WalletFragment
 import com.example.cryptowallet.network.apis.CoinBaseClient
 import com.example.cryptowallet.network.classesapi.AccessToken
 import com.example.cryptowallet.network.classesapi.CompleteRequestMoneyApi
+import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.networkcalls.*
 import com.example.cryptowallet.oauth.AccessTokenProviderImp
 import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
@@ -29,11 +34,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        const val MY_CLIENT_ID = "2bc5e4b5b4446ad9b730b8561f7aeff463e648cd9146ffb6b5dd885164c300f1"
-        const val CLIENT_SECRET = "411f668a4b106cde166902e8b73c02d7938a501b6e90f6b8ddd2809c4250cba7"
+        const val MY_CLIENT_ID = "c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188"
+        const val CLIENT_SECRET = "311b687baee92bbd8e584527bb757f27c9ed363f7a3922a18b381bcd4309b5b4"
         const val MY_REDIRECT_URI = "cryptowallet://callback"
-        val keyStringAccesskey = "Access_key"
-        val keyStringCode = "Auth_code"
+        const val keyStringAccesskey = "Access_key"
+        const val keyStringCode = "Auth_code"
         var codeFromShared:String ?= null
         var stringTokenFromShared:String ?= null
         var accessTokenFromShared:AccessToken ?= null
@@ -45,10 +50,6 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(inflater)
         setContentView(binding.root)
 
-        binding.toShowAddressesForDifferentWalletsActivity.setOnClickListener {
-            var intent = Intent(this,ShowAddressesForDifferentWalletsActivity::class.java)
-            startActivity(intent)
-        }
         runBlocking {
             val job:Job = launch(IO) {
                 codeFromShared = EncSharedPreferences.getValueString(keyStringCode,applicationContext)
@@ -81,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             val jsonStringAccessToken = EncSharedPreferences.getValueString(keyStringAccesskey,applicationContext)?:""
             accessTokenFromShared = EncSharedPreferences.convertJsonStringToTestClass(jsonStringAccessToken)
-            Repository.accessToken = EncSharedPreferences.convertJsonStringToTestClass(jsonStringAccessToken)
+            //Repository.accessToken = EncSharedPreferences.convertJsonStringToTestClass(jsonStringAccessToken)
             Log.e(
                 "WHATS NEXT",
                 "DO API Requests WITH TOKEN AVAILABLE CODE:$codeFromShared, Token:${
@@ -93,16 +94,12 @@ class MainActivity : AppCompatActivity() {
                     var job:Job = launch(IO) {
                         Log.e("SHOWING USER", "${it.name}, id: ${it.id} WITH TOKEN = ${accessTokenFromShared?.access_token}}")
                         Repository.userId = it.id.toString()
+                        Repository.userName = it.name.toString()
                     }
                 }
             }
-            /*
-            UpdateAccountNetwork.updateAccount {
-                Log.e("UPDATE ACCOUNT MAIN BEFORE LIST ACCOUNTS:","name: ${it.name}, ${it.createdAt}, currency: ${it.currency}, id: ${it.id} ")
-            }
-            */
             ListAccountsNetwork.getAccounts {
-                Repository.accountId = it[0].id?:""
+                Repository.accounts = it as MutableList<ListAccounts.Data>
                 runBlocking {
                     var job:Job = launch(IO) {
                         Log.e(
@@ -110,26 +107,20 @@ class MainActivity : AppCompatActivity() {
                             "ID: ${it[0].id}, ${it[0].name},type = ${it[0].type},primary = ${it[0].primary}, ${it[0].balance}, ${it[0].currency} WITH TOKEN = ${accessTokenFromShared?.access_token}"
                         )
                         Log.e("ALL THE LIST OFF ACCOUNTS MAIN:","$it")
+                        swapFragments(WalletFragment())
                     }
                 }
             }
+            binding.apply {
+                bottomNavigationContainer.setOnNavigationItemSelectedListener {
+                    handleBottomNavigation(it.itemId, binding)
+                }
+            }
+            //swap fragment to wallet which is going to be the main one to show to the user
+            //listing accounts that have balance > 0
+            swapFragments(WalletFragment())
             /*
-            AddressNetwork.getAddresses {
-                runBlocking {
-                    var job: Job = launch(IO) {
-                        Log.e(
-                            "CREATE ADDRESS MAIN: ",
-                            "${it.address} , ${it.name} , ${it.createdAt} , WITH TOKEN = ${accessTokenFromShared?.access_token}"
-                        )
-                    }
-                }
-            }
-            */
-
-            ShowAddressesNetwork.getAddresses {
-                Log.e("Showing Addresses MAIN: ","$it")
-            }
-
+            example complete money request after request money successfull which it havent been 'type stuff
             RequestMoneyNetwork.getRequestMoney {
                 Log.e("REQUEST MONEY MAIN: ","To: ${it.to}, amount: ${it.amount?.amount}, currency: ${it.amount?.currency} ")
                 val logger = HttpLoggingInterceptor()
@@ -159,40 +150,9 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 })
-
+                */
             }
-
-
-
-            SendMoneyNetwork.sendMoney {
-                //Log.e("Showing Send Money Main:","${it.status}, ${it.amount}, ${it.details}")
-                Toast.makeText(applicationContext,"GOT THE MESSAGE WITH 2FA TOKEN",Toast.LENGTH_SHORT).show()
-            }
-            binding.sendTwoFactorButton.setOnClickListener {
-                var tfToken = binding.editTwoFactorTokenEditText.text.toString()
-                Log.e("TOKEN 2FA FROM EDIT TEXT MAIN", tfToken)
-                Repository.token2fa = tfToken
-                SendMoney2FANetwork.sendMoney {
-                    Log.e("2FA SEND MONEY NETWORK MAIN:","${it.status}, ${it.amount}")
-                }
-            }
-
-
-
-
-        //AccessTokenProviderImp().refreshToken {
-        //  Log.e("USING IMP ON MAIN FOR REFRESH","${it.access_token}")
-        // }
-
-        // runBlocking {
-        //  var job:Job = launch(IO){
-        //    revokeToken()
-        // joinAll()
-        // }
-        //}
         }
-    }
-
     override fun onResume() {
         super.onResume()
         val uri = intent.data
@@ -225,7 +185,6 @@ class MainActivity : AppCompatActivity() {
                         refresh_token = response.body()?.refresh_token?:"",
                         scope =  response.body()?.scope?:""
                     )
-
                     if(accessToken != null) {
                         val jsonAccessToken = EncSharedPreferences.convertTestClassToJsonString(accessToken)
                         EncSharedPreferences.saveToEncryptedSharedPrefsString(keyStringAccesskey,jsonAccessToken,applicationContext)
@@ -268,4 +227,30 @@ class MainActivity : AppCompatActivity() {
         })
     }
      */
+    private fun handleBottomNavigation(
+        menuItemId: Int, binding: ActivityMainBinding
+    ): Boolean = when (menuItemId) {
+
+        R.id.menu_wallet -> {
+            swapFragments(WalletFragment())
+            true
+        }
+        R.id.menu_request -> {
+            swapFragments(RequestFragment())
+            true
+        }
+        R.id.menu_send -> {
+            swapFragments(SendFragment())
+            true
+        }
+        else -> false
+    }
+
+    //override
+    fun swapFragments(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack("back")
+            .commit()
+    }
 }

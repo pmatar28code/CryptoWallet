@@ -33,6 +33,7 @@ object ListAccountsNetwork {
         private val onSuccess: (List<ListAccounts.Data>) -> Unit
     ) : Callback<ListAccounts> {
         override fun onResponse(call: Call<ListAccounts>, response: Response<ListAccounts>) {
+
             val listOfAccounts = mutableListOf<ListAccounts.Data>()
             for(item in response.body()?.data!!){
                 listOfAccounts.add(item!!)
