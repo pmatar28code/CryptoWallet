@@ -3,9 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.9" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_show_addresses_for_different_wallets.xml" value="0.5" />
         <entry key="app/src/main/res/layout/item_wallets.xml" value="0.4166666666666667" />
+        <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.10614035087719298" />
       </map>
     </option>
   </component>

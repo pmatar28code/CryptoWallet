@@ -163,20 +163,20 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-            /*
+
             SendMoneyNetwork.sendMoney {
                 //Log.e("Showing Send Money Main:","${it.status}, ${it.amount}, ${it.details}")
                 Toast.makeText(applicationContext,"GOT THE MESSAGE WITH 2FA TOKEN",Toast.LENGTH_SHORT).show()
             }
-            binding.send2fabutton.setOnClickListener {
-                var tfToken = binding.editText2fa.text.toString()
+            binding.sendTwoFactorButton.setOnClickListener {
+                var tfToken = binding.editTwoFactorTokenEditText.text.toString()
                 Log.e("TOKEN 2FA FROM EDIT TEXT MAIN", tfToken)
                 Repository.token2fa = tfToken
                 SendMoney2FANetwork.sendMoney {
                     Log.e("2FA SEND MONEY NETWORK MAIN:","${it.status}, ${it.amount}")
                 }
             }
-            */
+
 
 
 

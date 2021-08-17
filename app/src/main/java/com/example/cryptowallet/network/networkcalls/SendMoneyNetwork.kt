@@ -50,10 +50,9 @@ object SendMoneyNetwork {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun sendMoney (onSuccess: (SendMoney.Data) -> Unit){
         val token = AccessTokenProviderImp().token()?.access_token?:""
-        var idem = LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
+        //var idem = LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
         //Log.e("REFRESH NETWORK REFRESH TOKEN FROM Actual TOKEN:", refreshToken)
         sendMoneyApi.sendMoney (token,"send","3NJJgGJXwjiRNhikFwoCeLpRC2oB6NJ4Wb","0.12","USD").enqueue(
             SendMoneyCallBack(onSuccess)

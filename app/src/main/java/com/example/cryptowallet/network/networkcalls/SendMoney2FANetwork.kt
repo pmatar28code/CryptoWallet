@@ -49,10 +49,9 @@ object SendMoney2FANetwork {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun sendMoney (onSuccess: (SendMoney.Data) -> Unit){
         val token = AccessTokenProviderImp().token()?.access_token?:""
-        var idem = LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
+        //var idem = LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
         var token2fa = Repository.token2fa
         Log.e("2fa NETWORK  TOKEN sms :", "$token2fa")
         sendMoney2FAAPI.sendMoney ("Bearer $token",Repository.token2fa,"send","3NJJgGJXwjiRNhikFwoCeLpRC2oB6NJ4Wb","0.12","USD").enqueue(
