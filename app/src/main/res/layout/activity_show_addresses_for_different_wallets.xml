@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/wallets_recycler_view"
+        android:id="@+id/wallets_recycler_view2"
         android:layout_width="0dp"
         android:layout_height="515dp"
         android:layout_marginStart="16dp"
@@ -27,7 +27,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wallets_recycler_view" />
+        app:layout_constraintTop_toBottomOf="@+id/wallets_recycler_view2" />
 
     <Button
         android:id="@+id/button2"

@@ -236,10 +236,12 @@ class MainActivity : AppCompatActivity() {
             true
         }
         R.id.menu_request -> {
+            Repository.accounts.clear()
             swapFragments(RequestFragment())
             true
         }
         R.id.menu_send -> {
+            Repository.accounts.clear()
             swapFragments(SendFragment())
             true
         }

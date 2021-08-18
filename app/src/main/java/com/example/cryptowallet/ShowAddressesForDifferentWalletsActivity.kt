@@ -35,7 +35,7 @@ class ShowAddressesForDifferentWalletsActivity: AppCompatActivity() {
 
                     })
 
-                    binding.walletsRecyclerView.apply{
+                    binding.walletsRecyclerView2.apply{
                         adapter = walletsAdapter
                         layoutManager = LinearLayoutManager(context)
                         walletsAdapter.submitList(listOfWallets.toList())
