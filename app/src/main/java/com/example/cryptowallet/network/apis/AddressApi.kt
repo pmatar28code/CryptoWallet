@@ -4,12 +4,16 @@ import com.example.cryptowallet.network.classesapi.NAddress
 import retrofit2.Call
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface AddressApi {
     companion object{
-        const val postValue = "v2/accounts/ef804b1f-c74d-5679-bda7-9b2a25863f22/addresses"
+        const val postValue = "v2/accounts/{id}/addresses"
     }
     @POST(postValue)
     fun getAddress(
-        @Header("Authorization") token:String): Call<NAddress>
+        @Header("Authorization") token:String,
+        @Path("id")id:String
+    ): Call<NAddress>
 }

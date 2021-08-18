@@ -39,4 +39,13 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/get_addresses"
         app:layout_constraintTop_toTopOf="@+id/get_addresses" />
+
+    <ImageView
+        android:id="@+id/imageViewAddressesQr"
+        android:layout_width="82dp"
+        android:layout_height="98dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/get_addresses"
+        tools:srcCompat="@tools:sample/avatars" />
 </androidx.constraintlayout.widget.ConstraintLayout>

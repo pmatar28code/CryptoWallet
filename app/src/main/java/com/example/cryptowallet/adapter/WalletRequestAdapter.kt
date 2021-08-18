@@ -18,9 +18,9 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class WalletsAdapter(
+class WalletRequestAdapter(
     val onCLickSetId:(ListAccounts.Data) -> Unit
-): ListAdapter<ListAccounts.Data, WalletsAdapter.WalletsViewHolder>(diff) {
+): ListAdapter<ListAccounts.Data, WalletRequestAdapter.WalletsRequestViewHolder>(diff) {
     companion object {
         val diff = object : DiffUtil.ItemCallback<ListAccounts.Data>() {
             override fun areItemsTheSame(
@@ -37,12 +37,12 @@ class WalletsAdapter(
             }
         }
     }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletsViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WalletsRequestViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemWalletsBinding.inflate(inflater, parent, false)
-        return WalletsViewHolder(binding, onCLickSetId)
+        return WalletsRequestViewHolder(binding, onCLickSetId)
     }
-    override fun onBindViewHolder(holder: WalletsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: WalletsRequestViewHolder, position: Int) {
         holder.onBind(getItem(position))
         holder.itemView.setOnClickListener { onCLickSetId(getItem(position)) }
         val currentWalletCurrency = getItem(position).balance?.currency
@@ -50,7 +50,7 @@ class WalletsAdapter(
             setIcon(currentWalletCurrency,holder)
         }
     }
-    class WalletsViewHolder(
+    class WalletsRequestViewHolder(
         private val binding: ItemWalletsBinding,
         private val onCLickForDetails: (ListAccounts.Data) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -62,7 +62,7 @@ class WalletsAdapter(
             }
         }
     }
-    private fun setIcon(currency: String, holder:WalletsViewHolder){
+    private fun setIcon(currency: String, holder:WalletsRequestViewHolder){
         getIcons(currency) {
             if (it.contains(currency)) {
                 Log.e("IT IN PICASSO:", it)
@@ -80,7 +80,7 @@ class WalletsAdapter(
         val retrofit = retrofitBuilder.build()
         val cryptoIconClient = retrofit.create(CryptoIconApi::class.java)
         val cryptoIconCall = cryptoIconClient.getIcons(currency)
-        cryptoIconCall.enqueue(object:Callback<String>{
+        cryptoIconCall.enqueue(object: Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 var linkString = response.toString()
                 var lenght = linkString.length

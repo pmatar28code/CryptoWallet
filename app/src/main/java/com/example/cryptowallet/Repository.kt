@@ -10,4 +10,5 @@ object Repository {
     var accounts = mutableListOf<ListAccounts.Data>()
     var accountId = ""
     var token2fa =""
+    var currency=""
 }

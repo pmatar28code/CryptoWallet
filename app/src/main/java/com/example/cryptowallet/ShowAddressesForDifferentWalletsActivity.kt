@@ -1,19 +1,28 @@
 package com.example.cryptowallet
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.cryptowallet.adapter.WalletsAdapter
+import com.example.cryptowallet.adapter.WalletRequestAdapter
 import com.example.cryptowallet.databinding.ActivityShowAddressesForDifferentWalletsBinding
 import com.example.cryptowallet.network.classesapi.ListAccounts
+import com.example.cryptowallet.network.networkcalls.AddressNetwork
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class ShowAddressesForDifferentWalletsActivity: AppCompatActivity() {
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         val inflater = LayoutInflater.from(this)
         val binding = ActivityShowAddressesForDifferentWalletsBinding.inflate(inflater)
@@ -23,16 +32,21 @@ class ShowAddressesForDifferentWalletsActivity: AppCompatActivity() {
 
         runBlocking {
             var job: Job = launch {
-                ListAccountsNetwork.getAccounts {
-                    Log.e("INSIDE WALLET ACTIVITY NETWORK CALL:", "$it")
-                    listOfWallets = it.toMutableList()
+                ListAccountsNetwork.getAccounts { list ->
+                    Log.e("INSIDE WALLET ACTIVITY NETWORK CALL:", "$list")
+                    listOfWallets = list.toMutableList()
 
                     Log.e("Wallets Activity list:","$listOfWallets")
 
-                    val walletsAdapter = WalletsAdapter(onCLickSetId = {
-                        Repository.accountId = it.id.toString()
-                        Log.e("repository id t:","${Repository.accountId}")
-
+                    val walletsAdapter =WalletRequestAdapter(onCLickSetId = { data ->
+                        Repository.accountId = data.id.toString()
+                        Repository.currency = data.balance?.currency.toString()
+                        AddressNetwork.getAddresses {
+                            //var accountAddress = "1232342342344-1231313-123123"
+                            var urlForQr =
+                                "http://api.qrserver.com/v1/create-qr-code/?data=${it.address}&size=100x100"
+                            Picasso.get().load(urlForQr).into(binding.imageViewAddressesQr)
+                        }
                     })
 
                     binding.walletsRecyclerView2.apply{
@@ -42,12 +56,7 @@ class ShowAddressesForDifferentWalletsActivity: AppCompatActivity() {
                         walletsAdapter.notifyDataSetChanged()
                     }
                 }
-
-
-
-
             }
         }
-
     }
 }
