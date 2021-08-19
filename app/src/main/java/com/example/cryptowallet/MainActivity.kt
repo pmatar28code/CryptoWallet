@@ -15,17 +15,11 @@ import com.example.cryptowallet.fragments.SendFragment
 import com.example.cryptowallet.fragments.WalletFragment
 import com.example.cryptowallet.network.apis.CoinBaseClient
 import com.example.cryptowallet.network.classesapi.AccessToken
-import com.example.cryptowallet.network.classesapi.CompleteRequestMoneyApi
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.networkcalls.*
-import com.example.cryptowallet.oauth.AccessTokenProviderImp
-import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
-import com.example.cryptowallet.oauth.TokenRefreshAuthenticatorCoinBase
 import com.example.cryptowallet.utilities.EncSharedPreferences
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

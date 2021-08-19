@@ -1,6 +1,5 @@
 package com.example.cryptowallet
 
-import android.accounts.Account
 import com.example.cryptowallet.network.classesapi.ListAccounts
 
 
@@ -11,4 +10,6 @@ object Repository {
     var accountId = ""
     var token2fa =""
     var currency=""
+    var address =""
+    var iconAddress =""
 }

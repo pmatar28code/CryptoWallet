@@ -1,22 +1,16 @@
 package com.example.cryptowallet.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.cryptowallet.R
 import com.example.cryptowallet.databinding.ItemWalletsBinding
-import com.example.cryptowallet.network.apis.CryptoIconApi
 import com.example.cryptowallet.network.classesapi.ListAccounts
-import com.squareup.picasso.Picasso
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.example.cryptowallet.utilities.Utility
 
 class WalletsAdapter(
     val onCLickSetId:(ListAccounts.Data) -> Unit
@@ -63,38 +57,11 @@ class WalletsAdapter(
         }
     }
     private fun setIcon(currency: String, holder:WalletsViewHolder){
-        getIcons(currency) {
-            if (it.contains(currency)) {
-                Log.e("IT IN PICASSO:", it)
-                Picasso.get().load(it).into(
-                    holder.itemView
-                        .findViewById<ImageView>(R.id.wallet_icon_image_view)
-                )
-            }
+        Utility.getInstance()?.applicationContext?.let {
+            Glide.with(it)
+                .load("https://api.coinicons.net/icon/$currency/128x128")
+                .into(holder.itemView
+                    .findViewById<ImageView>(R.id.wallet_icon_image_view))
         }
-    }
-    private fun getIcons(currency:String, listCallback:(String) -> Unit) {
-        val retrofitBuilder = Retrofit.Builder()
-            .baseUrl("https://api.coinicons.net/")
-            .addConverterFactory(GsonConverterFactory.create())
-        val retrofit = retrofitBuilder.build()
-        val cryptoIconClient = retrofit.create(CryptoIconApi::class.java)
-        val cryptoIconCall = cryptoIconClient.getIcons(currency)
-        cryptoIconCall.enqueue(object:Callback<String>{
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                var linkString = response.toString()
-                var lenght = linkString.length
-                linkString= linkString.substring(46)
-                linkString = linkString.dropLast(1)
-                linkString = linkString.replace("%","")
-                linkString = linkString.replace("7","")
-                linkString = linkString.replace("D","")
-                listCallback(linkString)
-                Log.e("LINK STRING ADAPTER FUN:", linkString)
-            }
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                Log.e("ON FAILURE ADAPTER","$t")
-            }
-        })
     }
 }
