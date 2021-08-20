@@ -33,7 +33,7 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
                     Log.e("INSIDE WALLET ACTIVITY NETWORK CALL:", "$list")
                     listOfWallets = list.toMutableList()
                     Log.e("Wallets Activity list:","$listOfWallets")
-                    val walletsAdapter = WalletRequestAdapter { data ->
+                    val walletsRequestAdapter = WalletRequestAdapter { data ->
                         Repository.accountId = data.id.toString()
                         Repository.currency = data.balance?.currency.toString()
                         Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
@@ -49,10 +49,10 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
                         }
                     }
                     binding.walletsRequestRecyclerView.apply{
-                        adapter = walletsAdapter
+                        adapter = walletsRequestAdapter
                         layoutManager = LinearLayoutManager(context)
-                        walletsAdapter.submitList(listOfWallets.toList())
-                        walletsAdapter.notifyDataSetChanged()
+                        walletsRequestAdapter.submitList(listOfWallets.toList())
+                        walletsRequestAdapter.notifyDataSetChanged()
                     }
                 }
             }

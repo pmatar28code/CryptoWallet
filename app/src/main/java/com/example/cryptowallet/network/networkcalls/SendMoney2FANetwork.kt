@@ -41,7 +41,22 @@ object SendMoney2FANetwork {
         private val onSuccess:(SendMoney.Data) -> Unit): Callback<SendMoney.Data> {
         override fun onResponse(call: Call<SendMoney.Data>, response: Response<SendMoney.Data>) {
             Log.e("ON Response Send Money 2FA Network:","${response.body()?.details} status: ${response.body()?.status}")
-
+            val sendMoneyData = SendMoney.Data(
+                amount = response.body()?.amount,
+                createdAt = response.body()?.createdAt,
+                description = response.body()?.description,
+                details = response.body()?.details,
+                id=response.body()?.id,
+                nativeAmount= response.body()?.nativeAmount,
+                network = response.body()?.network,
+                resource = response.body()?.resource,
+                resourcePath = response.body()?.resourcePath,
+                status = response.body()?.status,
+                to= response.body()?.to,
+                type=response.body()?.type,
+                updatedAt = response.body()?.updatedAt
+            )
+            onSuccess(sendMoneyData)
         }
 
         override fun onFailure(call: Call<SendMoney.Data>, t: Throwable) {
@@ -53,8 +68,12 @@ object SendMoney2FANetwork {
         val token = AccessTokenProviderImp().token()?.access_token?:""
         //var idem = LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
         var token2fa = Repository.token2fa
+        val accountId = Repository.accountId
+        val to = Repository.sendMonetTo
+        val currency = Repository.currency
+        val amount = Repository.sendMoneyAmount
         Log.e("2fa NETWORK  TOKEN sms :", "$token2fa")
-        sendMoney2FAAPI.sendMoney ("Bearer $token",Repository.token2fa,"send","3NJJgGJXwjiRNhikFwoCeLpRC2oB6NJ4Wb","0.12","USD").enqueue(
+        sendMoney2FAAPI.sendMoney ("Bearer $token",Repository.token2fa,accountId,"send",to,amount,currency).enqueue(
             SendMoneyCallBack(onSuccess)
         )
     }

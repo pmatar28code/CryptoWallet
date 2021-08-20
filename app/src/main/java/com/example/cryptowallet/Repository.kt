@@ -12,4 +12,10 @@ object Repository {
     var currency=""
     var address =""
     var iconAddress =""
+    var sendMoneyAmount =""
+    var sendMonetTo=""
+    var sendMoneyAddress=""
+    var sendMoneyCurrency=""
+    var sendMoneyAccountId=""
+    var repoSendMoneyResponseCode =0
 }

@@ -6,11 +6,12 @@ import retrofit2.http.*
 
 interface SendMoney2FAAPI {
    // @Headers("Accept: application/json","Authorization","CB-2FA-TOKEN")
-    @POST("v2/accounts/ef804b1f-c74d-5679-bda7-9b2a25863f22/transactions")
+    @POST("v2/accounts/{id}/transactions")
     @FormUrlEncoded
     fun sendMoney(
        @Header("Authorization")token:String,
        @Header("CB-2FA-TOKEN")token2fa:String,
+       @Path("id")id:String,
        @Field("type")type:String,//send
        @Field("to")to:String,//address to send
        @Field("amount")amount:String,

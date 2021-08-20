@@ -6,10 +6,11 @@ import retrofit2.http.*
 
 interface SendMoneyApi {
     @Headers("Accept: application/json")
-    @POST("v2/accounts/ef804b1f-c74d-5679-bda7-9b2a25863f22/transactions")
+    @POST("v2/accounts/{id}/transactions")
     @FormUrlEncoded
     fun sendMoney(
         @Header("Authorization")token:String,
+        @Path("id") id:String,
         @Field("type")type:String,//send
         @Field("to")to:String,//address to send
         @Field("amount")amount:String,

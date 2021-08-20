@@ -3,11 +3,15 @@ package com.example.cryptowallet.network.networkcalls
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.FragmentManager
+import com.example.cryptowallet.Repository
+import com.example.cryptowallet.dialog.SendMoney2FaDialog
 import com.example.cryptowallet.network.apis.SendMoneyApi
 import com.example.cryptowallet.network.classesapi.SendMoney
 import com.example.cryptowallet.oauth.AccessTokenProviderImp
 import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
 import com.example.cryptowallet.oauth.TokenRefreshAuthenticatorCoinBase
+import com.example.cryptowallet.utilities.Utility
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -42,7 +46,29 @@ object SendMoneyNetwork {
         private val onSuccess:(SendMoney.Data) -> Unit): Callback<SendMoney.Data> {
         override fun onResponse(call: Call<SendMoney.Data>, response: Response<SendMoney.Data>) {
             Log.e("ON Response Send Money Network:","${response.body()?.details} status: ${response.body()?.status}")
+            val sendMoneyData = SendMoney.Data(
+                amount = response.body()?.amount,
+                createdAt = response.body()?.createdAt,
+                description = response.body()?.description,
+                details = response.body()?.details,
+                id=response.body()?.id,
+                nativeAmount= response.body()?.nativeAmount,
+                network = response.body()?.network,
+                resource = response.body()?.resource,
+                resourcePath = response.body()?.resourcePath,
+                status = response.body()?.status,
+                to= response.body()?.to,
+                type=response.body()?.type,
+                updatedAt = response.body()?.updatedAt
+            )
 
+            if(response.code() == 402){
+                Repository.repoSendMoneyResponseCode = response.code()
+                onSuccess(sendMoneyData)
+            }else{
+                Repository.repoSendMoneyResponseCode = 0
+                onSuccess(sendMoneyData)
+            }
         }
 
         override fun onFailure(call: Call<SendMoney.Data>, t: Throwable) {
@@ -52,9 +78,13 @@ object SendMoneyNetwork {
 
     fun sendMoney (onSuccess: (SendMoney.Data) -> Unit){
         val token = AccessTokenProviderImp().token()?.access_token?:""
+        val accountId = Repository.accountId
+        val to = Repository.sendMonetTo
+        val currency = Repository.currency
+        val amount = Repository.sendMoneyAmount
         //var idem = LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
         //Log.e("REFRESH NETWORK REFRESH TOKEN FROM Actual TOKEN:", refreshToken)
-        sendMoneyApi.sendMoney (token,"send","3NJJgGJXwjiRNhikFwoCeLpRC2oB6NJ4Wb","0.12","USD").enqueue(
+        sendMoneyApi.sendMoney (token,accountId,"send",to,amount,currency).enqueue(
             SendMoneyCallBack(onSuccess)
         )
     }
