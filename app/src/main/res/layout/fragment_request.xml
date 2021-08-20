@@ -35,7 +35,7 @@
                 android:id="@+id/request_title_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Choose Wallet you want to request money for:"
+                android:text="Choose currency for request:"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -59,7 +59,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="530dp">
+            android:layout_height="580dp">
 
             <!-- Title, secondary and supporting text -->
             <androidx.recyclerview.widget.RecyclerView

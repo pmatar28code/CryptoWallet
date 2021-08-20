@@ -24,10 +24,6 @@ class WalletFragment: Fragment(R.layout.fragment_wallet) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentWalletBinding.bind(view)
 
-        binding.buttonShowAddresses.setOnClickListener{
-            val intent = Intent(requireContext(),ShowAddressesForDifferentWalletsActivity::class.java)
-            startActivity(intent)
-        }
         justWalletAccountsWithCurrencyBTCAndWLUNA()
 
         walletAdapter = WalletsAdapter {
