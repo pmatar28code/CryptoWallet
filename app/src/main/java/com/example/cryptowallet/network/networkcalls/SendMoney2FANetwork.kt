@@ -1,8 +1,6 @@
 package com.example.cryptowallet.network.networkcalls
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.network.apis.SendMoney2FAAPI
 import com.example.cryptowallet.network.classesapi.SendMoney
@@ -40,22 +38,27 @@ object SendMoney2FANetwork {
     private class SendMoneyCallBack(
         private val onSuccess:(SendMoney.Data) -> Unit): Callback<SendMoney.Data> {
         override fun onResponse(call: Call<SendMoney.Data>, response: Response<SendMoney.Data>) {
-            Log.e("ON Response Send Money 2FA Network:","${response.body()?.details} status: ${response.body()?.status}")
+            Log.e(
+                "ON Response Send Money 2FA Network:",
+                "${response.body()?.details} status: ${response.body()?.status}"
+            )
             val sendMoneyData = SendMoney.Data(
                 amount = response.body()?.amount,
                 createdAt = response.body()?.createdAt,
                 description = response.body()?.description,
                 details = response.body()?.details,
-                id=response.body()?.id,
-                nativeAmount= response.body()?.nativeAmount,
+                id = response.body()?.id,
+                nativeAmount = response.body()?.nativeAmount,
                 network = response.body()?.network,
                 resource = response.body()?.resource,
                 resourcePath = response.body()?.resourcePath,
                 status = response.body()?.status,
-                to= response.body()?.to,
-                type=response.body()?.type,
+                to = response.body()?.to,
+                type = response.body()?.type,
                 updatedAt = response.body()?.updatedAt
             )
+
+            Repository.sendMoneyDataObj = sendMoneyData
             onSuccess(sendMoneyData)
         }
 

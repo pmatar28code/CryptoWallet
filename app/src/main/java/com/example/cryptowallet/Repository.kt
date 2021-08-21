@@ -21,6 +21,8 @@ object Repository {
     var sendMoneyAccountId=""
     var repoSendMoneyResponseCode =0
 
+
+
     //details for send money confirm
     var sendMoneyDataObj = SendMoney.Data(
         amount = SendMoney.Data.Amount("",""),
@@ -38,6 +40,8 @@ object Repository {
         updatedAt= ""
     )
 
+    var didntRequiredTwoFA = false
+
     var confirmAmount = ""
     var confirmCreatedAt = ""
     var confirmDescription = ""
@@ -51,5 +55,7 @@ object Repository {
     var confirmTo= ""
     var confirmType=""
     var confirmUpdatedAt= ""
+
+
 
 }
