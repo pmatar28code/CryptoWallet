@@ -57,7 +57,7 @@ class RequestMoneyDialog:DialogFragment() {
                 val imgBitmapPath = MediaStore.Images.Media.insertImage(
                     requireContext().contentResolver,
                     bitmap1,
-                    "title",
+                    Repository.address,// was "Title or "title"
                     null
                 )
                 val imgBitmapUri: Uri = Uri.parse(imgBitmapPath)
