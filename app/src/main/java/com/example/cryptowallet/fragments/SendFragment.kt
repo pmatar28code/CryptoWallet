@@ -1,8 +1,10 @@
 package com.example.cryptowallet.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cryptowallet.R
@@ -22,6 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class SendFragment: Fragment(R.layout.fragment_send){
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentSendBinding.bind(view)
@@ -35,9 +38,9 @@ class SendFragment: Fragment(R.layout.fragment_send){
                     listOfWallets = list.toMutableList()
                     Log.e("Wallets Activity list:","$listOfWallets")
                     val walletSendAdapter = WalletSendAdapter { data ->
-                        Repository.accountId = data.id.toString()
-                        Repository.currency = data.balance?.currency.toString()
-                        binding.outlinedTextFieldCurrency.editText?.setText(Repository.currency)
+                        Repository.sendMoneyAccountId = data.id.toString()
+                        Repository.sendMoneyCurrency = data.balance?.currency.toString()
+                        binding.outlinedTextFieldCurrency.editText?.setText(Repository.sendMoneyCurrency)
                         Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
                         runBlocking {
                             val job: Job = launch(Dispatchers.IO) {
@@ -55,22 +58,25 @@ class SendFragment: Fragment(R.layout.fragment_send){
                                 binding.sendMoneyButton.setOnClickListener {
                                     Repository.sendMoneyAmount = binding.outlinedTextFieldAmount.editText?.text.toString()
                                     Repository.sendMonetTo = binding.outlinedTextFieldTo.editText?.text.toString()
-                                    Repository.currency = binding.outlinedTextFieldCurrency.editText?.text.toString()
-                                    Log.e("CURRRENCY THISS:","${Repository.currency}")
+                                    Repository.sendMoneyCurrency = binding.outlinedTextFieldCurrency.editText?.text.toString()
+                                    Log.e("CURRRENCY THISS:", Repository.currency)
 
                                     runBlocking {
                                         val job: Job = launch(Dispatchers.IO) {
                                             SendMoneyNetwork.sendMoney {
 
-                                                Log.e("SEND MONEY FIRST REQUEST FROM DIALOG:", "${it}")
+                                                Log.e("SEND MONEY FIRST REQUEST FROM DIALOG:", "$it")
                                                 Log.e("RESPONSE CODE SEND:","${Repository.repoSendMoneyResponseCode}")
                                                 if(Repository.repoSendMoneyResponseCode == 402){
                                                     Repository.repoSendMoneyResponseCode = 400
-                                                    SendMoney2FaDialog.create {
+                                                    Toast.makeText(requireContext(),"Two Factor Was Required",Toast.LENGTH_SHORT).show()
                                                     Log.e("Two Factor Was required","${Repository.repoSendMoneyResponseCode}")
+                                                    SendMoney2FaDialog.create {
+
                                                     }.show(parentFragmentManager,"To Send 2Fa Dialog")
                                                 }else{
                                                     Log.e("Two Factor Was NOT  Required","${Repository.repoSendMoneyResponseCode}")
+                                                    Toast.makeText(requireContext(),"TWO FACTOR NOT REQUIRED ${it.createdAt}",Toast.LENGTH_SHORT).show()
                                                 }
                                             }
                                         }

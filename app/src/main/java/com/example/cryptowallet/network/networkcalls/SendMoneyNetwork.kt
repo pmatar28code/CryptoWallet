@@ -78,9 +78,9 @@ object SendMoneyNetwork {
 
     fun sendMoney (onSuccess: (SendMoney.Data) -> Unit){
         val token = AccessTokenProviderImp().token()?.access_token?:""
-        val accountId = Repository.accountId
+        val accountId = Repository.sendMoneyAccountId
         val to = Repository.sendMonetTo
-        val currency = Repository.currency
+        val currency = Repository.sendMoneyCurrency
         val amount = Repository.sendMoneyAmount
         //var idem = LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
         //Log.e("REFRESH NETWORK REFRESH TOKEN FROM Actual TOKEN:", refreshToken)

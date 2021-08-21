@@ -10,6 +10,17 @@ import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.databinding.FragmentRequestMoneyDialogBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import android.content.Intent
+
+import android.provider.MediaStore
+
+import android.graphics.drawable.BitmapDrawable
+
+import android.graphics.Bitmap
+import android.net.Uri
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toDrawable
+
 
 class RequestMoneyDialog:DialogFragment() {
     companion object {
@@ -39,7 +50,23 @@ class RequestMoneyDialog:DialogFragment() {
             requireContext(),R.style.MyRounded_MaterialComponents_MaterialAlertDialog)
             .setView(binding.root)
             .setPositiveButton("Request"){_,_ ->
-                Toast.makeText(requireContext(),"Opening sharing drawer",Toast.LENGTH_SHORT).show()
+                val bitmapDrawable =
+                    binding.requestDialogQrcodeImage.drawable.toBitmap(1000,1000).toDrawable(resources)// get the from imageview or use your drawable from drawable folder
+
+                val bitmap1 = bitmapDrawable.bitmap
+                val imgBitmapPath = MediaStore.Images.Media.insertImage(
+                    requireContext().contentResolver,
+                    bitmap1,
+                    "title",
+                    null
+                )
+                val imgBitmapUri: Uri = Uri.parse(imgBitmapPath)
+                val shareText = binding.requestDialogAddressText.text
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "*/*"
+                shareIntent.putExtra(Intent.EXTRA_STREAM, imgBitmapUri)
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareText)
+                startActivity(Intent.createChooser(shareIntent, "Share Wallpaper using"))
             }
             .setNegativeButton("Cancel",null)
             .create()

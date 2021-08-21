@@ -42,6 +42,7 @@ class SendMoney2FaDialog: DialogFragment() {
                 Repository.token2fa = binding.outlinedTextField2FaToken.editText?.text.toString()
                 SendMoney2FANetwork.sendMoney {
                     Log.e("2Fa REQUEST MONEy FROM DiALOG PRESSING ACCEPT:","${it.details}")
+                    Toast.makeText(requireContext(),"Details for send money 2Fa: ${it.createdAt}",Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton("Cancel", null)
