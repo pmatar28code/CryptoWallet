@@ -14,7 +14,9 @@ import com.example.cryptowallet.adapter.WalletSendAdapter
 import com.example.cryptowallet.databinding.FragmentSendBinding
 import com.example.cryptowallet.dialog.RequestMoneyDialog
 import com.example.cryptowallet.dialog.SendMoney2FaDialog
+import com.example.cryptowallet.dialog.SendMoneyConfirmDialog
 import com.example.cryptowallet.network.classesapi.ListAccounts
+import com.example.cryptowallet.network.classesapi.SendMoney
 import com.example.cryptowallet.network.networkcalls.AddressNetwork
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 import com.example.cryptowallet.network.networkcalls.SendMoneyNetwork
@@ -72,9 +74,30 @@ class SendFragment: Fragment(R.layout.fragment_send){
                                                     Toast.makeText(requireContext(),"Two Factor Was Required",Toast.LENGTH_SHORT).show()
                                                     Log.e("Two Factor Was required","${Repository.repoSendMoneyResponseCode}")
                                                     SendMoney2FaDialog.create {
+                                                        SendMoneyConfirmDialog.create {
 
+                                                        }.show(parentFragmentManager,"From Send Money to Send Confirm")
                                                     }.show(parentFragmentManager,"To Send 2Fa Dialog")
                                                 }else{
+                                                    Repository.sendMoneyDataObj = SendMoney.Data(
+                                                        amount = it.amount,
+                                                        createdAt = it.createdAt,
+                                                        description = it.description,
+                                                        details = it.details,
+                                                        id= it.id,
+                                                        nativeAmount = it.nativeAmount,
+                                                        network= it.network,
+                                                        resource= it.resource,
+                                                        resourcePath= it.resourcePath,
+                                                        status= it.status,
+                                                        to= it.to,
+                                                        type=it.type,
+                                                        updatedAt= it.updatedAt
+                                                    )
+                                                    SendMoneyConfirmDialog.create {
+
+                                                    }.show(parentFragmentManager,"From Send Money to Send Confirm")
+
                                                     Log.e("Two Factor Was NOT  Required","${Repository.repoSendMoneyResponseCode}")
                                                     Toast.makeText(requireContext(),"TWO FACTOR NOT REQUIRED ${it.createdAt}",Toast.LENGTH_SHORT).show()
                                                 }
