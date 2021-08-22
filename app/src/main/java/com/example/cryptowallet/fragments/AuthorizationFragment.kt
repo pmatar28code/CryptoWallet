@@ -61,19 +61,20 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                 var code = request.url.toString()
-                Log.e("TST OVERRIDE", "THIS OVERRIDE $code")
-                if (code.contains("?")) {
+                //Log.e("TST OVERRIDE", "THIS OVERRIDE $code")
+                if (code.contains("?") && code.length == 106) {
                     code = code.removeRange(0,41)
                     code = code.dropLast(1)
+                    Log.e("TST OVERRIDE", "HOW CODE ENDED UP $code")
                     Utility.getInstance()?.applicationContext?.let {
                         EncSharedPreferences.saveToEncryptedSharedPrefsString("Auth_code",code,
                             it
                         )
                     }
 
-                    var intent = Intent(requireContext(), MainActivity::class.java)
-                    //intent.putExtra("url_code", test)
-                    startActivity(intent)
+                    //var intent = Intent(requireContext(), MainActivity::class.java)
+                    //intent.putExtra("url_code", code)
+                    //startActivity(intent)
                     //view.loadUrl(urlString)
                     return true
                 }
