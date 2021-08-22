@@ -2,8 +2,6 @@ package com.example.cryptowallet.fragments
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -16,11 +14,11 @@ import com.example.cryptowallet.MainActivity
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.databinding.FragmentAuthorizationBinding
+import com.example.cryptowallet.interfacex.MainInterface
 import com.example.cryptowallet.network.apis.CoinBaseClient
 import com.example.cryptowallet.network.classesapi.AccessToken
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
-import com.example.cryptowallet.network.networkcalls.RequestMoneyNetwork
 import com.example.cryptowallet.network.networkcalls.UserNetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
 import com.example.cryptowallet.utilities.Utility
@@ -38,59 +36,40 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
-    companion object{
+    companion object {
         const val MY_CLIENT_ID = "c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188"
         val urlString = "https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&account=all&scope=wallet:accounts:read wallet:addresses:create wallet:addresses:read wallet:accounts:update wallet:accounts:create wallet:transactions:send wallet:transactions:request&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day"
-
-        // lateinit var browser : WebView
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = FragmentAuthorizationBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
-/*
-        // find the WebView by name in the main.xml of step 2
-        browser = binding.webViewAuthorization
-
-        // Enable javascript
-        browser.settings.javaScriptEnabled = true
-
-        // Set WebView client
-        //browser.setWebChromeClient( WebChromeClient());
-        val url =
-            "https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob&response_type=code&account=all&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate+wallet%3Aaccounts%3Acreate+wallet%3Atransactions%3Asend+wallet%3Atransactions%3Arequest&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day"
-        //browser.webChromeClient = WebChromeClient()
-        val urlString = "https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&account=all&scope=wallet:accounts:read wallet:addresses:create wallet:addresses:read wallet:accounts:update wallet:accounts:create wallet:transactions:send wallet:transactions:request&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day"
-        browser.webViewClient = WebViewClient()
-        //browser.loadUrl(urlString)
-        */
 
         val webView: WebView = binding.webViewAuthorization
-        //webView.settings.loadsImagesAutomatically = true
         webView.settings.javaScriptEnabled = true
 
-       // webView.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
-
-       // val urlString = "https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&account=all&scope=wallet:accounts:read wallet:addresses:create wallet:addresses:read wallet:accounts:update wallet:accounts:create wallet:transactions:send wallet:transactions:request&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day"
-
-        //webView.loadUrl(urlString)
-
-
         webView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+            override fun shouldOverrideUrlLoading(
+                view: WebView,
+                request: WebResourceRequest
+            ): Boolean {
                 var code = request.url.toString()
                 //Log.e("TST OVERRIDE", "THIS OVERRIDE $code")
                 if (code.contains("?") && code.length == 106) {
-                    code = code.removeRange(0,41)
+                    code = code.removeRange(0, 41)
                     code = code.dropLast(1)
                     Log.e("TST OVERRIDE", "HOW CODE ENDED UP $code")
                     Utility.getInstance()?.applicationContext?.let {
-                        EncSharedPreferences.saveToEncryptedSharedPrefsString("Auth_code",code,
+                        EncSharedPreferences.saveToEncryptedSharedPrefsString(
+                            "Auth_code", code,
                             it
                         )
                     }
                     getTokenNetworkRequest(code)
+                    getUserAndListAccountsFromNetwork()
+                    //val intent = Intent(requireContext(),MainActivity::class.java)
+                    //startActivity(intent)
                     return true
                 }
                 return false
@@ -98,7 +77,8 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
         }
         webView.loadUrl(urlString)
     }
-    private fun getTokenNetworkRequest(code:String){
+
+    private fun getTokenNetworkRequest(code: String) {
         runBlocking {
             val job: Job = launch {
                 val logger = HttpLoggingInterceptor()
@@ -150,7 +130,7 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                             "ACCESS TOKEN ADDED TO EncSharedPrefs $accessToken"
                         )
 
-                    //intent
+                        //intent
                     }
 
                     override fun onFailure(call: Call<AccessToken>, t: Throwable) {
@@ -162,26 +142,27 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
         }
     }
 
-    private fun getUserAndListAccountsFromNetwork(){
+    private fun getUserAndListAccountsFromNetwork() {
         UserNetwork.getUser {
             runBlocking {
-                var job:Job = launch(Dispatchers.IO) {
-                    Log.e("SHOWING USER", "${it.name}, id: ${it.id} WITH TOKEN = ${MainActivity.accessTokenFromShared?.access_token}}")
+                var job: Job = launch(Dispatchers.IO) {
+                    Log.e("SHOWING USER", "${it.name}, id: ${it.id} WITH TOKEN = ${MainActivity.accessTokenFromShared?.access_token}}"
+                    )
                     Repository.userId = it.id.toString()
                     Repository.userName = it.name.toString()
-                }
-            }
-        }
-        ListAccountsNetwork.getAccounts {
-            Repository.accounts = it as MutableList<ListAccounts.Data>
-            runBlocking {
-                var job:Job = launch(Dispatchers.IO) {
-                    Log.e(
-                        "LIST OF ACCOUNTS MAIN OJO: ",
-                        "ID: ${it[0].id}, ${it[0].name},type = ${it[0].type},primary = ${it[0].primary}, ${it[0].balance}, ${it[0].currency} WITH TOKEN = ${MainActivity.accessTokenFromShared?.access_token}"
-                    )
-                    Log.e("ALL THE LIST OFF ACCOUNTS MAIN:","$it")
-                    //swapFragments(WalletFragment())
+
+                    ListAccountsNetwork.getAccounts {
+                        Repository.accounts = it as MutableList<ListAccounts.Data>
+
+                        Log.e(
+                            "LIST OF ACCOUNTS MAIN OJO: ",
+                            "ID: ${it[0].id}, ${it[0].name},type = ${it[0].type},primary = ${it[0].primary}, ${it[0].balance}, ${it[0].currency} WITH TOKEN = ${MainActivity.accessTokenFromShared?.access_token}"
+                        )
+                        Log.e("ALL THE LIST OFF ACCOUNTS MAIN:", "$it")
+                        //swapFragments(WalletFragment())
+                        val intent = Intent(requireContext(),MainActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
             }
         }

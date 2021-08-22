@@ -11,9 +11,6 @@ import com.example.cryptowallet.fragments.RequestFragment
 import com.example.cryptowallet.fragments.SendFragment
 import com.example.cryptowallet.fragments.WalletFragment
 import com.example.cryptowallet.network.classesapi.AccessToken
-import com.example.cryptowallet.network.classesapi.ListAccounts
-import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
-import com.example.cryptowallet.network.networkcalls.UserNetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
@@ -63,6 +60,7 @@ class MainActivity : AppCompatActivity() {
                 }"
             )
 
+    /*
             UserNetwork.getUser {
                 runBlocking {
                     var job:Job = launch(IO) {
@@ -85,6 +83,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+            */
+
             binding.apply {
                 bottomNavigationContainer.setOnNavigationItemSelectedListener {
                     handleBottomNavigation(it.itemId, binding)
@@ -117,8 +117,6 @@ class MainActivity : AppCompatActivity() {
         }
         else -> false
     }
-
-    //override
     fun swapFragments(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
