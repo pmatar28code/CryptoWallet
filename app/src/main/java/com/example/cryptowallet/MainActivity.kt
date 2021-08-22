@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import com.example.cryptowallet.databinding.ActivityMainBinding
+import com.example.cryptowallet.fragments.AuthorizationFragment
 import com.example.cryptowallet.fragments.RequestFragment
 import com.example.cryptowallet.fragments.SendFragment
 import com.example.cryptowallet.fragments.WalletFragment
@@ -52,7 +53,13 @@ class MainActivity : AppCompatActivity() {
                 joinAll()
             }
         }
+        //val intent = Intent()
+        //Log.e("CAME BACK TO MAIN:","${intent.getStringExtra("url_with_code")}")
+        //            val url = "https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&account=all&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate+wallet%3Aaccounts%3Acreate+wallet%3Atransactions%3Asend+wallet%3Atransactions%3Arequest&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day"
         if (codeFromShared == null) {
+            swapFragments(AuthorizationFragment())
+
+            /*
             val url = "https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&account=all&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate+wallet%3Aaccounts%3Acreate+wallet%3Atransactions%3Asend+wallet%3Atransactions%3Arequest&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day"
             val customTabsIntentBuilder  =  CustomTabsIntent.Builder()
             val customTabsIntent = customTabsIntentBuilder.build()
@@ -66,7 +73,8 @@ class MainActivity : AppCompatActivity() {
 
             customTabsIntent.launchUrl(this, Uri.parse(url))
 
-/*
+*/
+            /*
             val intent = Intent(
                Intent.ACTION_VIEW,
                 Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&account=all&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate+wallet%3Aaddresses%3Aread+wallet%3Aaccounts%3Aupdate+wallet%3Aaccounts%3Acreate+wallet%3Atransactions%3Asend+wallet%3Atransactions%3Arequest&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day")
@@ -74,8 +82,64 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             Log.e("FIRST Run", "getting the code")*/
         } else {
-            val jsonStringAccessToken = EncSharedPreferences.getValueString(keyStringAccesskey,applicationContext)?:""
-            accessTokenFromShared = EncSharedPreferences.convertJsonStringToTestClass(jsonStringAccessToken)
+            runBlocking {
+                val job:Job = launch(IO){
+
+
+
+
+                    val retrofitBuilder = Retrofit.Builder()
+                        .baseUrl("https://api.coinbase.com/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                    val retrofit = retrofitBuilder.build()
+                    val coinBaseClient = retrofit.create(CoinBaseClient::class.java)
+                    val accessTokenCall = codeFromShared?.let {
+                        coinBaseClient.getToken(
+                            "authorization_code",
+                            it,
+                            MY_CLIENT_ID,
+                            CLIENT_SECRET,
+                            MY_REDIRECT_URI
+                        )
+                    }
+                    accessTokenCall?.enqueue(object: Callback<AccessToken> {
+                        override fun onResponse(call: Call<AccessToken>, response: Response<AccessToken>) {
+                            Toast.makeText(this@MainActivity,"good response: ${response.body()?.access_token}",Toast.LENGTH_SHORT).show()
+                            var accessToken = AccessToken(
+                                access_token =  response.body()?.access_token?:"",
+                                token_type =  response.body()?.token_type?:"",
+                                expires_in = response.body()?.expires_in?:0,
+                                refresh_token = response.body()?.refresh_token?:"",
+                                scope =  response.body()?.scope?:""
+                            )
+                            if(accessToken != null) {
+                                val jsonAccessToken = EncSharedPreferences.convertTestClassToJsonString(accessToken)
+                                EncSharedPreferences.saveToEncryptedSharedPrefsString(keyStringAccesskey,jsonAccessToken,applicationContext)
+                                Log.e("ADDED TOKEN TO DATABASE","ACCESS TOKEN ADDED TO EncSharedPrefs $accessToken")
+                                val intent =Intent(this@MainActivity, MainActivity::class.java)
+                                startActivity(intent)
+                            }else{
+                                Log.e("TOKEN IS NULL","ACCESS TOKEN IS NULL $accessToken")
+                            }
+
+                        }
+                        override fun onFailure(call: Call<AccessToken>, t: Throwable) {
+                            Toast.makeText(this@MainActivity,"bad response",Toast.LENGTH_SHORT).show()
+                        }
+                    })
+
+
+
+
+
+
+
+
+
+            val jsonStringAccessToken =
+                EncSharedPreferences.getValueString(keyStringAccesskey, applicationContext) ?: ""
+            accessTokenFromShared =
+                EncSharedPreferences.convertJsonStringToTestClass(jsonStringAccessToken)
             //Repository.accessToken = EncSharedPreferences.convertJsonStringToTestClass(jsonStringAccessToken)
             Log.e(
                 "WHATS NEXT",
@@ -83,6 +147,8 @@ class MainActivity : AppCompatActivity() {
                     accessTokenFromShared?.access_token
                 }"
             )
+        }
+        }
             UserNetwork.getUser {
                 runBlocking {
                     var job:Job = launch(IO) {
@@ -147,6 +213,7 @@ class MainActivity : AppCompatActivity() {
                 */
             }
         }
+                    /*
     override fun onResume() {
         super.onResume()
         val uri = intent.data
@@ -196,6 +263,7 @@ class MainActivity : AppCompatActivity() {
             })
         }
     }
+                    */
     /*
     private fun revokeToken(){
         //changed to encsharedPreferences instead of database
