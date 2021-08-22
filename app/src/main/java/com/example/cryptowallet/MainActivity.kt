@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import com.example.cryptowallet.databinding.ActivityMainBinding
 import com.example.cryptowallet.fragments.AuthorizationFragment
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (codeFromShared == null) {
+            binding.bottomNavigationContainer.isGone =true
             swapFragments(AuthorizationFragment())
 
 
