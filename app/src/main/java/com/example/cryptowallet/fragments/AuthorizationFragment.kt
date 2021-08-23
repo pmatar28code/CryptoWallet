@@ -4,17 +4,21 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
+import androidx.core.view.isGone
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.cryptowallet.MainActivity
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
+import com.example.cryptowallet.databinding.ActivityMainBinding
 import com.example.cryptowallet.databinding.FragmentAuthorizationBinding
-import com.example.cryptowallet.interfacex.MainInterface
 import com.example.cryptowallet.network.apis.CoinBaseClient
 import com.example.cryptowallet.network.classesapi.AccessToken
 import com.example.cryptowallet.network.classesapi.ListAccounts
@@ -160,6 +164,13 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                         )
                         Log.e("ALL THE LIST OFF ACCOUNTS MAIN:", "$it")
                         //swapFragments(WalletFragment())
+                        //val contextMain = MainActivity.mainContext
+                        //val inflaterMain = LayoutInflater.from(contextMain)
+                        //val bindingMain = ActivityMainBinding.inflate(inflaterMain)
+                       // bindingMain.bottomNavigationContainer.isVisible = true
+                        //parentFragmentManager.beginTransaction()
+                          //  .replace(R.id.fragment_container,WalletFragment())
+                            //.commit()
                         val intent = Intent(requireContext(),MainActivity::class.java)
                         startActivity(intent)
                     }

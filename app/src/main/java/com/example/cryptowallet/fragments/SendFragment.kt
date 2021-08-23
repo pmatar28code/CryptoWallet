@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -24,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.*
 
 class SendFragment: Fragment(R.layout.fragment_send) {
     private var walletSendAdapter:WalletSendAdapter?=null
@@ -52,13 +54,63 @@ class SendFragment: Fragment(R.layout.fragment_send) {
                     binding.walletsSendRecyclerView.apply {
                         adapter = walletSendAdapter
                         layoutManager = LinearLayoutManager(context)
-                        walletSendAdapter?.submitList(listOfWallets.toList())
+                        walletSendAdapter?.submitList(listOfWallets.toList().reversed())
                         walletSendAdapter?.notifyDataSetChanged()
                     }
+                    performSearch(binding,listOfWallets)
                 }
+
             }
         }
     }
+
+    private fun performSearch(binding:FragmentSendBinding,listSearch:List<ListAccounts.Data>) {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                search(query,listSearch,binding)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                search(newText,listSearch,binding)
+                return true
+            }
+        })
+    }
+
+    private fun search(text: String?,listOfAccounts:List<ListAccounts.Data>,binding:FragmentSendBinding) {
+        var listOfAccountsToWork = listOfAccounts
+        var searchResultList = mutableListOf<ListAccounts.Data>()
+
+        text?.let {
+            listOfAccountsToWork.forEach { Account ->
+                if (Account.balance?.currency == text.uppercase(Locale.getDefault()) ||
+                    Account.balance?.currency?.contains(text.uppercase(Locale.getDefault())) == true
+                ) {
+                    searchResultList.add(Account)
+                }
+            }
+            if(searchResultList.isEmpty()){
+                updateRecyclerView(listOfAccountsToWork.reversed())
+                Toast.makeText(requireContext(), "No match found!", Toast.LENGTH_SHORT).show()
+            }else{
+                updateRecyclerView(searchResultList.reversed())
+            }
+            //updateRecyclerView(searchResultList)
+           // if (searchResultList.isEmpty()) {
+            //    Toast.makeText(requireContext(), "No match found!", Toast.LENGTH_SHORT).show()
+           // }
+            //updateRecyclerView(searchResultList)
+        }
+    }
+
+    private fun updateRecyclerView(searchResultList:List<ListAccounts.Data>) {
+        walletSendAdapter?.submitList(searchResultList)
+        walletSendAdapter?.notifyDataSetChanged()
+
+    }
+
+
 
     private fun sendMoneyButtonFunction(
         binding: FragmentSendBinding,
