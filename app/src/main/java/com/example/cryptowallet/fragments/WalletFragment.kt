@@ -11,6 +11,7 @@ import com.example.cryptowallet.Repository
 import com.example.cryptowallet.ShowAddressesForDifferentWalletsActivity
 import com.example.cryptowallet.adapter.WalletsAdapter
 import com.example.cryptowallet.databinding.FragmentWalletBinding
+import com.example.cryptowallet.dialog.WalletDetailsDialog
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 
@@ -27,12 +28,13 @@ class WalletFragment: Fragment(R.layout.fragment_wallet) {
         justWalletAccountsWithCurrencyBTCAndWLUNA()
 
         walletAdapter = WalletsAdapter {
-
+            Repository.walletDetailsAccountId = it.id.toString()
+            WalletDetailsDialog.create {  }.show(parentFragmentManager,"to open wallet details dialog")
         }
         binding.walletsRecyclerView.apply {
             adapter = walletAdapter
             layoutManager = LinearLayoutManager(requireContext())
-            walletAdapter!!.submitList(Repository.accounts)
+            walletAdapter!!.submitList(Repository.accounts.reversed())
             walletAdapter!!.notifyDataSetChanged()
 
         }
@@ -49,7 +51,7 @@ class WalletFragment: Fragment(R.layout.fragment_wallet) {
         super.onResume()
         ListAccountsNetwork.getAccounts {
             Repository.accounts = it as MutableList<ListAccounts.Data>
-            walletAdapter?.submitList(Repository.accounts)
+            walletAdapter?.submitList(Repository.accounts.reversed())
             walletAdapter?.notifyDataSetChanged()
         }
     }
