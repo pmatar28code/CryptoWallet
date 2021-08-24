@@ -1,5 +1,7 @@
 package com.example.cryptowallet.codereader
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.example.cryptowallet.R
+import com.example.cryptowallet.Repository
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.util.concurrent.Executors
 
@@ -22,14 +26,15 @@ class BarcodeResultBottomSheet: BottomSheetDialogFragment() {
     //We will call this function to update the URL displayed
     fun updateURL(url: String?) {
         if (url != null) {
-            fetchUrlMetaData(url) { title ->
+            fetchUrlMetaData(url) { address ->
                 view?.apply {
-                    findViewById<TextView>(R.id.text_view_title)?.text = "This is The Address:"
                     //findViewById<TextView>(R.id.text_view_desc)?.text = desc
-                    findViewById<TextView>(R.id.text_view_link)?.text = title
-                    findViewById<TextView>(R.id.text_view_visit_link).setOnClickListener { _ ->
-                        Toast.makeText(requireContext(),"THIS IS WHErE I SET COPY OR STORE VALUE",Toast.LENGTH_SHORT).show()
-                        //Intent(Intent.ACTION_VIEW).also {
+                    findViewById<TextView>(R.id.text_view_address)?.text = address
+                    findViewById<TextView>(R.id.text_view_store_address).setOnClickListener { _ ->
+                        Toast.makeText(requireContext(),"Address copied to your clipboard",Toast.LENGTH_SHORT).show()
+                        copyToClipboard(address)
+
+                    //Intent(Intent.ACTION_VIEW).also {
                         // it.data = Uri.parse(url)
                         // startActivity(it)
                         // }
@@ -37,6 +42,10 @@ class BarcodeResultBottomSheet: BottomSheetDialogFragment() {
                 }
             }
         }
+    }
+    fun copyToClipboard(text: CharSequence){
+        val clipboard = ContextCompat.getSystemService(requireContext(), ClipboardManager::class.java)
+        clipboard?.setPrimaryClip(ClipData.newPlainText("",text))
     }
 
     //this function will fetch URL data
