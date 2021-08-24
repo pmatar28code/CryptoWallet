@@ -1,10 +1,15 @@
 package com.example.cryptowallet
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -33,6 +38,12 @@ class MainActivity : AppCompatActivity() {
         var stringTokenFromShared:String ?= null
         var accessTokenFromShared:AccessToken ?= null
         //lateinit var mainContext: Context
+
+
+        private const val TAG = "CameraXBasic"
+        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        private const val REQUEST_CODE_PERMISSIONS = 10
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +51,14 @@ class MainActivity : AppCompatActivity() {
         val inflater = LayoutInflater.from(this)
         val binding = ActivityMainBinding.inflate(inflater)
         setContentView(binding.root)
+
+        if (allPermissionsGranted()) {
+            //startCamera()
+        } else {
+            ActivityCompat.requestPermissions(
+                this,REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            )
+        }
 
         runBlocking {
             val job:Job = launch(IO) {
@@ -104,6 +123,26 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            baseContext, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults:
+        IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (allPermissionsGranted()) {
+                //startCamera()
+            } else {
+                Toast.makeText(this,
+                    "Permissions not granted by the user.",
+                    Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+    }
 
     private fun handleBottomNavigation(
         menuItemId: Int, binding: ActivityMainBinding

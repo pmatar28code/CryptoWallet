@@ -2,6 +2,7 @@ package com.example.cryptowallet.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
+import com.example.cryptowallet.ScanQrActivity
 import com.example.cryptowallet.adapter.WalletSendAdapter
 import com.example.cryptowallet.databinding.FragmentSendBinding
 import com.example.cryptowallet.dialog.SendMoney2FaDialog
@@ -48,6 +50,10 @@ class SendFragment: Fragment(R.layout.fragment_send) {
                                 requireContext(),
                                 parentFragmentManager
                             )
+                        }
+                        binding.scanQrCodeButton.setOnClickListener {
+                            val intent = Intent(requireContext(),ScanQrActivity::class.java)
+                            startActivity(intent)
                         }
                     }
 
