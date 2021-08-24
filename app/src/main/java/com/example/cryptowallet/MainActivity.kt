@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        if (codeFromShared == null) {
+        if (codeFromShared == null || codeFromShared == "") {
            // mainContext = this
             binding.bottomNavigationContainer.isGone = true
 
@@ -175,9 +175,15 @@ class MainActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
             btnConfirm.setOnClickListener {
-                EncSharedPreferences.clearSharedPreference(this)
-                val intent = Intent(this,MainActivity::class.java)
-                startActivity(intent)
+                runBlocking {
+                    val job:Job = launch(IO) {
+                            EncSharedPreferences.saveToEncryptedSharedPrefsString(keyStringCode,"",this@MainActivity)
+                            //stringTokenFromShared = null
+                            //accessTokenFromShared = null
+                            val intent = Intent(this@MainActivity, MainActivity::class.java)
+                            startActivity(intent)
+                    }
+                }
             }
             dialog.setCancelable(false)
             dialog.setContentView(view)
