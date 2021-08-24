@@ -6,6 +6,8 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_show_addresses_for_different_wallets.xml" value="0.5" />
         <entry key="app/src/main/res/layout/bottom_barcode_sheet_data.xml" value="0.12587719298245614" />
+        <entry key="app/src/main/res/layout/bottom_sheet_barcode_data.xml" value="0.14210526315789473" />
+        <entry key="app/src/main/res/layout/bottom_sheet_menu.xml" value="0.14210526315789473" />
         <entry key="app/src/main/res/layout/fragmen_scan_qr_dialog.xml" value="0.12587719298245614" />
         <entry key="app/src/main/res/layout/fragment_authorization.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_request.xml" value="0.25" />

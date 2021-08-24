@@ -2,10 +2,12 @@ package com.example.cryptowallet
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -21,6 +23,7 @@ import com.example.cryptowallet.fragments.SendFragment
 import com.example.cryptowallet.fragments.WalletFragment
 import com.example.cryptowallet.network.classesapi.AccessToken
 import com.example.cryptowallet.utilities.EncSharedPreferences
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.joinAll
@@ -162,9 +165,28 @@ class MainActivity : AppCompatActivity() {
             swapFragments(SendFragment())
             true
         }
+        R.id.menu_other -> {
+            val dialog = BottomSheetDialog(this)
+            val view = layoutInflater.inflate(R.layout.bottom_sheet_menu, null)
+            val btnClose = view.findViewById<Button>(R.id.idBtnDismiss)
+            val btnConfirm = view.findViewById<Button>(R.id.button_confirm)
+
+            btnClose.setOnClickListener {
+                dialog.dismiss()
+            }
+            btnConfirm.setOnClickListener {
+                EncSharedPreferences.clearSharedPreference(this)
+                val intent = Intent(this,MainActivity::class.java)
+                startActivity(intent)
+            }
+            dialog.setCancelable(false)
+            dialog.setContentView(view)
+            dialog.show()
+            true
+        }
         else -> false
     }
-    fun swapFragments(fragment: Fragment) {
+    private fun swapFragments(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .addToBackStack("back")
