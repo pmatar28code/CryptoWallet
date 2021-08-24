@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_qr_reader.xml" value="0.23771929824561402" />
+        <entry key="app/src/main/res/layout/activity_show_addresses_for_different_wallets.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/bottom_barcode_sheet_data.xml" value="0.12587719298245614" />
+        <entry key="app/src/main/res/layout/bottom_sheet_barcode_data.xml" value="0.14210526315789473" />
+        <entry key="app/src/main/res/layout/bottom_sheet_menu.xml" value="0.14210526315789473" />
+        <entry key="app/src/main/res/layout/fragmen_scan_qr_dialog.xml" value="0.12587719298245614" />
+        <entry key="app/src/main/res/layout/fragment_authorization.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_request.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_request_money_dialog.xml" value="0.21" />
+        <entry key="app/src/main/res/layout/fragment_send.xml" value="0.17" />
+        <entry key="app/src/main/res/layout/fragment_send_money_2fa_dialog.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_send_money_confirm_dialog.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_wallet.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_wallet_details.xml" value="0.14210526315789473" />
+        <entry key="app/src/main/res/layout/item_wallets.xml" value="0.4166666666666667" />
+        <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.10614035087719298" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

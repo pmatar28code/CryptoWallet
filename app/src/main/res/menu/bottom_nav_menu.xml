@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_wallet"
+        android:enabled="true"
+        android:icon="@drawable/ic_wallet"
+        android:title="@string/wallet_menu_title"/>
+    <item
+        android:id="@+id/menu_request"
+        android:enabled="true"
+        android:icon="@drawable/ic_request"
+        android:title="@string/request_menu_title"/>
+    <item
+        android:id="@+id/menu_send"
+        android:enabled="true"
+        android:icon="@drawable/ic_send"
+        android:title="@string/send_menu_title"/>
+    <item
+        android:id="@+id/menu_other"
+        android:enabled="true"
+        android:icon="@drawable/ic_exit"
+        android:title="Logout"/>
+</menu>

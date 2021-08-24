@@ -7,6 +7,7 @@ import com.example.cryptowallet.oauth.AccessTokenProviderImp
 import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
 import com.example.cryptowallet.oauth.TokenRefreshAuthenticatorCoinBase
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,7 +16,10 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 object ListAccountsNetwork {
     private val accessTokenProvider = AccessTokenProviderImp()
+    val logger = HttpLoggingInterceptor()
+        .setLevel(HttpLoggingInterceptor.Level.BODY )
     private val client = OkHttpClient.Builder()
+        .addInterceptor(logger)
         .addNetworkInterceptor(TokenAuthorizationInterceptor(accessTokenProvider))
         .authenticator(TokenRefreshAuthenticatorCoinBase(accessTokenProvider))
         .build()
@@ -33,6 +37,7 @@ object ListAccountsNetwork {
         private val onSuccess: (List<ListAccounts.Data>) -> Unit
     ) : Callback<ListAccounts> {
         override fun onResponse(call: Call<ListAccounts>, response: Response<ListAccounts>) {
+            Log.e("LIST OF Accounts Network On Response:","${response.body()?.data}")
             val listOfAccounts = mutableListOf<ListAccounts.Data>()
             for(item in response.body()?.data!!){
                 listOfAccounts.add(item!!)

@@ -1,43 +1,53 @@
 package com.example.cryptowallet
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import android.os.AsyncTask
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.cryptowallet.database.CoinBaseDatabase
-import com.example.cryptowallet.database.JustCode
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import com.example.cryptowallet.databinding.ActivityMainBinding
-import com.example.cryptowallet.network.apis.CoinBaseClient
-import com.example.cryptowallet.network.apis.RevokeTokenApi
-import com.example.cryptowallet.network.networkcalls.AddressNetwork
-import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
-import com.example.cryptowallet.network.networkcalls.UserNetwork
+import com.example.cryptowallet.fragments.AuthorizationFragment
+import com.example.cryptowallet.fragments.RequestFragment
+import com.example.cryptowallet.fragments.SendFragment
+import com.example.cryptowallet.fragments.WalletFragment
 import com.example.cryptowallet.network.classesapi.AccessToken
-import kotlinx.coroutines.*
+import com.example.cryptowallet.utilities.EncSharedPreferences
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.Dispatchers.IO
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        const val MY_CLIENT_ID = "e4faf6ec45843a2f1e8a42c6242f3d8e82ce5603d3ee9c86c85be29a6361104f"
-        const val CLIENT_SECRET = "84e2a6a63dc56f5d5be617f77cf71c0c4069a7e3a49cb9e2ce7e5d2bddea007f"
-        const val MY_REDIRECT_URI = "cryptowallet://callback"
-        lateinit var ROOM_DATABASE: CoinBaseDatabase
+        const val MY_CLIENT_ID = "c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188"
+        const val CLIENT_SECRET = "311b687baee92bbd8e584527bb757f27c9ed363f7a3922a18b381bcd4309b5b4"
+        const val MY_REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"//"cryptowallet://callback"
+        const val keyStringAccesskey = "Access_key"
+        const val keyStringCode = "Auth_code"
+        var codeFromShared:String ?= null
+        var stringTokenFromShared:String ?= null
+        var accessTokenFromShared:AccessToken ?= null
+        //lateinit var mainContext: Context
+
+
+        private const val TAG = "CameraXBasic"
+        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        private const val REQUEST_CODE_PERMISSIONS = 10
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
-    var accessToken:AccessTokenDCLass?=null
-    var database: CoinBaseDatabase?= null
-    var token:String ?= ""
-    var testingCodeList:List<JustCode>?=null
-    var testingTokenList:List<AccessTokenDCLass>?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,224 +55,149 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(inflater)
         setContentView(binding.root)
 
-        database = CoinBaseDatabase.getInstance(applicationContext)
-        ROOM_DATABASE = database as CoinBaseDatabase
+        if (allPermissionsGranted()) {
+            //startCamera()
+        } else {
+            ActivityCompat.requestPermissions(
+                this,REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            )
+        }
+
         runBlocking {
             val job:Job = launch(IO) {
-                testingCodeList = database?.JustCodeDao()?.getAllCodes()
-                testingTokenList = database?.AccessTokenDao()?.getAllTokens()
+                codeFromShared = EncSharedPreferences.getValueString(keyStringCode,applicationContext)
+                Log.e("HOW CODE VALUE STRING LOOKS MAIN:",codeFromShared?:"not looking good")
+                stringTokenFromShared = EncSharedPreferences.getValueString(keyStringAccesskey,applicationContext)
                 joinAll()
             }
         }
 
+        if (codeFromShared == null || codeFromShared == "") {
+           // mainContext = this
+            binding.bottomNavigationContainer.isGone = true
 
-        if (testingCodeList!!.isEmpty()) {
-            val intent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=e4faf6ec45843a2f1e8a42c6242f3d8e82ce5603d3ee9c86c85be29a6361104f&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&scope=wallet%3Aaccounts%3Aread+wallet%3Aaddresses%3Acreate")
-            )
-            startActivity(intent)
-            Log.e("FIRST Run", "getting the code")
+            swapFragments(AuthorizationFragment())
+
+
         } else {
-            Repository.accessToken = testingTokenList!![0]
+            stringTokenFromShared = EncSharedPreferences.getValueString(keyStringAccesskey,applicationContext)
+
+
             Log.e(
                 "WHATS NEXT",
-                "DO API Requests WITH TOKEN AVAILABLE CODE:${testingCodeList?.get(0)?.code}, Token:${
-                    testingTokenList?.get(0)?.access_token
+                "DO API Requests WITH TOKEN AVAILABLE CODE:$codeFromShared, Token:${
+                    accessTokenFromShared?.access_token
                 }"
             )
+
+    /*
             UserNetwork.getUser {
                 runBlocking {
                     var job:Job = launch(IO) {
-                        val token = database?.AccessTokenDao()?.getAllTokens()?.get(0)
-                        Log.e("SHOWING USER", "${it.name}, id: ${it.id} WITH TOKEN = ${token?.access_token}")
+                        Log.e("SHOWING USER", "${it.name}, id: ${it.id} WITH TOKEN = ${accessTokenFromShared?.access_token}}")
                         Repository.userId = it.id.toString()
+                        Repository.userName = it.name.toString()
                     }
                 }
             }
             ListAccountsNetwork.getAccounts {
-                Repository.accountId = it[0].id?:""
+                Repository.accounts = it as MutableList<ListAccounts.Data>
                 runBlocking {
                     var job:Job = launch(IO) {
-                        var token = database?.AccessTokenDao()?.getAllTokens()?.get(0)
                         Log.e(
                             "LIST OF ACCOUNTS MAIN OJO: ",
-                            "ID: ${it[0].id}, ${it[0].name}, ${it[0].balance}, ${it[0].currency} WITH TOKEN = ${token?.access_token}"
+                            "ID: ${it[0].id}, ${it[0].name},type = ${it[0].type},primary = ${it[0].primary}, ${it[0].balance}, ${it[0].currency} WITH TOKEN = ${accessTokenFromShared?.access_token}"
                         )
+                        Log.e("ALL THE LIST OFF ACCOUNTS MAIN:","$it")
+                        swapFragments(WalletFragment())
                     }
                 }
             }
-            AddressNetwork.getAddresses {
+            */
+
+            binding.apply {
+                bottomNavigationContainer.setOnNavigationItemSelectedListener {
+                    handleBottomNavigation(it.itemId, binding)
+                }
+            }
+            //swap fragment to wallet which is going to be the main one to show to the user
+            //listing accounts that have balance > 0
+            swapFragments(WalletFragment())
+
+            }
+        }
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            baseContext, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults:
+        IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (allPermissionsGranted()) {
+                //startCamera()
+            } else {
+                Toast.makeText(this,
+                    "Permissions not granted by the user.",
+                    Toast.LENGTH_SHORT).show()
+                finish()
+            }
+        }
+    }
+
+    private fun handleBottomNavigation(
+        menuItemId: Int, binding: ActivityMainBinding
+    ): Boolean = when (menuItemId) {
+
+        R.id.menu_wallet -> {
+            swapFragments(WalletFragment())
+            true
+        }
+        R.id.menu_request -> {
+            Repository.accounts.clear()
+            swapFragments(RequestFragment())
+            true
+        }
+        R.id.menu_send -> {
+            Repository.accounts.clear()
+            swapFragments(SendFragment())
+            true
+        }
+        R.id.menu_other -> {
+            val dialog = BottomSheetDialog(this)
+            val view = layoutInflater.inflate(R.layout.bottom_sheet_menu, null)
+            val btnClose = view.findViewById<Button>(R.id.idBtnDismiss)
+            val btnConfirm = view.findViewById<Button>(R.id.button_confirm)
+
+            btnClose.setOnClickListener {
+                dialog.dismiss()
+            }
+            btnConfirm.setOnClickListener {
                 runBlocking {
-                    var job: Job = launch(IO) {
-                        var token = database?.AccessTokenDao()?.getAllTokens()?.get(0)
-                        Log.e(
-                            "CREATE ADDRESS MAIN: ",
-                            "${it.address} , ${it.name} , ${it.createdAt} , WITH TOKEN = ${token?.access_token}"
-                        )
+                    val job:Job = launch(IO) {
+                            EncSharedPreferences.saveToEncryptedSharedPrefsString(keyStringCode,"",this@MainActivity)
+                            //stringTokenFromShared = null
+                            //accessTokenFromShared = null
+                            val intent = Intent(this@MainActivity, MainActivity::class.java)
+                            startActivity(intent)
                     }
                 }
             }
-
-        //AccessTokenProviderImp().refreshToken {
-        //  Log.e("USING IMP ON MAIN FOR REFRESH","${it.access_token}")
-        // }
-
-        // runBlocking {
-        //  var job:Job = launch(IO){
-        //    revokeToken()
-        // joinAll()
-        // }
-        //}
+            dialog.setCancelable(false)
+            dialog.setContentView(view)
+            dialog.show()
+            true
         }
+        else -> false
+    }
+    private fun swapFragments(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack("back")
+            .commit()
     }
 
-    override fun onResume() {
-        super.onResume()
-        val uri = intent.data
-        if(uri != null){
-            val code = uri.getQueryParameter("code")!!
-            CoroutineScope(IO).launch {
-                addCode(code)
-                var testCodeList2 = getCode()
-                Log.e("ADDING CODE","ADDED CODE TO DATABASE $testCodeList2")
-            }
-            //cryptowallet://callback?code=e260bd24659d7ee7c88acf1550839ded1a90b159d4cb37d24fd208df4a4222fb
-            val retrofitBuilder = Retrofit.Builder()
-                .baseUrl("https://api.coinbase.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-            val retrofit = retrofitBuilder.build()
-            val coinBaseClient = retrofit.create(CoinBaseClient::class.java)
-            val accessTokenCall = coinBaseClient.getToken(
-                "authorization_code",
-                code,
-                MY_CLIENT_ID,
-                CLIENT_SECRET,
-                MY_REDIRECT_URI
-            )
-            accessTokenCall.enqueue(object: Callback<AccessToken> {
-                override fun onResponse(call: Call<AccessToken>, response: Response<AccessToken>) {
-                    Toast.makeText(this@MainActivity,"good response: ${response.body()?.access_token}",Toast.LENGTH_SHORT).show()
-                    var accessTokenRegular = AccessToken(
-                        access_token =  response.body()?.access_token?:"",
-                        token_type =  response.body()?.token_type?:"",
-                        expires_in = response.body()?.expires_in?:0,
-                        refresh_token = response.body()?.refresh_token?:"",
-                        scope =  response.body()?.scope?:""
-                    )
-                    accessToken= AccessTokenDCLass(
-                        access_token =  response.body()?.access_token?:"",
-                        token_type =  response.body()?.token_type?:"",
-                        expires_in = response.body()?.expires_in?:0,
-                        refresh_token = response.body()?.refresh_token?:"",
-                        scope =  response.body()?.scope?:""
-                    )
-                    if(accessToken != null) {
-                        //CoroutineScope(IO).launch{
-                          //  deleteActualToken()
-                        //}
-                        addToken(accessToken!!)
-                        Repository.accessToken = accessToken
-                        Log.e("ADDED TOKEN TO DATABASE","ACCESS TOKEN ADDED TO DATABASE $accessToken")
-                        val intent =Intent(this@MainActivity, MainActivity::class.java)
-                        startActivity(intent)
-                    }else{
-                        Log.e("TOKEN IS NULL","ACCESS TOKEN IS NULL $accessToken")
-                    }
 
-                }
-                override fun onFailure(call: Call<AccessToken>, t: Throwable) {
-                    Toast.makeText(this@MainActivity,"bad response",Toast.LENGTH_SHORT).show()
-                }
-            })
-        }
-    }
-
-    private fun addToken(token:AccessTokenDCLass){
-        AsyncTask.execute {
-            database?.AccessTokenDao()?.addToken(token)
-        }
-    }
-
-    private suspend fun getAllTokens():List<AccessTokenDCLass>{
-        var tokenList = database?.AccessTokenDao()?.getAllTokens()!!
-        if(tokenList.isEmpty()){
-            return emptyList()
-        }else{
-            return tokenList
-        }
-    }
-
-    private fun authorizationRequest(callback: (String) -> Unit){
-        if (intent.data == null) {
-            val intent = Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://www.coinbase.com/oauth/authorize?client_id=e4faf6ec45843a2f1e8a42c6242f3d8e82ce5603d3ee9c86c85be29a6361104f&redirect_uri=cryptowallet%3A%2F%2Fcallback&response_type=code&scope=wallet%3Auser%3Aread")
-            )
-            startActivity(intent)
-            var code = intent.data?.getQueryParameter("code")
-            callback(code!!)
-        }
-    }
-
-    suspend fun getCode():List<JustCode>{
-        var codeList = database?.JustCodeDao()?.getAllCodes()
-        return codeList!!
-    }
-
-    suspend fun addCode(code:String){
-        var justCode = JustCode(code = code)
-        database?.JustCodeDao()?.addCode(justCode)
-    }
-
-    private suspend fun deleteActualToken() {
-        var actualToken:AccessTokenDCLass ?=null
-        getTokenDatabase {
-            actualToken = it
-        }
-        Log.e("Actual token for delete", "$actualToken")
-        var database = MainActivity.ROOM_DATABASE
-        database.AccessTokenDao().removeToken(actualToken?.key)
-    }
-
-    private suspend fun getTokenDatabase(tokenCallBack:(AccessTokenDCLass)-> Unit) {
-        var database = MainActivity.ROOM_DATABASE
-        var listTokens = database.AccessTokenDao().getAllTokens()
-        tokenCallBack(listTokens[0])
-    }
-
-    private suspend fun populateCodeList(codeListCallBack:(List<JustCode>)->Unit){
-        val codeListFormDatabase = database?.JustCodeDao()
-        codeListFormDatabase?.getAllCodes()?.let { codeListCallBack(it) }
-
-    }
-
-    private suspend fun populateTokenList(tokenListCallBack:(List<AccessTokenDCLass>)->Unit){
-        val tokenListFormDatabase = database?.AccessTokenDao()
-        tokenListFormDatabase?.getAllTokens()?.let { tokenListCallBack(it) }
-    }
-
-    private fun revokeToken(){
-        val databaseRevoke =  database?.AccessTokenDao()?.getAllTokens()?.get(0)?.refresh_token!!
-        val retrofitBuilder = Retrofit.Builder()
-            .baseUrl("https://api.coinbase.com/")
-            .addConverterFactory(MoshiConverterFactory.create())
-        val retrofit = retrofitBuilder.build()
-        val revokeTokenClient = retrofit.create(RevokeTokenApi::class.java)
-        val revokeCall = revokeTokenClient.revokeToken(
-            databaseRevoke,
-            "Bearer $databaseRevoke "
-        )
-        revokeCall.enqueue(object:Callback<Void>{
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                Log.e("IS IT REVOKED MAIN ON RESPONSE","${response.body()}")
-            }
-
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                Log.e("ON FAILURE REVOKE","$t")
-            }
-
-        })
-
-    }
 }

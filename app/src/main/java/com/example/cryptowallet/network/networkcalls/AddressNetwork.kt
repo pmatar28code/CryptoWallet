@@ -1,6 +1,7 @@
 package com.example.cryptowallet.network.networkcalls
 
 import android.util.Log
+import com.example.cryptowallet.Repository
 import com.example.cryptowallet.network.apis.AddressApi
 import com.example.cryptowallet.network.classesapi.NAddress
 import com.example.cryptowallet.oauth.AccessTokenProviderImp
@@ -58,8 +59,9 @@ object AddressNetwork {
 
     fun getAddresses(onSuccess: (NAddress.Data) -> Unit) {
         val token = AccessTokenProviderImp().token()?.access_token ?: ""
+        val accountId = Repository.accountId
         Log.e("On Actual ADDRESS NETWORK TOKEN:", token)
-        addressApi.getAddress("Bearer $token").enqueue(AddressCallBack(onSuccess))
+        addressApi.getAddress("Bearer $token", accountId).enqueue(AddressCallBack(onSuccess))
     }
 }
 
