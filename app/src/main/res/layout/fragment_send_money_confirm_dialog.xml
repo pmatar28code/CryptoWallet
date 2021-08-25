@@ -27,7 +27,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/send_confirm_dialog_x"
+                    android:id="@+id/send_confirm_dialog_logo"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:contentDescription="content_description_media"
@@ -35,29 +35,74 @@
                     app:srcCompat="@drawable/logo" />
 
                 <TextView
-                    android:id="@+id/send_confirm_dialog_y"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Two Factor Authentication Token:"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="sans"
-                    android:textAlignment="center"
-                    />
-
-                <!-- Media -->
-
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Two Factor Authentication Token:"
+                    android:text="Confirmation:"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:typeface="sans"
                     android:textAlignment="center"/>
+
+                <TextView
+                    android:id="@+id/send_confirm_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="sans"
+                    android:textAlignment="center"
+                    android:background="@android:drawable/editbox_background"
+                    />
+
+                <TextView
+                    android:id="@+id/send_confirm_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="sans"
+                    android:textAlignment="center"
+                    android:background="@android:drawable/editbox_background"
+                    />
+
+                <TextView
+                    android:id="@+id/send_confirm_amount_currency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="sans"
+                    android:textAlignment="center"
+                    android:background="@android:drawable/editbox_background"
+                    />
+
+                <TextView
+                    android:id="@+id/send_confirm_native_amount_currency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="sans"
+                    android:textAlignment="center"
+                    android:background="@android:drawable/editbox_background"
+                    />
+
+                <TextView
+                    android:id="@+id/send_confirm_created"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="sans"
+                    android:textAlignment="center"
+                    android:background="@android:drawable/editbox_background"
+                    />
 
 
             </LinearLayout>

@@ -40,7 +40,7 @@ object SendMoney2FANetwork {
         override fun onResponse(call: Call<SendMoney.Data>, response: Response<SendMoney.Data>) {
             Log.e(
                 "ON Response Send Money 2FA Network:",
-                "${response.body()?.details} status: ${response.body()?.status}"
+                "code = ${response.code()}${response.body()?.details} status: ${response.body()?.status}"
             )
             val sendMoneyData = SendMoney.Data(
                 amount = response.body()?.amount,
@@ -59,7 +59,13 @@ object SendMoney2FANetwork {
             )
 
             Repository.sendMoneyDataObj = sendMoneyData
-            onSuccess(sendMoneyData)
+            if(response.code() == 400){
+                sendMoneyData.id = "0"
+                onSuccess(sendMoneyData)
+            }else{
+                onSuccess(sendMoneyData)
+            }
+
         }
 
         override fun onFailure(call: Call<SendMoney.Data>, t: Throwable) {

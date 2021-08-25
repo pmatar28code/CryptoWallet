@@ -34,6 +34,16 @@
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/two_fa" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Two Factor Authentication Token:"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:typeface="sans"
+                    android:textAlignment="center"/>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/outlinedTextField2FaToken"
                     android:layout_width="match_parent"
@@ -53,15 +63,6 @@
                 <!-- Media -->
 
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Two Factor Authentication Token:"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="sans"
-                    android:textAlignment="center"/>
 
 
             </LinearLayout>
