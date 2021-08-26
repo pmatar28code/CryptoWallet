@@ -43,7 +43,7 @@ class SendFragment: Fragment(R.layout.fragment_send) {
             val intent = Intent(requireContext(),ScanQrActivity::class.java)
             startActivity(intent)
         }
-        
+
         runBlocking {
             var job: Job = launch {
                 ListAccountsNetwork.getAccounts { list ->
