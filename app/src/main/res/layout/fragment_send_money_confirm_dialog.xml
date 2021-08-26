@@ -29,14 +29,14 @@
                     android:id="@+id/send_confirm_dialog_logo"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:contentDescription="content_description_media"
+                    android:contentDescription="@string/fragment_send_money_confirm_dialog_content_description_media"
                     android:scaleType="centerCrop"
                     app:srcCompat="@drawable/logo" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Confirmation:"
+                    android:text="@string/fragment_send_money_confirm_dialog_confirmation"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="20sp"
                     android:textStyle="bold"

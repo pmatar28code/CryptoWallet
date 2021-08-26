@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="Are you sure you want to Logout?"
+            android:text="@string/bottom_sheet_menu_are_you_sure_you_want_to_logout"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -27,7 +27,7 @@
             android:layout_marginStart="100dp"
             android:layout_below="@id/idTVCourseName"
             android:gravity="center"
-            android:text="Cancel"
+            android:text="@string/bottom_sheet_menu_cancel"
             android:textAllCaps="false" />
 
         <Button
@@ -36,8 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_below="@id/idTVCourseName"
-            android:layout_toRightOf="@id/idBtnDismiss"
-            android:text="Logout"
+            android:layout_toEndOf="@id/idBtnDismiss"
+            android:text="@string/bottom_sheet_menu_logout"
             android:textAllCaps="false" />
 
     </RelativeLayout>
