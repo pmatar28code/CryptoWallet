@@ -39,7 +39,11 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentSendBinding.bind(view)
 
-
+        binding.scanQrCodeButton.setOnClickListener {
+            val intent = Intent(requireContext(),ScanQrActivity::class.java)
+            startActivity(intent)
+        }
+        
         runBlocking {
             var job: Job = launch {
                 ListAccountsNetwork.getAccounts { list ->
@@ -54,10 +58,7 @@ class SendFragment: Fragment(R.layout.fragment_send) {
                                 parentFragmentManager
                             )
                         }
-                        binding.scanQrCodeButton.setOnClickListener {
-                            val intent = Intent(requireContext(),ScanQrActivity::class.java)
-                            startActivity(intent)
-                        }
+
                     }
 
                     binding.walletsSendRecyclerView.apply {
