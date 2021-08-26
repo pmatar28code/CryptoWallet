@@ -18,10 +18,12 @@ import com.example.cryptowallet.adapter.WalletSendAdapter
 import com.example.cryptowallet.databinding.FragmentSendBinding
 import com.example.cryptowallet.dialog.SendMoney2FaDialog
 import com.example.cryptowallet.dialog.SendMoneyConfirmDialog
+import com.example.cryptowallet.dialog.TransactionsDetailDialog
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.classesapi.SendMoney
 import com.example.cryptowallet.network.networkcalls.AddressNetwork
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
+import com.example.cryptowallet.network.networkcalls.ListTransactionsNetwork
 import com.example.cryptowallet.network.networkcalls.SendMoneyNetwork
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -36,6 +38,10 @@ class SendFragment: Fragment(R.layout.fragment_send) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentSendBinding.bind(view)
+
+        binding.showTransactionDetailsButton.setOnClickListener {
+            TransactionsDetailDialog.create {  }.show(parentFragmentManager,"show transactions")
+        }
 
         runBlocking {
             var job: Job = launch {
@@ -141,6 +147,7 @@ class SendFragment: Fragment(R.layout.fragment_send) {
                             Toast.LENGTH_SHORT
                         ).show()
                         Log.e("Two Factor Was required", "${Repository.repoSendMoneyResponseCode}")
+                        Repository.didntRequiredTwoFA = false
                         SendMoney2FaDialog.create {
                             SendMoneyConfirmDialog.create {
 

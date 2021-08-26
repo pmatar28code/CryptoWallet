@@ -42,7 +42,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
     companion object {
         const val MY_CLIENT_ID = "c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188"
-        val urlString = "https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&account=all&scope=wallet:accounts:read wallet:addresses:create wallet:addresses:read wallet:accounts:update wallet:accounts:create wallet:transactions:send wallet:transactions:request&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day"
+        val urlString = "https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&account=all&scope=wallet:accounts:read wallet:addresses:create wallet:addresses:read wallet:accounts:update wallet:accounts:create wallet:transactions:send wallet:transactions:request wallet:transactions:read&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day"
     }
 
     @SuppressLint("SetJavaScriptEnabled")

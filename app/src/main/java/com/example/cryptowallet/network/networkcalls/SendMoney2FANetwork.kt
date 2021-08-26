@@ -63,6 +63,7 @@ object SendMoney2FANetwork {
                 sendMoneyData.id = "0"
                 onSuccess(sendMoneyData)
             }else{
+                Repository.sendMoneyDataObj = sendMoneyData
                 onSuccess(sendMoneyData)
             }
 

@@ -3,12 +3,15 @@ package com.example.cryptowallet.dialog
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.databinding.FragmentSendMoneyConfirmDialogBinding
+import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
+import com.example.cryptowallet.network.networkcalls.ListTransactionsNetwork
 import com.example.cryptowallet.network.networkcalls.SendMoney2FANetwork
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.runBlocking
@@ -28,34 +31,34 @@ class SendMoneyConfirmDialog: DialogFragment() {
         val binding = FragmentSendMoneyConfirmDialogBinding.inflate(inflater)
         if(!Repository.didntRequiredTwoFA){
         runBlocking {
-            SendMoney2FANetwork.sendMoney {
+            SendMoney2FANetwork.sendMoney { sendMoneyData ->
                 binding.apply {
-                    if(it.id == "0"){
+                    if (sendMoneyData.id == "0") {
                         sendConfirmId.text = "Transaction could not be completed"
-                        sendConfirmAmountCurrency.isVisible =false
-                        sendConfirmStatus.isVisible = false
-                        sendConfirmCreated.isVisible = false
-                        binding.sendConfirmNativeAmountCurrency.isVisible = false
-                    }else {
-                        sendConfirmId.text = it.id
-                        sendConfirmAmountCurrency.text = "${it.amount?.amount} / ${it.amount?.currency}"
-                        sendConfirmStatus.text = "Status: ${it.status}"
-                        sendConfirmCreated.text = "Created at: ${it.createdAt}"
-                        sendConfirmNativeAmountCurrency.text = "Native: ${it.nativeAmount?.amount} / ${it.nativeAmount?.currency}"
+
+                    } else {
+                        sendConfirmId.text = "Transation Successful, you will receive an email with confirmation. \n " +
+                                "Keep in mind, transactions may take between 30 minutes and one hour to complete."
                     }
+
                 }
+
             }
+
         }
         }else{
             Repository.didntRequiredTwoFA = false
-            binding.apply{
-                //sendConfirmDialogY.text = Repository.sendMoneyDataObj.toString()
-                sendConfirmId.text = Repository.sendMoneyDataObj.id
-                sendConfirmAmountCurrency.text = "${Repository.sendMoneyDataObj.amount?.amount} / ${Repository.sendMoneyDataObj.amount?.currency}"
-                sendConfirmStatus.text = "Status: ${Repository.sendMoneyDataObj.status}"
-                sendConfirmCreated.text = "Created at: ${Repository.sendMoneyDataObj.createdAt}"
-                sendConfirmNativeAmountCurrency.text = "Native: ${Repository.sendMoneyDataObj.nativeAmount?.amount} / ${Repository.sendMoneyDataObj.nativeAmount?.currency}"
-            }
+                binding.apply {
+                    if (Repository.sendMoneyDataObj.id == null) {
+                        sendConfirmId.text = "Transaction could not be completed"
+
+                    } else {
+                        sendConfirmId.text = "Transation Successful, you will recieve an email with confirmation. \n " +
+                                "Keep in mind, transactions may take between 30 minutes and one hour to complete."//it[lastIndex].id.toString()
+
+                    }
+                }
+
         }
 
         return MaterialAlertDialogBuilder(

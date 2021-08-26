@@ -16,6 +16,7 @@
         <entry key="app/src/main/res/layout/fragment_send.xml" value="0.17" />
         <entry key="app/src/main/res/layout/fragment_send_money_2fa_dialog.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_send_money_confirm_dialog.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_transaction_details.xml" value="0.11710526315789474" />
         <entry key="app/src/main/res/layout/fragment_wallet.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_wallet_details.xml" value="0.14210526315789473" />
         <entry key="app/src/main/res/layout/item_wallets.xml" value="0.4166666666666667" />
