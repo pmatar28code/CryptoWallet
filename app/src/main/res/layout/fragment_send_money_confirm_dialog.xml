@@ -56,56 +56,6 @@
                     android:background="@android:drawable/editbox_background"
                     />
 
-                <TextView
-                    android:id="@+id/send_confirm_status"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="sans"
-                    android:textAlignment="center"
-                    android:background="@android:drawable/editbox_background"
-                    />
-
-                <TextView
-                    android:id="@+id/send_confirm_amount_currency"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="sans"
-                    android:textAlignment="center"
-                    android:background="@android:drawable/editbox_background"
-                    />
-
-                <TextView
-                    android:id="@+id/send_confirm_native_amount_currency"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="sans"
-                    android:textAlignment="center"
-                    android:background="@android:drawable/editbox_background"
-                    />
-
-                <TextView
-                    android:id="@+id/send_confirm_created"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="sans"
-                    android:textAlignment="center"
-                    android:background="@android:drawable/editbox_background"
-                    />
-
-
-
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>

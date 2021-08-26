@@ -39,9 +39,6 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentSendBinding.bind(view)
 
-        binding.showTransactionDetailsButton.setOnClickListener {
-            TransactionsDetailDialog.create {  }.show(parentFragmentManager,"show transactions")
-        }
 
         runBlocking {
             var job: Job = launch {
