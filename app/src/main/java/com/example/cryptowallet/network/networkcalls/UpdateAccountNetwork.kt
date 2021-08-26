@@ -12,7 +12,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.POST
 
 object UpdateAccountNetwork {
     private val accessTokenProvider = AccessTokenProviderImp()
@@ -58,18 +57,6 @@ object UpdateAccountNetwork {
     fun updateAccount (onSuccess: (UpdateAccount.Data) -> Unit){
         val token = AccessTokenProviderImp().token()?.access_token?:""
         Log.e("UPDATE ACCOUNT REFRESH TOKEN FROM Actual TOKEN:", token)
-        /*val updateAccountTest = UpdateAccount.Data(
-            balance = UpdateAccount.Data.Balance("8","BTX"),
-            createdAt = "",
-            currency = "BTC",
-            id ="",
-            name ="test name 2",
-            primary = false,
-            resource = "",
-            resourcePath = "",
-            type = "wallet",
-            updatedAt = ""
-        )*/
         updateAccountApi.updateAccount (token,"BTC Wallet").enqueue(UpdateAccountCallBack(onSuccess))
     }
 }

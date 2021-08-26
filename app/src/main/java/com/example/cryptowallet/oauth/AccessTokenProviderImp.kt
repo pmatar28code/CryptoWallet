@@ -38,16 +38,6 @@ class AccessTokenProviderImp : AccessTokenProvider {
                 }
             }
         }
-        /*
-        if (newAccessToken == null){
-            token?.access_token = "1"
-        Log.e("TOKEN ACCESS TOKEN PROV Forced to 1", "$token")
-        return token
-    }else {
-            Log.e("TOKEN ACCESS TOKEN PROV NOOOTT FORCED", "$token")
-            return token
-        }
-        */
         Log.e("RETURNED TOKEN FUN TOKEN IMP:","$token")
         return token
     }
@@ -94,7 +84,6 @@ class AccessTokenProviderImp : AccessTokenProvider {
                     refreshCallback(false)
                 }
             }
-
             override fun onFailure(call: Call<AccessToken>, t: Throwable) {
                 Log.e("ON FAILURE ReFReSH IMP:","$t")
                 refreshCallback(false)

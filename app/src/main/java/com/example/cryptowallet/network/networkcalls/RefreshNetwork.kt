@@ -14,13 +14,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 object RefreshNetwork {
     const val MY_CLIENT_ID = "2bc5e4b5b4446ad9b730b8561f7aeff463e648cd9146ffb6b5dd885164c300f1"
     const val CLIENT_SECRET = "411f668a4b106cde166902e8b73c02d7938a501b6e90f6b8ddd2809c4250cba7"
-    //private val logger = HttpLoggingInterceptor()
-    //   .setLevel(HttpLoggingInterceptor.Level.BODY )
     private val accessTokenProvider = AccessTokenProviderImp()
-    private val client = OkHttpClient() //.Builder()
-        //.addNetworkInterceptor(TokenAuthorizationInterceptor(accessTokenProvider))
-       // .authenticator(TokenRefreshAuthenticator(accessTokenProvider))
-        //.build()
+    private val client = OkHttpClient()
     private val refreshTokenApi: RefreshTokenApi
     get(){
         return Retrofit.Builder()

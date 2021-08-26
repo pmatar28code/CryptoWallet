@@ -4,20 +4,15 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
-import androidx.core.view.isGone
-import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.cryptowallet.MainActivity
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
-import com.example.cryptowallet.databinding.ActivityMainBinding
 import com.example.cryptowallet.databinding.FragmentAuthorizationBinding
 import com.example.cryptowallet.network.apis.CoinBaseClient
 import com.example.cryptowallet.network.classesapi.AccessToken
@@ -41,8 +36,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
     companion object {
-        const val MY_CLIENT_ID = "c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188"
-        val urlString = "https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&account=all&scope=wallet:accounts:read wallet:addresses:create wallet:addresses:read wallet:accounts:update wallet:accounts:create wallet:transactions:send wallet:transactions:request wallet:transactions:read&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day"
+        private const val MY_CLIENT_ID = "c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188"
+        const val urlString = "https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&account=all&scope=wallet:accounts:read wallet:addresses:create wallet:addresses:read wallet:accounts:update wallet:accounts:create wallet:transactions:send wallet:transactions:request wallet:transactions:read&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day"
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -59,7 +54,6 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                 request: WebResourceRequest
             ): Boolean {
                 var code = request.url.toString()
-                //Log.e("TST OVERRIDE", "THIS OVERRIDE $code")
                 if (code.contains("?") && code.length == 106) {
                     code = code.removeRange(0, 41)
                     code = code.dropLast(1)
@@ -72,8 +66,6 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                     }
                     getTokenNetworkRequest(code)
                     getUserAndListAccountsFromNetwork()
-                    //val intent = Intent(requireContext(),MainActivity::class.java)
-                    //startActivity(intent)
                     return true
                 }
                 return false
@@ -133,8 +125,6 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                             "ADDED TOKEN TO DATABASE",
                             "ACCESS TOKEN ADDED TO EncSharedPrefs $accessToken"
                         )
-
-                        //intent
                     }
 
                     override fun onFailure(call: Call<AccessToken>, t: Throwable) {
@@ -163,14 +153,6 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                             "ID: ${it[0].id}, ${it[0].name},type = ${it[0].type},primary = ${it[0].primary}, ${it[0].balance}, ${it[0].currency} WITH TOKEN = ${MainActivity.accessTokenFromShared?.access_token}"
                         )
                         Log.e("ALL THE LIST OFF ACCOUNTS MAIN:", "$it")
-                        //swapFragments(WalletFragment())
-                        //val contextMain = MainActivity.mainContext
-                        //val inflaterMain = LayoutInflater.from(contextMain)
-                        //val bindingMain = ActivityMainBinding.inflate(inflaterMain)
-                       // bindingMain.bottomNavigationContainer.isVisible = true
-                        //parentFragmentManager.beginTransaction()
-                          //  .replace(R.id.fragment_container,WalletFragment())
-                            //.commit()
                         val intent = Intent(requireContext(),MainActivity::class.java)
                         startActivity(intent)
                     }

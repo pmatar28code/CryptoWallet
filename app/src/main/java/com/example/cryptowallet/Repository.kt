@@ -2,8 +2,6 @@ package com.example.cryptowallet
 
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.classesapi.SendMoney
-import com.squareup.moshi.Json
-
 
 object Repository {
     var userId = ""
@@ -24,11 +22,6 @@ object Repository {
 
     var walletDetailsAccountId =""
 
-
-
-
-
-    //details for send money confirm
     var sendMoneyDataObj = SendMoney.Data(
         amount = SendMoney.Data.Amount("",""),
         createdAt = "",
@@ -46,21 +39,4 @@ object Repository {
     )
 
     var didntRequiredTwoFA = false
-
-    var confirmAmount = ""
-    var confirmCreatedAt = ""
-    var confirmDescription = ""
-    var confirmDetails =""
-    var confirmId= ""
-    var confirmNativeAmount =""
-    var confirmNetwork= ""
-    var confirmResource= ""
-    var confirmResourcePath= ""
-    var confirmStatus=""
-    var confirmTo= ""
-    var confirmType=""
-    var confirmUpdatedAt= ""
-
-
-
 }

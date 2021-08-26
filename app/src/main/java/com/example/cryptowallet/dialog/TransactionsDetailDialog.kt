@@ -4,26 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.bumptech.glide.Glide
 import com.example.cryptowallet.R
-import com.example.cryptowallet.Repository
-import com.example.cryptowallet.databinding.FragmentRequestMoneyDialogBinding
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import android.content.Intent
-
-import android.provider.MediaStore
-
-import android.graphics.drawable.BitmapDrawable
-
-import android.graphics.Bitmap
-import android.net.Uri
-import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.toDrawable
 import com.example.cryptowallet.databinding.FragmentTransactionDetailsBinding
 import com.example.cryptowallet.network.networkcalls.ListTransactionsNetwork
-
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class TransactionsDetailDialog:DialogFragment() {
     companion object {

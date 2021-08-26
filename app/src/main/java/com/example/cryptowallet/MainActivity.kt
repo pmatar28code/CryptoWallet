@@ -1,7 +1,6 @@
 package com.example.cryptowallet
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -13,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
-import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.cryptowallet.databinding.ActivityMainBinding
 import com.example.cryptowallet.fragments.AuthorizationFragment
@@ -40,8 +37,6 @@ class MainActivity : AppCompatActivity() {
         var codeFromShared:String ?= null
         var stringTokenFromShared:String ?= null
         var accessTokenFromShared:AccessToken ?= null
-        //lateinit var mainContext: Context
-
 
         private const val TAG = "CameraXBasic"
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
@@ -56,7 +51,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (allPermissionsGranted()) {
-            //startCamera()
         } else {
             ActivityCompat.requestPermissions(
                 this,REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
@@ -73,59 +67,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (codeFromShared == null || codeFromShared == "") {
-           // mainContext = this
             binding.bottomNavigationContainer.isGone = true
 
             swapFragments(AuthorizationFragment())
-
-
         } else {
             stringTokenFromShared = EncSharedPreferences.getValueString(keyStringAccesskey,applicationContext)
-
-
             Log.e(
                 "WHATS NEXT",
                 "DO API Requests WITH TOKEN AVAILABLE CODE:$codeFromShared, Token:${
                     accessTokenFromShared?.access_token
                 }"
             )
-
-    /*
-            UserNetwork.getUser {
-                runBlocking {
-                    var job:Job = launch(IO) {
-                        Log.e("SHOWING USER", "${it.name}, id: ${it.id} WITH TOKEN = ${accessTokenFromShared?.access_token}}")
-                        Repository.userId = it.id.toString()
-                        Repository.userName = it.name.toString()
-                    }
-                }
-            }
-            ListAccountsNetwork.getAccounts {
-                Repository.accounts = it as MutableList<ListAccounts.Data>
-                runBlocking {
-                    var job:Job = launch(IO) {
-                        Log.e(
-                            "LIST OF ACCOUNTS MAIN OJO: ",
-                            "ID: ${it[0].id}, ${it[0].name},type = ${it[0].type},primary = ${it[0].primary}, ${it[0].balance}, ${it[0].currency} WITH TOKEN = ${accessTokenFromShared?.access_token}"
-                        )
-                        Log.e("ALL THE LIST OFF ACCOUNTS MAIN:","$it")
-                        swapFragments(WalletFragment())
-                    }
-                }
-            }
-            */
-
             binding.apply {
                 bottomNavigationContainer.setOnNavigationItemSelectedListener {
                     handleBottomNavigation(it.itemId, binding)
                 }
             }
-            //swap fragment to wallet which is going to be the main one to show to the user
-            //listing accounts that have balance > 0
             swapFragments(WalletFragment())
-
-            }
         }
+    }
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
             baseContext, it) == PackageManager.PERMISSION_GRANTED
@@ -137,7 +97,6 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
             if (allPermissionsGranted()) {
-                //startCamera()
             } else {
                 Toast.makeText(this,
                     "Permissions not granted by the user.",
@@ -177,11 +136,9 @@ class MainActivity : AppCompatActivity() {
             btnConfirm.setOnClickListener {
                 runBlocking {
                     val job:Job = launch(IO) {
-                            EncSharedPreferences.saveToEncryptedSharedPrefsString(keyStringCode,"",this@MainActivity)
-                            //stringTokenFromShared = null
-                            //accessTokenFromShared = null
-                            val intent = Intent(this@MainActivity, MainActivity::class.java)
-                            startActivity(intent)
+                        EncSharedPreferences.saveToEncryptedSharedPrefsString(keyStringCode,"",this@MainActivity)
+                        val intent = Intent(this@MainActivity, MainActivity::class.java)
+                        startActivity(intent)
                     }
                 }
             }
@@ -198,6 +155,4 @@ class MainActivity : AppCompatActivity() {
             .addToBackStack("back")
             .commit()
     }
-
-
 }

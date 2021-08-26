@@ -36,7 +36,6 @@ class ShowAddressesForDifferentWalletsActivity: AppCompatActivity() {
                         Repository.accountId = data.id.toString()
                         Repository.currency = data.balance?.currency.toString()
                         AddressNetwork.getAddresses {
-                            //var accountAddress = "1232342342344-1231313-123123"
                             var urlForQr =
                                 "http://api.qrserver.com/v1/create-qr-code/?data=${it.address}&size=100x100"
                         }

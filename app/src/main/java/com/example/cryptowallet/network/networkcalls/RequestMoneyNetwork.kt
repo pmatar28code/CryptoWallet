@@ -54,10 +54,6 @@ object RequestMoneyNetwork {
                 status = response.body()?.status
 
             )
-           // Log.e(
-           //     "RESPONDED REQUEST MONEY WITH:",
-             //   "amount: ${newRequestMoney.amount},to: ${newRequestMoney.to} ${response.isSuccessful}"
-           //)
             onSuccess(newRequestMoney)
         }
 
@@ -83,7 +79,5 @@ object RequestMoneyNetwork {
         test.put("currency","BTC")
         test.put("description","request test")
         requestMoneyApi.requestMoney(requestMoney).enqueue(RequestMoneyCallBack(onSuccess))
-
-        //token,"request","phil@nevie.com",".0001","BTC","this description"
     }
 }

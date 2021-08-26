@@ -33,22 +33,6 @@ object ShowAddressesNetwork {
         private val onSuccess: (List<ShowAddresses.Data>) -> Unit
     ) : Callback<ShowAddresses> {
         override fun onResponse(call: Call<ShowAddresses>, response: Response<ShowAddresses>) {
-            //Log.e("ON Response Address:", " ${response.body()?.address}")
-            /*
-            val addresses = ShowAddresses.Data(
-                address = response.body()?.address ?: "",
-                createdAt = response.body()?.createdAt ?: "",
-                id = response.body()?.id ?: "",
-                name = response.body()?.name ?: "",
-                network = response.body()?.network ?: "",
-                resource = response.body()?.resource ?: "",
-                resourcePath = response.body()?.resourcePath ?: "",
-                updatedAt = response.body()?.updatedAt ?: "",
-            )*/
-            //Log.e(
-                //"RESPONDED WITH:",
-                //"Address: ${addresses.address},${addresses.name} ${response.isSuccessful}"
-            //)
             val listOfAddresses = mutableListOf<ShowAddresses.Data>()
                 for (address in response.body()?.data!!) {
                     if (address != null) {
@@ -58,7 +42,6 @@ object ShowAddressesNetwork {
                 onSuccess(listOfAddresses)
 
         }
-
         override fun onFailure(call: Call<ShowAddresses>, t: Throwable) {
             Log.e("On Failure Address:", "$t")
         }

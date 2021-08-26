@@ -18,12 +18,10 @@ import com.example.cryptowallet.adapter.WalletSendAdapter
 import com.example.cryptowallet.databinding.FragmentSendBinding
 import com.example.cryptowallet.dialog.SendMoney2FaDialog
 import com.example.cryptowallet.dialog.SendMoneyConfirmDialog
-import com.example.cryptowallet.dialog.TransactionsDetailDialog
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.classesapi.SendMoney
 import com.example.cryptowallet.network.networkcalls.AddressNetwork
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
-import com.example.cryptowallet.network.networkcalls.ListTransactionsNetwork
 import com.example.cryptowallet.network.networkcalls.SendMoneyNetwork
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -58,7 +56,6 @@ class SendFragment: Fragment(R.layout.fragment_send) {
                                 parentFragmentManager
                             )
                         }
-
                     }
 
                     binding.walletsSendRecyclerView.apply {
@@ -69,7 +66,6 @@ class SendFragment: Fragment(R.layout.fragment_send) {
                     }
                     performSearch(binding,listOfWallets)
                 }
-
             }
         }
     }
@@ -89,8 +85,8 @@ class SendFragment: Fragment(R.layout.fragment_send) {
     }
 
     private fun search(text: String?,listOfAccounts:List<ListAccounts.Data>,binding:FragmentSendBinding) {
-        var listOfAccountsToWork = listOfAccounts
-        var searchResultList = mutableListOf<ListAccounts.Data>()
+        val listOfAccountsToWork = listOfAccounts
+        val searchResultList = mutableListOf<ListAccounts.Data>()
 
         text?.let {
             listOfAccountsToWork.forEach { Account ->
@@ -106,22 +102,15 @@ class SendFragment: Fragment(R.layout.fragment_send) {
             }else{
                 updateRecyclerView(searchResultList.reversed())
             }
-            //updateRecyclerView(searchResultList)
-           // if (searchResultList.isEmpty()) {
-            //    Toast.makeText(requireContext(), "No match found!", Toast.LENGTH_SHORT).show()
-           // }
-            //updateRecyclerView(searchResultList)
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun updateRecyclerView(searchResultList:List<ListAccounts.Data>) {
         walletSendAdapter?.submitList(searchResultList)
         walletSendAdapter?.notifyDataSetChanged()
 
     }
-
-
-
     private fun sendMoneyButtonFunction(
         binding: FragmentSendBinding,
         requireContext: Context,
@@ -187,18 +176,7 @@ class SendFragment: Fragment(R.layout.fragment_send) {
             }
         }
     }
-    //launch dialog fragment perform first send money request
-    // for 2fa token input and then make the 2fa request for send money now with token
-
-    //SendMoney2FaDialog.create {
-
-    //}.show(parentFragmentManager,"To Send 2Fa Dialog")
-
     private fun sendMoneyNetworkCallBackTasks(binding: FragmentSendBinding,data:ListAccounts.Data) {
-        //Log.e("INSIDE WALLET ACTIVITY NETWORK CALL:", "$list")
-        //listOfWallets = list.toMutableList()
-        //Log.e("Wallets Activity list:", "$listOfWallets")
-
         Repository.sendMoneyAccountId = data.id.toString()
         Repository.sendMoneyCurrency = data.balance?.currency.toString()
         binding.outlinedTextFieldCurrency.editText?.setText(Repository.sendMoneyCurrency)
@@ -208,11 +186,6 @@ class SendFragment: Fragment(R.layout.fragment_send) {
             val job: Job = launch(Dispatchers.IO) {
                 AddressNetwork.getAddresses {
                     Repository.address = it.address.toString()
-                /*
-                    RequestMoneyDialog.create {
-                }.show(parentFragmentManager, "Open Edit Recipe")
-
-                */
                 }
             }
         }

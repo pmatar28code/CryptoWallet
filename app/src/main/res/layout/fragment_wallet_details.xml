@@ -49,9 +49,6 @@
                     android:paddingBottom="8dp"
                     android:background="@android:drawable/editbox_background" />
 
-                <!-- Media -->
-
-
                 <TextView
                     android:id="@+id/wallet_details_currency"
                     android:layout_width="match_parent"

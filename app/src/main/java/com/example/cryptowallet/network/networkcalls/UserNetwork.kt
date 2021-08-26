@@ -14,8 +14,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 object UserNetwork {
-    //private val logger = HttpLoggingInterceptor()
-     //   .setLevel(HttpLoggingInterceptor.Level.BODY )
     private val accessTokenProvider = AccessTokenProviderImp()
     private val accessTokenInterceptor = TokenAuthorizationInterceptor(accessTokenProvider)
     private val client = OkHttpClient.Builder()

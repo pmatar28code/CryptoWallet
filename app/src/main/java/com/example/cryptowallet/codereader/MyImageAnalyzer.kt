@@ -36,7 +36,6 @@ class MyImageAnalyzer(
                 }
         }
     }
-
     private fun readBarcodeData(barcodes: List<Barcode>) {
         for (barcode in barcodes) {
             when (barcode.valueType) {

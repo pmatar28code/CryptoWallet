@@ -40,7 +40,6 @@
         android:typeface="sans"
         android:textAlignment="center"/>
 
-    <!-- Media -->
     <ImageView
         android:id="@+id/request_dialog_qrcode_image"
         android:layout_width="match_parent"
@@ -71,7 +70,8 @@
         android:typeface="sans"
         android:textAlignment="center"
         android:background="@android:drawable/editbox_background"/>
-</LinearLayout>
+
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 

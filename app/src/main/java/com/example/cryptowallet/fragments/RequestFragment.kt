@@ -12,7 +12,6 @@ import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.adapter.WalletRequestAdapter
 import com.example.cryptowallet.databinding.FragmentRequestBinding
-import com.example.cryptowallet.databinding.FragmentSendBinding
 import com.example.cryptowallet.dialog.RequestMoneyDialog
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.networkcalls.AddressNetwork
@@ -78,9 +77,10 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
         })
     }
 
-    private fun search(text: String?,listOfAccounts:List<ListAccounts.Data>,binding: FragmentRequestBinding) {
-        var listOfAccountsToWork = listOfAccounts
-        var searchResultList = mutableListOf<ListAccounts.Data>()
+    private fun search(
+        text: String?,listOfAccounts:List<ListAccounts.Data>,binding: FragmentRequestBinding) {
+        val listOfAccountsToWork = listOfAccounts
+        val searchResultList = mutableListOf<ListAccounts.Data>()
 
         text?.let {
             listOfAccountsToWork.forEach { Account ->
@@ -96,18 +96,12 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
             }else{
                 updateRecyclerView(searchResultList.reversed())
             }
-            //updateRecyclerView(searchResultList)
-            // if (searchResultList.isEmpty()) {
-            //    Toast.makeText(requireContext(), "No match found!", Toast.LENGTH_SHORT).show()
-            // }
-            //updateRecyclerView(searchResultList)
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun updateRecyclerView(searchResultList:List<ListAccounts.Data>) {
         walletsRequestAdapter?.submitList(searchResultList)
         walletsRequestAdapter?.notifyDataSetChanged()
-
     }
-
 }

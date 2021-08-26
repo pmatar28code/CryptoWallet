@@ -6,12 +6,9 @@ import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
-import com.example.cryptowallet.databinding.FragmentSendMoneyConfirmDialogBinding
 import com.example.cryptowallet.databinding.FragmentWalletDetailsBinding
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
-import com.example.cryptowallet.network.networkcalls.SendMoney2FANetwork
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.runBlocking
 
 class WalletDetailsDialog: DialogFragment() {
     companion object {
@@ -45,5 +42,4 @@ class WalletDetailsDialog: DialogFragment() {
 
             .create()
     }
-
 }

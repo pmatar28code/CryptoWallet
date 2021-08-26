@@ -60,11 +60,6 @@
                     />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Media -->
-
-
-
-
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
