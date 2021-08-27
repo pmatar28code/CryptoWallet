@@ -16,7 +16,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 object ListAccountsNetwork {
     private val accessTokenProvider = AccessTokenProviderImp()
-    val logger = HttpLoggingInterceptor()
+    private val logger = HttpLoggingInterceptor()
         .setLevel(HttpLoggingInterceptor.Level.BODY )
     private val client = OkHttpClient.Builder()
         .addInterceptor(logger)
@@ -42,7 +42,6 @@ object ListAccountsNetwork {
                 listOfAccounts.add(item!!)
             }
             onSuccess(listOfAccounts.toList())
-
         }
         override fun onFailure(call: Call<ListAccounts>, t: Throwable) {
             Log.e("On Failure LIST ACCOUNTS NETWORK:", "This is T : $t")
@@ -50,7 +49,7 @@ object ListAccountsNetwork {
     }
 
     fun getAccounts(onSuccess: (List<ListAccounts.Data>) -> Unit) {
-        var token = AccessTokenProviderImp().token()?.access_token ?: ""
+        val token = AccessTokenProviderImp().token()?.access_token ?: ""
         listAccountsApi.getAccounts("Bearer $token").enqueue(AccountsCallBack(onSuccess))
     }
 }

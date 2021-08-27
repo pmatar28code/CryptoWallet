@@ -32,34 +32,30 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
 
         var listOfWallets = mutableListOf<ListAccounts.Data>()
 
-        runBlocking {
-            var job: Job = launch {
-                ListAccountsNetwork.getAccounts { list ->
-                    listOfWallets = list.toMutableList()
-                        walletsRequestAdapter = WalletRequestAdapter { data ->
-                        Repository.accountId = data.id.toString()
-                        Repository.currency = data.balance?.currency.toString()
-                        Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
-                        runBlocking {
-                            val job: Job = launch(IO) {
-                                AddressNetwork.getAddresses {
-                                    Repository.address = it.address.toString()
-                                    RequestMoneyDialog.create {
 
-                                    }.show(parentFragmentManager, "Open Edit Recipe")
-                                }
-                            }
-                        }
-                    }
-                    binding.walletsRequestRecyclerView.apply{
-                        adapter = walletsRequestAdapter
-                        layoutManager = LinearLayoutManager(context)
-                        walletsRequestAdapter?.submitList(listOfWallets.toList().reversed())
-                        walletsRequestAdapter?.notifyDataSetChanged()
-                    }
-                    performSearch(binding,listOfWallets)
+        ListAccountsNetwork.getAccounts { list ->
+            listOfWallets = list.toMutableList()
+            walletsRequestAdapter = WalletRequestAdapter { data ->
+                Repository.accountId = data.id.toString()
+                Repository.currency = data.balance?.currency.toString()
+                Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
+
+                AddressNetwork.getAddresses {
+                    Repository.address = it.address.toString()
+                    RequestMoneyDialog.create {
+
+                    }.show(parentFragmentManager, "Open Edit Recipe")
                 }
+
+
             }
+            binding.walletsRequestRecyclerView.apply{
+                adapter = walletsRequestAdapter
+                layoutManager = LinearLayoutManager(context)
+                walletsRequestAdapter?.submitList(listOfWallets.toList().reversed())
+                walletsRequestAdapter?.notifyDataSetChanged()
+            }
+            performSearch(binding,listOfWallets)
         }
     }
     private fun performSearch(binding: FragmentRequestBinding, listSearch:List<ListAccounts.Data>) {
