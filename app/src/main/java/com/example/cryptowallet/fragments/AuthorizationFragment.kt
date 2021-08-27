@@ -8,7 +8,6 @@ import android.view.View
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.cryptowallet.MainActivity
 import com.example.cryptowallet.R
@@ -21,10 +20,6 @@ import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 import com.example.cryptowallet.network.networkcalls.UserNetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
 import com.example.cryptowallet.utilities.Utility
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -74,77 +69,68 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
     }
 
     private fun getTokenNetworkRequest(code: String) {
-        runBlocking {
-            val job: Job = launch {
-                val logger = HttpLoggingInterceptor()
-                    .setLevel(HttpLoggingInterceptor.Level.BODY)
-                val okHttpClient = OkHttpClient.Builder()
-                    .addInterceptor(logger)
-                    .build()
-                val retrofitBuilder = Retrofit.Builder()
-                    .baseUrl("https://api.coinbase.com/")
-                    .client(okHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create())
-                val retrofit = retrofitBuilder.build()
-                val coinBaseClient = retrofit.create(CoinBaseClient::class.java)
-                val accessTokenCall = coinBaseClient.getToken(
-                    "authorization_code",
-                    code,
-                    MainActivity.MY_CLIENT_ID,
-                    MainActivity.CLIENT_SECRET,
-                    MainActivity.MY_REDIRECT_URI
+        val logger = HttpLoggingInterceptor()
+            .setLevel(HttpLoggingInterceptor.Level.BODY)
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(logger)
+            .build()
+        val retrofitBuilder = Retrofit.Builder()
+            .baseUrl("https://api.coinbase.com/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+        val retrofit = retrofitBuilder.build()
+        val coinBaseClient = retrofit.create(CoinBaseClient::class.java)
+        val accessTokenCall = coinBaseClient.getToken(
+            "authorization_code",
+            code,
+            MainActivity.MY_CLIENT_ID,
+            MainActivity.CLIENT_SECRET,
+            MainActivity.MY_REDIRECT_URI
+        )
+        accessTokenCall?.enqueue(object : Callback<AccessToken> {
+            override fun onResponse(
+                call: Call<AccessToken>,
+                response: Response<AccessToken>
+            ){
+                val accessToken = AccessToken(
+                    access_token = response.body()?.access_token ?: "",
+                    token_type = response.body()?.token_type ?: "",
+                    expires_in = response.body()?.expires_in ?: 0,
+                    refresh_token = response.body()?.refresh_token ?: "",
+                    scope = response.body()?.scope ?: ""
                 )
+                val jsonAccessToken =
+                    EncSharedPreferences.convertTestClassToJsonString(accessToken)
+                Utility.getInstance()?.applicationContext?.let {
+                    EncSharedPreferences.saveToEncryptedSharedPrefsString(
+                        MainActivity.keyStringAccesskey, jsonAccessToken,
+                        it
+                    )
+                }
 
-                accessTokenCall?.enqueue(object : Callback<AccessToken> {
-                    override fun onResponse(
-                        call: Call<AccessToken>,
-                        response: Response<AccessToken>
-                    ) {
-                        val accessToken = AccessToken(
-                            access_token = response.body()?.access_token ?: "",
-                            token_type = response.body()?.token_type ?: "",
-                            expires_in = response.body()?.expires_in ?: 0,
-                            refresh_token = response.body()?.refresh_token ?: "",
-                            scope = response.body()?.scope ?: ""
-                        )
-                        val jsonAccessToken =
-                            EncSharedPreferences.convertTestClassToJsonString(accessToken)
-                        Utility.getInstance()?.applicationContext?.let {
-                            EncSharedPreferences.saveToEncryptedSharedPrefsString(
-                                MainActivity.keyStringAccesskey, jsonAccessToken,
-                                it
-                            )
-                        }
-
-                    }
-                    override fun onFailure(call: Call<AccessToken>, t: Throwable) {
-                    }
-                })
             }
-        }
+            override fun onFailure(call: Call<AccessToken>, t: Throwable) {
+            }
+        })
     }
 
     private fun getUserAndListAccountsFromNetwork() {
         UserNetwork.getUser {
-            runBlocking {
-                var job: Job = launch(Dispatchers.IO) {
-                    Log.e("SHOWING USER", "${it.name}, id: ${it.id} WITH TOKEN = ${MainActivity.accessTokenFromShared?.access_token}}"
-                    )
-                    Repository.userId = it.id.toString()
-                    Repository.userName = it.name.toString()
+            Log.e("SHOWING USER", "${it.name}, id: ${it.id} WITH TOKEN = ${MainActivity.accessTokenFromShared?.access_token}}"
+            )
+            Repository.userId = it.id.toString()
+            Repository.userName = it.name.toString()
 
-                    ListAccountsNetwork.getAccounts {
-                        Repository.accounts = it as MutableList<ListAccounts.Data>
+            ListAccountsNetwork.getAccounts {
+                Repository.accounts = it as MutableList<ListAccounts.Data>
 
-                        Log.e(
-                            "LIST OF ACCOUNTS MAIN OJO: ",
-                            "ID: ${it[0].id}, ${it[0].name},type = ${it[0].type},primary = ${it[0].primary}, ${it[0].balance}, ${it[0].currency} WITH TOKEN = ${MainActivity.accessTokenFromShared?.access_token}"
-                        )
-                        Log.e("ALL THE LIST OFF ACCOUNTS MAIN:", "$it")
-                        val intent = Intent(requireContext(),MainActivity::class.java)
-                        startActivity(intent)
-                    }
-                }
+                Log.e(
+                    "LIST OF ACCOUNTS MAIN OJO: ",
+                    "ID: ${it[0].id}, ${it[0].name},type = ${it[0].type},primary = ${it[0].primary}, ${it[0].balance}, ${it[0].currency} WITH TOKEN = ${MainActivity.accessTokenFromShared?.access_token}"
+                )
+                Log.e("ALL THE LIST OFF ACCOUNTS MAIN:", "$it")
+                val intent = Intent(requireContext(),MainActivity::class.java)
+                startActivity(intent)
             }
         }
     }
