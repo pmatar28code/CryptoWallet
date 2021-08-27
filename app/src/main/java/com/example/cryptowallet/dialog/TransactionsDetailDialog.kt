@@ -24,7 +24,6 @@ class TransactionsDetailDialog:DialogFragment() {
             }
         }
     }
-    var listWalletDetails = mutableListOf<ListTransactions.Data>()
     @SuppressLint("SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = LayoutInflater.from(requireContext())

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cryptowallet.R
-import com.example.cryptowallet.databinding.ItemWalletsBinding
+import com.example.cryptowallet.databinding.ItemTransactionsBinding
 import com.example.cryptowallet.network.classesapi.ListTransactions
 import com.example.cryptowallet.utilities.Utility
 
@@ -34,7 +34,7 @@ class TransactionsAdapter(
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemWalletsBinding.inflate(inflater, parent, false)
+        val binding = ItemTransactionsBinding.inflate(inflater, parent, false)
         return TransactionsViewHolder(binding, onCLickSetId)
     }
     override fun onBindViewHolder(holder: TransactionsViewHolder, position: Int) {
@@ -46,15 +46,18 @@ class TransactionsAdapter(
         //}
     }
     class TransactionsViewHolder(
-        private val binding: ItemWalletsBinding,
+        private val binding: ItemTransactionsBinding,
         private val onCLickForDetails: (ListTransactions.Data) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun onBind(transaction: ListTransactions.Data) {
             binding.apply {
-                walletNameText.text = transaction.id.toString()
-                walletIdText.text =  "${transaction.amount?.amount.toString()} / ${transaction.amount?.currency.toString()}"
-                walletCurrencyText.text = transaction.status.toString()
+                transactionIdText.text = transaction.id.toString()
+                transactionAmountCurrencyText.text =  "${transaction.amount?.amount.toString()} / ${transaction.amount?.currency.toString()}"
+                transactionStatusText.text = transaction.status.toString()
+                transactionTypeText.text = transaction.type.toString()
+                transactionNativeAmountCurrencyText.text = "${transaction.nativeAmount?.amount.toString()} / ${transaction.nativeAmount?.currency.toString()}"
+                transactionDateTimeText.text = transaction.createdAt.toString()
             }
         }
     }

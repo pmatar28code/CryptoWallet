@@ -21,6 +21,7 @@
         <entry key="app/src/main/res/layout/fragment_transactions_details_dialog.xml" value="0.12587719298245614" />
         <entry key="app/src/main/res/layout/fragment_wallet.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_wallet_details.xml" value="0.14210526315789473" />
+        <entry key="app/src/main/res/layout/item_transactions.xml" value="0.11096491228070175" />
         <entry key="app/src/main/res/layout/item_wallets.xml" value="0.4166666666666667" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.10614035087719298" />
       </map>

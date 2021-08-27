@@ -37,11 +37,15 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
         runBlocking {
             var job: Job = launch {
                 ListAccountsNetwork.getAccounts { list ->
-                    listOfWallets = list.toMutableList()
+                    for(account in list){
+                        if(account.balance?.amount != "0.00000000" && account.balance?.amount != "0.000000" && account.balance?.amount != "0.0000" && account.balance?.amount != "0.0000000000" && account.balance?.amount != "0.000000000" && account.balance?.amount != "0.0000000"){
+                            listOfWallets.add(account)
+                        }
+
+                    }
                     walletsShowTransactionsAdapter = WalletRequestAdapter { data ->
                         Repository.setTransactionIdForSpecificNetworkRequest = data.id.toString()
                         Repository.setTransactionCurrencyForIcon = data.balance?.currency.toString()
-                       // Repository.currency = data.balance?.currency.toString()
                         Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
                         TransactionsDetailDialog.create {
 
