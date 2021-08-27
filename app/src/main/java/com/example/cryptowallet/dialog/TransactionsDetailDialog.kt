@@ -11,10 +11,8 @@ import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.adapter.TransactionsAdapter
 import com.example.cryptowallet.databinding.FragmentTransactionsDetailsDialogBinding
-import com.example.cryptowallet.network.classesapi.ListTransactions
 import com.example.cryptowallet.network.networkcalls.ListTransactionsNetwork
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.fragment_transactions_details_dialog.*
 
 class TransactionsDetailDialog:DialogFragment() {
     companion object {
@@ -24,12 +22,10 @@ class TransactionsDetailDialog:DialogFragment() {
             }
         }
     }
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = LayoutInflater.from(requireContext())
         val binding = FragmentTransactionsDetailsDialogBinding.inflate(inflater)
-
-
 
         val transactionsDetailsAdapter = TransactionsAdapter{
 
@@ -38,8 +34,8 @@ class TransactionsDetailDialog:DialogFragment() {
             Glide.with(requireContext())
                 .load("https://api.coinicons.net/icon/${Repository.setTransactionCurrencyForIcon}/128x128")
                 .into(walletTransactionDetailsImage)
-            recyclerTransactionDetailsDialog.apply {
-                ListTransactionsNetwork.getTransactions {
+                recyclerTransactionDetailsDialog.apply {
+                    ListTransactionsNetwork.getTransactions {
                     adapter = transactionsDetailsAdapter
                     layoutManager = LinearLayoutManager(requireContext())
                     transactionsDetailsAdapter.submitList(it)
@@ -48,7 +44,6 @@ class TransactionsDetailDialog:DialogFragment() {
             }
 
         }
-
 
         return MaterialAlertDialogBuilder(
             requireContext(),R.style.MyRounded_MaterialComponents_MaterialAlertDialog)

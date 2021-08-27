@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.Toast
@@ -18,11 +17,6 @@ import com.example.cryptowallet.fragments.*
 import com.example.cryptowallet.network.classesapi.AccessToken
 import com.example.cryptowallet.utilities.EncSharedPreferences
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -51,14 +45,8 @@ class MainActivity : AppCompatActivity() {
                 this,REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
             )
         }
-
-        runBlocking {
-            val job:Job = launch(IO) {
-                codeFromShared = EncSharedPreferences.getValueString(keyStringCode,applicationContext)
-                stringTokenFromShared = EncSharedPreferences.getValueString(keyStringAccesskey,applicationContext)
-                joinAll()
-            }
-        }
+        codeFromShared = EncSharedPreferences.getValueString(keyStringCode,applicationContext)
+        stringTokenFromShared = EncSharedPreferences.getValueString(keyStringAccesskey,applicationContext)
 
         if (codeFromShared == null || codeFromShared == "") {
             binding.bottomNavigationContainer.isGone = true
@@ -127,13 +115,9 @@ class MainActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
             btnConfirm.setOnClickListener {
-                runBlocking {
-                    val job:Job = launch(IO) {
-                        EncSharedPreferences.saveToEncryptedSharedPrefsString(keyStringCode,"",this@MainActivity)
-                        val intent = Intent(this@MainActivity, MainActivity::class.java)
-                        startActivity(intent)
-                    }
-                }
+                EncSharedPreferences.saveToEncryptedSharedPrefsString(keyStringCode,"",this@MainActivity)
+                val intent = Intent(this@MainActivity, MainActivity::class.java)
+                startActivity(intent)
             }
             dialog.setCancelable(false)
             dialog.setContentView(view)

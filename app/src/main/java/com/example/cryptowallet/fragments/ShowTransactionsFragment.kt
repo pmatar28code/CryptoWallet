@@ -13,9 +13,6 @@ import com.example.cryptowallet.databinding.FragmentShowTransactionsBinding
 import com.example.cryptowallet.dialog.TransactionsDetailDialog
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
@@ -26,14 +23,11 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentShowTransactionsBinding.bind(view)
 
-        var listOfWallets = mutableListOf<ListAccounts.Data>()
+        val listOfWallets = mutableListOf<ListAccounts.Data>()
 
-        runBlocking {
-            var job: Job = launch {
-                setVariablesAndRecyclerView(binding,listOfWallets)
-            }
-        }
+        setVariablesAndRecyclerView(binding,listOfWallets)
     }
+
     private fun performSearch(
         binding: FragmentShowTransactionsBinding, listSearch:List<ListAccounts.Data>
     ) {
