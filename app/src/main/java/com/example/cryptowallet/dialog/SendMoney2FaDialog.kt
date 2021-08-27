@@ -8,9 +8,6 @@ import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.databinding.FragmentSendMoney2faDialogBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class SendMoney2FaDialog: DialogFragment() {
     companion object {
@@ -37,11 +34,7 @@ class SendMoney2FaDialog: DialogFragment() {
             .create()
     }
     private fun setPositiveButton(binding: FragmentSendMoney2faDialogBinding){
-        runBlocking {
-            val job:Job = launch {
-                Repository.token2fa = binding.outlinedTextField2FaToken.editText?.text.toString()
-                onItemAddedListener()
-            }
-        }
+        Repository.token2fa = binding.outlinedTextField2FaToken.editText?.text.toString()
+        onItemAddedListener()
     }
 }

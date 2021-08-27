@@ -39,7 +39,6 @@ class WalletDetailsDialog: DialogFragment() {
             .setView(binding.root)
             .setPositiveButton(getString(R.string.dialog_close)) { _, _ ->
             }
-
             .create()
     }
 }

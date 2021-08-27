@@ -10,7 +10,6 @@ import com.example.cryptowallet.Repository
 import com.example.cryptowallet.databinding.FragmentSendMoneyConfirmDialogBinding
 import com.example.cryptowallet.network.networkcalls.SendMoney2FANetwork
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.runBlocking
 
 class SendMoneyConfirmDialog: DialogFragment() {
     companion object {
@@ -25,7 +24,6 @@ class SendMoneyConfirmDialog: DialogFragment() {
         val inflater = LayoutInflater.from(requireContext())
         val binding = FragmentSendMoneyConfirmDialogBinding.inflate(inflater)
         if(!Repository.didntRequiredTwoFA){
-        runBlocking {
             SendMoney2FANetwork.sendMoney { sendMoneyData ->
                 binding.apply {
                     if (sendMoneyData.id == "0") {
@@ -35,7 +33,6 @@ class SendMoneyConfirmDialog: DialogFragment() {
                     }
                 }
             }
-        }
         }else{
             Repository.didntRequiredTwoFA = false
                 binding.apply {

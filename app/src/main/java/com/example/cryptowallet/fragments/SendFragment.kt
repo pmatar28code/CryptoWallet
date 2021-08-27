@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
@@ -23,10 +22,6 @@ import com.example.cryptowallet.network.classesapi.SendMoney
 import com.example.cryptowallet.network.networkcalls.AddressNetwork
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 import com.example.cryptowallet.network.networkcalls.SendMoneyNetwork
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class SendFragment: Fragment(R.layout.fragment_send) {
@@ -42,14 +37,11 @@ class SendFragment: Fragment(R.layout.fragment_send) {
             startActivity(intent)
         }
 
-        runBlocking {
-            var job: Job = launch {
-                ListAccountsNetwork.getAccounts { list ->
-                    listOfWallets = list.toMutableList()
-                    walletSendAdapter = WalletSendAdapter { data ->
-                        sendMoneyNetworkCallBackTasks(binding,data)
-
-                        binding.sendMoneyButton.setOnClickListener {
+        ListAccountsNetwork.getAccounts { list ->
+            listOfWallets = list.toMutableList()
+            walletSendAdapter = WalletSendAdapter { data ->
+                sendMoneyNetworkCallBackTasks(binding,data)
+                binding.sendMoneyButton.setOnClickListener {
                             sendMoneyButtonFunction(
                                 binding,
                                 requireContext(),
@@ -58,15 +50,13 @@ class SendFragment: Fragment(R.layout.fragment_send) {
                         }
                     }
 
-                    binding.walletsSendRecyclerView.apply {
-                        adapter = walletSendAdapter
-                        layoutManager = LinearLayoutManager(context)
-                        walletSendAdapter?.submitList(listOfWallets.toList().reversed())
-                        walletSendAdapter?.notifyDataSetChanged()
-                    }
-                    performSearch(binding,listOfWallets)
-                }
+            binding.walletsSendRecyclerView.apply {
+                adapter = walletSendAdapter
+                layoutManager = LinearLayoutManager(context)
+                walletSendAdapter?.submitList(listOfWallets.toList().reversed())
+                walletSendAdapter?.notifyDataSetChanged()
             }
+            performSearch(binding,listOfWallets)
         }
     }
 
@@ -87,7 +77,6 @@ class SendFragment: Fragment(R.layout.fragment_send) {
     private fun search(text: String?,listOfAccounts:List<ListAccounts.Data>,binding:FragmentSendBinding) {
         val listOfAccountsToWork = listOfAccounts
         val searchResultList = mutableListOf<ListAccounts.Data>()
-
         text?.let {
             listOfAccountsToWork.forEach { Account ->
                 if (Account.balance?.currency == text.uppercase(Locale.getDefault()) ||
@@ -108,7 +97,6 @@ class SendFragment: Fragment(R.layout.fragment_send) {
     private fun updateRecyclerView(searchResultList:List<ListAccounts.Data>) {
         walletSendAdapter?.submitList(searchResultList)
         walletSendAdapter?.notifyDataSetChanged()
-
     }
     private fun sendMoneyButtonFunction(
         binding: FragmentSendBinding,
@@ -119,49 +107,45 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         Repository.sendMonetTo = binding.outlinedTextFieldTo.editText?.text.toString()
         Repository.sendMoneyCurrency = binding.outlinedTextFieldCurrency.editText?.text.toString()
 
-        runBlocking {
-            val job: Job = launch(Dispatchers.IO) {
-                SendMoneyNetwork.sendMoney {
-                    if (Repository.repoSendMoneyResponseCode == 402) {
-                        Repository.repoSendMoneyResponseCode = 400
-                        Toast.makeText(
-                            requireContext,
-                            "Two Factor Was Required",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Repository.didntRequiredTwoFA = false
-                        SendMoney2FaDialog.create {
-                            SendMoneyConfirmDialog.create {
+        SendMoneyNetwork.sendMoney {
+            if (Repository.repoSendMoneyResponseCode == 402) {
+                Repository.repoSendMoneyResponseCode = 400
+                Toast.makeText(
+                    requireContext,
+                    "Two Factor Was Required",
+                    Toast.LENGTH_SHORT
+                ).show()
+                Repository.didntRequiredTwoFA = false
+                SendMoney2FaDialog.create {
+                    SendMoneyConfirmDialog.create {
 
-                            }.show(parentFragmentManager, "From Send Money to Send Confirm")
-                        }.show(parentFragmentManager, "To Send 2Fa Dialog")
-                    } else {
-                        Repository.didntRequiredTwoFA = true
-                        Repository.sendMoneyDataObj = SendMoney.Data(
-                            amount = it.amount,
-                            createdAt = it.createdAt,
-                            description = it.description,
-                            details = it.details,
-                            id = it.id,
-                            nativeAmount = it.nativeAmount,
-                            network = it.network,
-                            resource = it.resource,
-                            resourcePath = it.resourcePath,
-                            status = it.status,
-                            to = it.to,
-                            type = it.type,
-                            updatedAt = it.updatedAt
-                        )
-                        SendMoneyConfirmDialog.create {
-                        }.show(parentFragmentManager, "From Send Money to Send Confirm")
+                    }.show(parentFragmentManager, "From Send Money to Send Confirm")
+                }.show(parentFragmentManager, "To Send 2Fa Dialog")
+            } else {
+                Repository.didntRequiredTwoFA = true
+                Repository.sendMoneyDataObj = SendMoney.Data(
+                    amount = it.amount,
+                    createdAt = it.createdAt,
+                    description = it.description,
+                    details = it.details,
+                    id = it.id,
+                    nativeAmount = it.nativeAmount,
+                    network = it.network,
+                    resource = it.resource,
+                    resourcePath = it.resourcePath,
+                    status = it.status,
+                    to = it.to,
+                    type = it.type,
+                    updatedAt = it.updatedAt
+                )
+                SendMoneyConfirmDialog.create {
+                }.show(parentFragmentManager, "From Send Money to Send Confirm")
 
-                        Toast.makeText(
-                            requireContext,
-                            "TWO FACTOR ID NOT REQUIRED ${it.createdAt}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+                Toast.makeText(
+                    requireContext,
+                    "TWO FACTOR ID NOT REQUIRED ${it.createdAt}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -169,14 +153,10 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         Repository.sendMoneyAccountId = data.id.toString()
         Repository.sendMoneyCurrency = data.balance?.currency.toString()
         binding.outlinedTextFieldCurrency.editText?.setText(Repository.sendMoneyCurrency)
-        Repository.iconAddress =
-            "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
-        runBlocking {
-            val job: Job = launch(Dispatchers.IO) {
-                AddressNetwork.getAddresses {
-                    Repository.address = it.address.toString()
-                }
-            }
+        Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
+
+        AddressNetwork.getAddresses {
+            Repository.address = it.address.toString()
         }
     }
 }
