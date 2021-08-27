@@ -38,13 +38,6 @@ object ListTransactionsNetwork {
         private val onSuccess: (List<ListTransactions.Data>) -> Unit
     ) : Callback<ListTransactions> {
         override fun onResponse(call: Call<ListTransactions>, response: Response<ListTransactions>) {
-            val lastIndex = response.body()?.data?.lastIndex
-            Log.e("LIST OF Transactions Network On Response:","${lastIndex?.let {
-                response.body()?.data?.get(
-                    it
-                )?.id 
-            }}")
-
             val listOfTransactions = mutableListOf<ListTransactions.Data>()
             for(item in response.body()?.data!!){
                 listOfTransactions.add(item!!)
@@ -60,7 +53,6 @@ object ListTransactionsNetwork {
     fun getTransactions(onSuccess: (List<ListTransactions.Data>) -> Unit) {
         val token = AccessTokenProviderImp().token()?.access_token ?: ""
         val accountId = Repository.sendMoneyAccountId
-        Log.e("On Actual Transactions NETWORK TOKEN:", token)
         listTransactionsApi.getTransactions("Bearer $token",accountId).enqueue(TransactionsCallBack(onSuccess))
     }
 }

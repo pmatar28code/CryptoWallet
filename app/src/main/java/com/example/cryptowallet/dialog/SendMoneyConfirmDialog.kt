@@ -29,10 +29,9 @@ class SendMoneyConfirmDialog: DialogFragment() {
             SendMoney2FANetwork.sendMoney { sendMoneyData ->
                 binding.apply {
                     if (sendMoneyData.id == "0") {
-                        sendConfirmId.text = "Transaction could not be completed"
+                        sendConfirmId.text = getString(R.string.send_confirm_dialog_transaction_not_completed)
                     } else {
-                        sendConfirmId.text = "Transation Successful, you will receive an email with confirmation. \n " +
-                                "Keep in mind, transactions may take between 30 minutes and one hour to complete."
+                        sendConfirmId.text = getString(R.string.send_confirm_dialog_transaction_successful)
                     }
                 }
             }
@@ -41,10 +40,9 @@ class SendMoneyConfirmDialog: DialogFragment() {
             Repository.didntRequiredTwoFA = false
                 binding.apply {
                     if (Repository.sendMoneyDataObj.id == null) {
-                        sendConfirmId.text = "Transaction could not be completed"
+                        sendConfirmId.text = getString(R.string.send_confirm_dialog_transaction_not_completed)
                     } else {
-                        sendConfirmId.text = "Transation Successful, you will recieve an email with confirmation. \n " +
-                                "Keep in mind, transactions may take between 30 minutes and one hour to complete."//it[lastIndex].id.toString()
+                        sendConfirmId.text = getString(R.string.send_confirm_dialog_transaction_successful)
                     }
                 }
         }
@@ -53,7 +51,7 @@ class SendMoneyConfirmDialog: DialogFragment() {
             requireContext(), R.style.MyRounded_MaterialComponents_MaterialAlertDialog
         )
             .setView(binding.root)
-            .setPositiveButton("Accept") { _, _ ->
+            .setPositiveButton(getString(R.string.accept_button)) { _, _ ->
             }
             .create()
     }

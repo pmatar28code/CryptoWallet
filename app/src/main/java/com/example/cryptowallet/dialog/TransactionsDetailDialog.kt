@@ -38,7 +38,7 @@ class TransactionsDetailDialog:DialogFragment() {
         return MaterialAlertDialogBuilder(
             requireContext(),R.style.MyRounded_MaterialComponents_MaterialAlertDialog)
             .setView(binding.root)
-            .setPositiveButton("Accept"){_,_ ->
+            .setPositiveButton(getString(R.string.accept_button)){_,_ ->
 
             }
             .create()

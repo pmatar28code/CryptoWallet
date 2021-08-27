@@ -33,7 +33,6 @@ object UserNetwork {
     private class UserCallBack(
         private val onSuccess:(UserData.Data) -> Unit): Callback<UserData> {
         override fun onResponse(call: Call<UserData>, response: Response<UserData>) {
-            Log.e("ON Response User:"," ${response.body()?.data?.name} ok? ${response.isSuccessful}")
             val newClient = UserData.Data(
                 name = response.body()?.data?.name ?: "",
                 avatarUrl = response.body()?.data?.avatarUrl ?: "",
@@ -45,7 +44,6 @@ object UserNetwork {
                 resourcePath = response.body()?.data?.resourcePath ?: "",
                 username = response.body()?.data?.username ?: ""
             )
-            Log.e("RESPONDED WITH:","Client: ${newClient.name},${newClient.id} ${response.isSuccessful}")
             onSuccess(newClient)
         }
         override fun onFailure(call: Call<UserData>, t: Throwable) {
@@ -54,7 +52,6 @@ object UserNetwork {
     }
     fun getUser (onSuccess: (UserData.Data) -> Unit){
         val token = accessTokenProvider.token()?.access_token ?:""
-        Log.e("ON ACTUAL USER NETWORk CALL TOKEN:", token)
 
         coinBaseClientApiCalls.getUser("Bearer $token").enqueue(UserCallBack(onSuccess)) //getUser(token).enqueue(AddressCallBack(onSuccess))
     }

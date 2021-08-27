@@ -34,7 +34,6 @@ object AddressNetwork {
         private val onSuccess: (NAddress.Data) -> Unit
     ) : Callback<NAddress> {
         override fun onResponse(call: Call<NAddress>, response: Response<NAddress>) {
-            Log.e("ON Response Address:", " ${response.body()?.data?.address}")
             val newNAddress = NAddress.Data(
                 address = response.body()?.data?.address,
                 createdAt = response.body()?.data?.createdAt,
@@ -44,10 +43,6 @@ object AddressNetwork {
                 resource = response.body()?.data?.resource,
                 resourcePath = response.body()?.data?.resourcePath,
                 updatedAt = response.body()?.data?.updatedAt
-            )
-            Log.e(
-                "RESPONDED WITH:",
-                "Address: ${newNAddress.address},${newNAddress.name} ${response.isSuccessful}"
             )
             onSuccess(newNAddress)
         }
@@ -60,7 +55,6 @@ object AddressNetwork {
     fun getAddresses(onSuccess: (NAddress.Data) -> Unit) {
         val token = AccessTokenProviderImp().token()?.access_token ?: ""
         val accountId = Repository.accountId
-        Log.e("On Actual ADDRESS NETWORK TOKEN:", token)
         addressApi.getAddress("Bearer $token", accountId).enqueue(AddressCallBack(onSuccess))
     }
 }

@@ -37,7 +37,6 @@ object SendMoneyNetwork {
     private class SendMoneyCallBack(
         private val onSuccess:(SendMoney.Data) -> Unit): Callback<SendMoney.Data> {
         override fun onResponse(call: Call<SendMoney.Data>, response: Response<SendMoney.Data>) {
-            Log.e("ON Response Send Money Network:","${response.body()?.details} status: ${response.body()?.status}")
             val sendMoneyData = SendMoney.Data(
                 amount = response.body()?.amount,
                 createdAt = response.body()?.createdAt,
@@ -74,6 +73,7 @@ object SendMoneyNetwork {
         val to = Repository.sendMonetTo
         val currency = Repository.sendMoneyCurrency
         val amount = Repository.sendMoneyAmount
+
         sendMoneyApi.sendMoney (token,accountId,"send",to,amount,currency).enqueue(
             SendMoneyCallBack(onSuccess)
         )

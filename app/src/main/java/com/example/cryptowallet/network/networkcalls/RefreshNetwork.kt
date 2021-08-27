@@ -28,7 +28,6 @@ object RefreshNetwork {
     private class RefreshCallBack(
         private val onSuccess:(AccessToken) -> Unit): Callback<AccessToken> {
         override fun onResponse(call: Call<AccessToken>, response: Response<AccessToken>) {
-            Log.e("ON Response RefreshToken:"," ${response.body()?.access_token}")
             val newRefreshedToken = response.body()?.access_token?.let {
                 response.body()?.expires_in?.let { it1 ->
                     response.body()?.refresh_token?.let { it2 ->
@@ -46,7 +45,6 @@ object RefreshNetwork {
                     }
                 }
             }
-            Log.e("RESPONDED WITH:","RefreshedToken: ${newRefreshedToken?.access_token}, ${response.isSuccessful}")
             if (newRefreshedToken != null) {
                 onSuccess(newRefreshedToken)
             }
@@ -59,7 +57,6 @@ object RefreshNetwork {
 
     fun refreshToken (onSuccess: (AccessToken) -> Unit){
         val refreshToken = AccessTokenProviderImp().token()?.refresh_token?:""
-        Log.e("REFRESH NETWORK REFRESH TOKEN FROM Actual TOKEN:", refreshToken)
         refreshTokenApi.refreshToken("refresh_token", MY_CLIENT_ID, CLIENT_SECRET,refreshToken).enqueue(
             RefreshCallBack(onSuccess)
         )

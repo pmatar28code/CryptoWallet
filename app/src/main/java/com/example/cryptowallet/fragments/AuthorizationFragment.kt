@@ -57,7 +57,6 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                 if (code.contains("?") && code.length == 106) {
                     code = code.removeRange(0, 41)
                     code = code.dropLast(1)
-                    Log.e("TST OVERRIDE", "HOW CODE ENDED UP $code")
                     Utility.getInstance()?.applicationContext?.let {
                         EncSharedPreferences.saveToEncryptedSharedPrefsString(
                             "Auth_code", code,
@@ -101,11 +100,6 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                         call: Call<AccessToken>,
                         response: Response<AccessToken>
                     ) {
-                        Toast.makeText(
-                            requireContext(),
-                            "good response: ${response.body()?.access_token}",
-                            Toast.LENGTH_SHORT
-                        ).show()
                         val accessToken = AccessToken(
                             access_token = response.body()?.access_token ?: "",
                             token_type = response.body()?.token_type ?: "",
@@ -121,15 +115,9 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                                 it
                             )
                         }
-                        Log.e(
-                            "ADDED TOKEN TO DATABASE",
-                            "ACCESS TOKEN ADDED TO EncSharedPrefs $accessToken"
-                        )
-                    }
 
+                    }
                     override fun onFailure(call: Call<AccessToken>, t: Throwable) {
-                        Toast.makeText(requireContext(), "bad response", Toast.LENGTH_SHORT)
-                            .show()
                     }
                 })
             }

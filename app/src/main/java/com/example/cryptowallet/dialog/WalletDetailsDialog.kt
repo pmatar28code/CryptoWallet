@@ -37,7 +37,7 @@ class WalletDetailsDialog: DialogFragment() {
             requireContext(), R.style.MyRounded_MaterialComponents_MaterialAlertDialog
         )
             .setView(binding.root)
-            .setPositiveButton("Close") { _, _ ->
+            .setPositiveButton(getString(R.string.dialog_close)) { _, _ ->
             }
 
             .create()

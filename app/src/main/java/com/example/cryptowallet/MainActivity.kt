@@ -31,15 +31,13 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val MY_CLIENT_ID = "c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188"
         const val CLIENT_SECRET = "311b687baee92bbd8e584527bb757f27c9ed363f7a3922a18b381bcd4309b5b4"
-        const val MY_REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"//"cryptowallet://callback"
+        const val MY_REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
         const val keyStringAccesskey = "Access_key"
         const val keyStringCode = "Auth_code"
         var codeFromShared:String ?= null
         var stringTokenFromShared:String ?= null
         var accessTokenFromShared:AccessToken ?= null
 
-        private const val TAG = "CameraXBasic"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
@@ -60,7 +58,6 @@ class MainActivity : AppCompatActivity() {
         runBlocking {
             val job:Job = launch(IO) {
                 codeFromShared = EncSharedPreferences.getValueString(keyStringCode,applicationContext)
-                Log.e("HOW CODE VALUE STRING LOOKS MAIN:",codeFromShared?:"not looking good")
                 stringTokenFromShared = EncSharedPreferences.getValueString(keyStringAccesskey,applicationContext)
                 joinAll()
             }
@@ -72,12 +69,7 @@ class MainActivity : AppCompatActivity() {
             swapFragments(AuthorizationFragment())
         } else {
             stringTokenFromShared = EncSharedPreferences.getValueString(keyStringAccesskey,applicationContext)
-            Log.e(
-                "WHATS NEXT",
-                "DO API Requests WITH TOKEN AVAILABLE CODE:$codeFromShared, Token:${
-                    accessTokenFromShared?.access_token
-                }"
-            )
+
             binding.apply {
                 bottomNavigationContainer.setOnNavigationItemSelectedListener {
                     handleBottomNavigation(it.itemId, binding)

@@ -31,8 +31,7 @@ object UpdateAccountNetwork {
     private class UpdateAccountCallBack(
         private val onSuccess:(UpdateAccount.Data) -> Unit): Callback<UpdateAccount.Data> {
         override fun onResponse(call: Call<UpdateAccount.Data>, response: Response<UpdateAccount.Data>) {
-           Log.e("ON RESPONSE UPDATEACCOUNT NETWORK","code: ${response.code()}")
-            var updateAccountTest = UpdateAccount.Data(
+            val updateAccountTest = UpdateAccount.Data(
                 createdAt = response.body()?.createdAt,
                 balance = response.body()?.balance,
                 currency = response.body()?.currency,
@@ -44,8 +43,6 @@ object UpdateAccountNetwork {
                 type = response.body()?.type,
                 updatedAt = response.body()?.updatedAt
             )
-            Log.e("ON Response Update Account:"," ${response.body()?.name}, ${response.body()?.createdAt}")
-
             onSuccess(updateAccountTest)
         }
 
@@ -56,7 +53,6 @@ object UpdateAccountNetwork {
 
     fun updateAccount (onSuccess: (UpdateAccount.Data) -> Unit){
         val token = AccessTokenProviderImp().token()?.access_token?:""
-        Log.e("UPDATE ACCOUNT REFRESH TOKEN FROM Actual TOKEN:", token)
         updateAccountApi.updateAccount (token,"BTC Wallet").enqueue(UpdateAccountCallBack(onSuccess))
     }
 }

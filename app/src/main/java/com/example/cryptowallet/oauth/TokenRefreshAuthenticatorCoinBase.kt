@@ -39,9 +39,9 @@ class TokenRefreshAuthenticatorCoinBase(
                         }
                             ?:""
                         updatedToken = EncSharedPreferences.convertJsonStringToTestClass(stringUpdatedToken)
-                        Log.e("NEW UPDATED TOKEN ON AUTHENTICATOR CONBASE","$updatedToken")
+                        Log.e("NEW UPDATED TOKEN ON AUTHENTICATOR COINBASE","$updatedToken")
                     }else{
-                        Log.e("RECIEVED FALSE FROM REFRESH ON AUTHENTICATOR COINBASE","FALSE DO NOTHING")
+                        Log.e("RECEIVED FALSE FROM REFRESH ON AUTHENTICATOR COINBASE","FALSE DO NOTHING")
                     }
                 }
                 return response.request

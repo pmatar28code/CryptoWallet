@@ -43,7 +43,7 @@ class RequestMoneyDialog:DialogFragment() {
         return MaterialAlertDialogBuilder(
             requireContext(),R.style.MyRounded_MaterialComponents_MaterialAlertDialog)
             .setView(binding.root)
-            .setPositiveButton("Request"){_,_ ->
+            .setPositiveButton(getString(R.string.dialog_request)){ _, _ ->
                 val bitmapDrawable =
                     binding.requestDialogQrcodeImage.drawable.toBitmap(1000,1000).toDrawable(resources)// get the from imageview or use your drawable from drawable folder
 
@@ -62,7 +62,7 @@ class RequestMoneyDialog:DialogFragment() {
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareText)
                 startActivity(Intent.createChooser(shareIntent, "Share Wallpaper using"))
             }
-            .setNegativeButton("Cancel",null)
+            .setNegativeButton(R.string.dialog_cancel,null)
             .create()
     }
 }

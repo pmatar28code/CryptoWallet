@@ -26,7 +26,7 @@ class AccessTokenProviderImp : AccessTokenProvider {
     override fun token(): AccessToken? {
         runBlocking {
             val job: Job = launch(IO) {
-                var stringTokenFromSharedPrefs = utilityApplicationContext?.let {
+                val stringTokenFromSharedPrefs = utilityApplicationContext?.let {
                     EncSharedPreferences.getValueString(keyStringAccessKey,
                         it
                     )
@@ -69,7 +69,7 @@ class AccessTokenProviderImp : AccessTokenProvider {
                 if (newAccessToken!!.access_token != "" && newAccessToken != null){
                     runBlocking {
                         val job: Job = launch(IO) {
-                            var stringAccessToken = EncSharedPreferences.convertTestClassToJsonString(
+                            val stringAccessToken = EncSharedPreferences.convertTestClassToJsonString(
                                 newAccessToken!!
                             )
                             if (utilityApplicationContext != null) {

@@ -38,7 +38,6 @@ object RequestMoneyNetwork {
         private val onSuccess: (RequestMoney.Data) -> Unit
     ) : Callback<RequestMoney.Data> {
         override fun onResponse(call: Call<RequestMoney.Data>, response: Response<RequestMoney.Data>) {
-            Log.e("ON Response REQUEST MONEY:", "code: ${response.code()} ${response.body()?.to} , amount ${response.body()?.amount}, successfull? ${response.isSuccessful}")
             val newRequestMoney = RequestMoney.Data(
                 type = response.body()?.type,
                 amount = response.body()?.amount,
@@ -64,7 +63,6 @@ object RequestMoneyNetwork {
     fun getRequestMoney(onSuccess: (RequestMoney.Data) -> Unit) {
         val type = "request"
         val token = AccessTokenProviderImp().token()?.access_token ?: ""
-        Log.e("On Actual REQUEST MONEY NETWORK TOKEN:", token)
         val requestMoney = RequestMoneyApiBody(
             "request",
             "Phil@nevie.com",

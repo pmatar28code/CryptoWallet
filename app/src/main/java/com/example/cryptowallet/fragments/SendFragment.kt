@@ -98,7 +98,6 @@ class SendFragment: Fragment(R.layout.fragment_send) {
             }
             if(searchResultList.isEmpty()){
                 updateRecyclerView(listOfAccountsToWork.reversed())
-                Toast.makeText(requireContext(), "No match found!", Toast.LENGTH_SHORT).show()
             }else{
                 updateRecyclerView(searchResultList.reversed())
             }
@@ -119,13 +118,10 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         Repository.sendMoneyAmount = binding.outlinedTextFieldAmount.editText?.text.toString()
         Repository.sendMonetTo = binding.outlinedTextFieldTo.editText?.text.toString()
         Repository.sendMoneyCurrency = binding.outlinedTextFieldCurrency.editText?.text.toString()
-        Log.e("CURRRENCY THISS:", Repository.currency)
 
         runBlocking {
             val job: Job = launch(Dispatchers.IO) {
                 SendMoneyNetwork.sendMoney {
-                    Log.e("SEND MONEY FIRST REQUEST FROM DIALOG:", "$it")
-                    Log.e("RESPONSE CODE SEND:", "${Repository.repoSendMoneyResponseCode}")
                     if (Repository.repoSendMoneyResponseCode == 402) {
                         Repository.repoSendMoneyResponseCode = 400
                         Toast.makeText(
@@ -133,7 +129,6 @@ class SendFragment: Fragment(R.layout.fragment_send) {
                             "Two Factor Was Required",
                             Toast.LENGTH_SHORT
                         ).show()
-                        Log.e("Two Factor Was required", "${Repository.repoSendMoneyResponseCode}")
                         Repository.didntRequiredTwoFA = false
                         SendMoney2FaDialog.create {
                             SendMoneyConfirmDialog.create {
@@ -158,17 +153,11 @@ class SendFragment: Fragment(R.layout.fragment_send) {
                             updatedAt = it.updatedAt
                         )
                         SendMoneyConfirmDialog.create {
-
-
                         }.show(parentFragmentManager, "From Send Money to Send Confirm")
 
-                        Log.e(
-                            "Two Factor Was NOT  Required",
-                            "${Repository.repoSendMoneyResponseCode}"
-                        )
                         Toast.makeText(
                             requireContext,
-                            "TWO FACTOR NOT REQUIRED ${it.createdAt}",
+                            "TWO FACTOR ID NOT REQUIRED ${it.createdAt}",
                             Toast.LENGTH_SHORT
                         ).show()
                     }

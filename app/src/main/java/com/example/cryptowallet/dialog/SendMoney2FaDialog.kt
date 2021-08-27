@@ -30,10 +30,10 @@ class SendMoney2FaDialog: DialogFragment() {
             requireContext(), R.style.MyRounded_MaterialComponents_MaterialAlertDialog
         )
             .setView(binding.root)
-            .setPositiveButton("Send") { _, _ ->
+            .setPositiveButton(getString(R.string.dialog_send)) { _, _ ->
                 setPositiveButton(binding)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(getString(R.string.dialog_cancel), null)
             .create()
     }
     private fun setPositiveButton(binding: FragmentSendMoney2faDialogBinding){

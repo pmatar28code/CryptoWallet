@@ -25,6 +25,7 @@ import java.util.*
 class RequestFragment: Fragment(R.layout.fragment_request) {
     @SuppressLint("NotifyDataSetChanged")
     var walletsRequestAdapter:WalletRequestAdapter ?= null
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentRequestBinding.bind(view)
@@ -34,9 +35,7 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
         runBlocking {
             var job: Job = launch {
                 ListAccountsNetwork.getAccounts { list ->
-                    Log.e("INSIDE WALLET ACTIVITY NETWORK CALL:", "$list")
                     listOfWallets = list.toMutableList()
-                    Log.e("Wallets Activity list:","$listOfWallets")
                         walletsRequestAdapter = WalletRequestAdapter { data ->
                         Repository.accountId = data.id.toString()
                         Repository.currency = data.balance?.currency.toString()
@@ -92,7 +91,6 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
             }
             if(searchResultList.isEmpty()){
                 updateRecyclerView(listOfAccountsToWork.reversed())
-                Toast.makeText(requireContext(), "No match found!", Toast.LENGTH_SHORT).show()
             }else{
                 updateRecyclerView(searchResultList.reversed())
             }

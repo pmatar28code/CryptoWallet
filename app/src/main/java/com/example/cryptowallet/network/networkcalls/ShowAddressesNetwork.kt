@@ -49,7 +49,6 @@ object ShowAddressesNetwork {
 
     fun getAddresses(onSuccess: (List<ShowAddresses.Data>) -> Unit) {
         val token = AccessTokenProviderImp().token()?.access_token ?: ""
-        Log.e("On Actual ADDRESS NETWORK TOKEN:", token)
         showAddressesApi.getAddress("Bearer $token").enqueue(ShowAddressesCallBack(onSuccess))
     }
 }

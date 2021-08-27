@@ -29,7 +29,6 @@ class MyImageAnalyzer(
                     imageProxy.close()
                     if (it.isSuccessful) {
                         readBarcodeData(it.result as List<Barcode>)
-                        Log.e("READ BARCODE DATA?","${it.result}")
                     } else {
                         it.exception?.printStackTrace()
                     }

@@ -35,10 +35,6 @@ object SendMoney2FANetwork {
     private class SendMoneyCallBack(
         private val onSuccess:(SendMoney.Data) -> Unit): Callback<SendMoney.Data> {
         override fun onResponse(call: Call<SendMoney.Data>, response: Response<SendMoney.Data>) {
-            Log.e(
-                "ON Response Send Money 2FA Network:",
-                "code = ${response.code()}${response.body()?.details} status: ${response.body()?.status}"
-            )
             val sendMoneyData = SendMoney.Data(
                 amount = response.body()?.amount,
                 createdAt = response.body()?.createdAt,
@@ -74,8 +70,8 @@ object SendMoney2FANetwork {
         val to = Repository.sendMonetTo
         val currency = Repository.sendMoneyCurrency
         val amount = Repository.sendMoneyAmount
-        Log.e("2fa NETWORK  TOKEN sms :", token2fa)
-        sendMoney2FAAPI.sendMoney ("Bearer $token",Repository.token2fa,accountId,
+
+        sendMoney2FAAPI.sendMoney ("Bearer $token",token2fa,accountId,
             "send",to,amount,currency).enqueue(
             SendMoneyCallBack(onSuccess)
         )
