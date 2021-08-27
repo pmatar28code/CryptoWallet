@@ -28,7 +28,8 @@
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:typeface="sans" />
+                android:typeface="sans"
+                android:background="@android:drawable/editbox_background"/>
 
             <TextView
                 android:id="@+id/transaction_amount_currency_text"
@@ -37,7 +38,8 @@
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:typeface="sans" />
+                android:typeface="sans"
+                android:background="@android:drawable/editbox_background"/>
 
             <TextView
                 android:id="@+id/transaction_status_text"
@@ -46,7 +48,8 @@
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:typeface="sans" />
+                android:typeface="sans"
+                android:background="@android:drawable/editbox_background"/>
 
             <TextView
                 android:id="@+id/transaction_native_amount_currency_text"
@@ -55,7 +58,8 @@
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:typeface="sans" />
+                android:typeface="sans"
+                android:background="@android:drawable/editbox_background"/>
 
             <TextView
                 android:id="@+id/transaction_type_text"
@@ -64,7 +68,8 @@
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:typeface="sans" />
+                android:typeface="sans"
+                android:background="@android:drawable/editbox_background"/>
 
             <TextView
                 android:id="@+id/transaction_date_time_text"
@@ -73,7 +78,8 @@
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:typeface="sans" />
+                android:typeface="sans"
+                android:background="@android:drawable/editbox_background"/>
 
         </LinearLayout>
 

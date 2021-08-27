@@ -2,23 +2,17 @@ package com.example.cryptowallet.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.adapter.WalletRequestAdapter
-import com.example.cryptowallet.databinding.FragmentRequestBinding
 import com.example.cryptowallet.databinding.FragmentShowTransactionsBinding
-import com.example.cryptowallet.dialog.RequestMoneyDialog
 import com.example.cryptowallet.dialog.TransactionsDetailDialog
 import com.example.cryptowallet.network.classesapi.ListAccounts
-import com.example.cryptowallet.network.networkcalls.AddressNetwork
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -36,35 +30,15 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
 
         runBlocking {
             var job: Job = launch {
-                ListAccountsNetwork.getAccounts { list ->
-                    for(account in list){
-                        if(account.balance?.amount != "0.00000000" && account.balance?.amount != "0.000000" && account.balance?.amount != "0.0000" && account.balance?.amount != "0.0000000000" && account.balance?.amount != "0.000000000" && account.balance?.amount != "0.0000000"){
-                            listOfWallets.add(account)
-                        }
-
-                    }
-                    walletsShowTransactionsAdapter = WalletRequestAdapter { data ->
-                        Repository.setTransactionIdForSpecificNetworkRequest = data.id.toString()
-                        Repository.setTransactionCurrencyForIcon = data.balance?.currency.toString()
-                        Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
-                        TransactionsDetailDialog.create {
-
-                        }.show(parentFragmentManager,"open wallet transaction details")
-
-                    }
-                    binding.walletsShowTransactionsRecyclerView.apply{
-                        adapter = walletsShowTransactionsAdapter
-                        layoutManager = LinearLayoutManager(context)
-                        walletsShowTransactionsAdapter?.submitList(listOfWallets.toList().reversed())
-                        walletsShowTransactionsAdapter?.notifyDataSetChanged()
-                    }
-                    performSearch(binding,listOfWallets)
-                }
+                setVariablesAndRecyclerView(binding,listOfWallets)
             }
         }
     }
-    private fun performSearch(binding: FragmentShowTransactionsBinding, listSearch:List<ListAccounts.Data>) {
-        binding.searchViewShowTransactions.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+    private fun performSearch(
+        binding: FragmentShowTransactionsBinding, listSearch:List<ListAccounts.Data>
+    ) {
+        binding.searchViewShowTransactions.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 search(query,listSearch,binding)
                 return true
@@ -78,7 +52,9 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
     }
 
     private fun search(
-        text: String?,listOfAccounts:List<ListAccounts.Data>,binding: FragmentShowTransactionsBinding) {
+        text: String?,listOfAccounts:List<ListAccounts.Data>,
+        binding: FragmentShowTransactionsBinding
+    ){
         val listOfAccountsToWork = listOfAccounts
         val searchResultList = mutableListOf<ListAccounts.Data>()
 
@@ -102,5 +78,37 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
     private fun updateRecyclerView(searchResultList:List<ListAccounts.Data>) {
         walletsShowTransactionsAdapter?.submitList(searchResultList)
         walletsShowTransactionsAdapter?.notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun setVariablesAndRecyclerView(
+        binding: FragmentShowTransactionsBinding, listOfWallets: MutableList<ListAccounts.Data>
+    ){
+        ListAccountsNetwork.getAccounts { list ->
+            for(account in list){
+                if(account.balance?.amount != "0.00000000" && account.balance?.amount != "0.000000"
+                    && account.balance?.amount != "0.0000" && account.balance?.amount != "0.0000000000"
+                    && account.balance?.amount != "0.000000000" && account.balance?.amount != "0.0000000"){
+                    listOfWallets.add(account)
+                }
+
+            }
+            walletsShowTransactionsAdapter = WalletRequestAdapter { data ->
+                Repository.setTransactionIdForSpecificNetworkRequest = data.id.toString()
+                Repository.setTransactionCurrencyForIcon = data.balance?.currency.toString()
+                Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
+                TransactionsDetailDialog.create {
+
+                }.show(parentFragmentManager,"open wallet transaction details")
+
+            }
+            binding.walletsShowTransactionsRecyclerView.apply{
+                adapter = walletsShowTransactionsAdapter
+                layoutManager = LinearLayoutManager(context)
+                walletsShowTransactionsAdapter?.submitList(listOfWallets.toList().reversed())
+                walletsShowTransactionsAdapter?.notifyDataSetChanged()
+            }
+            performSearch(binding,listOfWallets)
+        }
     }
 }

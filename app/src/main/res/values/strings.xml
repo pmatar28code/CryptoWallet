@@ -40,4 +40,5 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_request">Request</string>
     <string name="dialog_close">Close</string>
+    <string name="fragment_show_transactions_select_for_details">Transactions(Select for Details)</string>
 </resources>
