@@ -7,13 +7,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp">
+        android:layout_margin="@dimen/standard_2dp">
 
         <TextView
             android:id="@+id/idTVCourseName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/standard_10dp"
             android:gravity="center"
             android:text="@string/bottom_sheet_menu_are_you_sure_you_want_to_logout"
             android:textColor="@color/black"
@@ -24,7 +24,7 @@
             android:id="@+id/idBtnDismiss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="@dimen/standard_100dp"
             android:layout_below="@id/idTVCourseName"
             android:gravity="center"
             android:text="@string/bottom_sheet_menu_cancel"
@@ -34,7 +34,7 @@
             android:id="@+id/button_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="@dimen/standard_10dp"
             android:layout_below="@id/idTVCourseName"
             android:layout_toEndOf="@id/idBtnDismiss"
             android:text="@string/bottom_sheet_menu_logout"
