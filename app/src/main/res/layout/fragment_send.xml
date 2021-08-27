@@ -210,7 +210,7 @@ android:layout_width="match_parent"
                     android:layout_marginStart="@dimen/standard_8dp"
                     android:layout_marginEnd="@dimen/standard_8dp"
                     android:text="@string/fragment_send_scan"
-                    app:icon="@drawable/ic_wallet"
+                    app:icon="@drawable/ic_scan_qr_code"
                     app:strokeColor="@color/purple_custom"
                     app:strokeWidth="@dimen/standard_2dp" />
             </LinearLayout>
