@@ -38,11 +38,17 @@ object ListTransactionsNetwork {
         private val onSuccess: (List<ListTransactions.Data>) -> Unit
     ) : Callback<ListTransactions> {
         override fun onResponse(call: Call<ListTransactions>, response: Response<ListTransactions>) {
-            val listOfTransactions = mutableListOf<ListTransactions.Data>()
-            for(item in response.body()?.data!!){
-                listOfTransactions.add(item!!)
+            var listOfTransactions = mutableListOf<ListTransactions.Data>()
+            if(response.body()?.data != null) {
+                for (item in response.body()?.data!!) {
+                    listOfTransactions.add(item!!)
+                }
+                onSuccess(listOfTransactions.toList())
+            }else{
+                listOfTransactions = emptyList<ListTransactions.Data>().toMutableList()
+                onSuccess(listOfTransactions)
             }
-            onSuccess(listOfTransactions.toList())
+
 
         }
         override fun onFailure(call: Call<ListTransactions>, t: Throwable) {
@@ -52,7 +58,7 @@ object ListTransactionsNetwork {
 
     fun getTransactions(onSuccess: (List<ListTransactions.Data>) -> Unit) {
         val token = AccessTokenProviderImp().token()?.access_token ?: ""
-        val accountId = Repository.sendMoneyAccountId
+        val accountId = Repository.setTransactionIdForSpecificNetworkRequest
         listTransactionsApi.getTransactions("Bearer $token",accountId).enqueue(TransactionsCallBack(onSuccess))
     }
 }

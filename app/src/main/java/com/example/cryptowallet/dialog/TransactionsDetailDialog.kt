@@ -5,10 +5,16 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.cryptowallet.R
-import com.example.cryptowallet.databinding.FragmentTransactionDetailsBinding
+import com.example.cryptowallet.Repository
+import com.example.cryptowallet.adapter.TransactionsAdapter
+import com.example.cryptowallet.databinding.FragmentTransactionsDetailsDialogBinding
+import com.example.cryptowallet.network.classesapi.ListTransactions
 import com.example.cryptowallet.network.networkcalls.ListTransactionsNetwork
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.fragment_transactions_details_dialog.*
 
 class TransactionsDetailDialog:DialogFragment() {
     companion object {
@@ -18,20 +24,30 @@ class TransactionsDetailDialog:DialogFragment() {
             }
         }
     }
+    var listWalletDetails = mutableListOf<ListTransactions.Data>()
     @SuppressLint("SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = LayoutInflater.from(requireContext())
-        val binding = FragmentTransactionDetailsBinding.inflate(inflater)
+        val binding = FragmentTransactionsDetailsDialogBinding.inflate(inflater)
 
+
+
+        val transactionsDetailsAdapter = TransactionsAdapter{
+
+        }
         binding.apply {
-            ListTransactionsNetwork.getTransactions {
-                var lastIndex = it.lastIndex
-                transactionId.text = it[lastIndex].id
-                transactionAmountCurrency.text = "${it[lastIndex].amount?.amount} / ${it[lastIndex].amount?.currency}"
-                transactionStatus.text = it[lastIndex].status
-                transactionNativeAmountCurrency.text = "${it[lastIndex].nativeAmount?.amount} / ${it[lastIndex].nativeAmount?.currency}"
-                transactionCreated.text = it[lastIndex].createdAt
+            Glide.with(requireContext())
+                .load("https://api.coinicons.net/icon/${Repository.setTransactionCurrencyForIcon}/128x128")
+                .into(walletTransactionDetailsImage)
+            recyclerTransactionDetailsDialog.apply {
+                ListTransactionsNetwork.getTransactions {
+                    adapter = transactionsDetailsAdapter
+                    layoutManager = LinearLayoutManager(requireContext())
+                    transactionsDetailsAdapter.submitList(it)
+                    transactionsDetailsAdapter.notifyDataSetChanged()
+                }
             }
+
         }
 
 

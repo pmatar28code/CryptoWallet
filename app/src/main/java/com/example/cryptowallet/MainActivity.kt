@@ -14,10 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import com.example.cryptowallet.databinding.ActivityMainBinding
-import com.example.cryptowallet.fragments.AuthorizationFragment
-import com.example.cryptowallet.fragments.RequestFragment
-import com.example.cryptowallet.fragments.SendFragment
-import com.example.cryptowallet.fragments.WalletFragment
+import com.example.cryptowallet.fragments.*
 import com.example.cryptowallet.network.classesapi.AccessToken
 import com.example.cryptowallet.utilities.EncSharedPreferences
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -114,6 +111,10 @@ class MainActivity : AppCompatActivity() {
         R.id.menu_send -> {
             Repository.accounts.clear()
             swapFragments(SendFragment())
+            true
+        }
+        R.id.menu_transactions -> {
+            swapFragments(ShowTransactionsFragment())
             true
         }
         R.id.menu_other -> {

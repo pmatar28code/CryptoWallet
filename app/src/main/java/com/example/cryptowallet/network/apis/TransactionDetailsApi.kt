@@ -6,8 +6,8 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
 
-interface ListTransactionsApi {
-    @GET("v2/accounts/{account_id}/transactions?&limit=199")
+interface TransactionDetailsApi {
+    @GET("v2/accounts/{account_id}/transactions")
     fun getTransactions(
         @Header("Authorization") token:String,
         @Path("account_id") account_id:String

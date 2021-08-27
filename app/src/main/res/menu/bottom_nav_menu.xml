@@ -15,6 +15,13 @@
         android:enabled="true"
         android:icon="@drawable/ic_send"
         android:title="@string/send_menu_title"/>
+
+    <item
+        android:id="@+id/menu_transactions"
+        android:enabled="true"
+        android:icon="@drawable/ic_exit"
+        android:title="Transactions"/>
+
     <item
         android:id="@+id/menu_other"
         android:enabled="true"

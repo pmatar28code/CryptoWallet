@@ -38,5 +38,8 @@ object Repository {
         updatedAt= ""
     )
 
+    var setTransactionIdForSpecificNetworkRequest =""
+    var setTransactionCurrencyForIcon=""
+
     var didntRequiredTwoFA = false
 }
