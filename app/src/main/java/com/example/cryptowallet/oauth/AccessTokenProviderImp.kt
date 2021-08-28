@@ -6,11 +6,6 @@ import com.example.cryptowallet.network.apis.RefreshTokenApi
 import com.example.cryptowallet.network.classesapi.AccessToken
 import com.example.cryptowallet.utilities.EncSharedPreferences
 import com.example.cryptowallet.utilities.Utility
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,19 +19,15 @@ class AccessTokenProviderImp : AccessTokenProvider {
     val utilityApplicationContext = Utility.getInstance()?.applicationContext
 
     override fun token(): AccessToken? {
-        runBlocking {
-            val job: Job = launch(IO) {
-                val stringTokenFromSharedPrefs = utilityApplicationContext?.let {
-                    EncSharedPreferences.getValueString(keyStringAccessKey,
-                        it
-                    )
-                }
-                token = stringTokenFromSharedPrefs?.let {
-                    EncSharedPreferences.convertJsonStringToTestClass(
-                        it
-                    )
-                }
-            }
+        val stringTokenFromSharedPrefs = utilityApplicationContext?.let {
+            EncSharedPreferences.getValueString(keyStringAccessKey,
+                it
+            )
+        }
+        token = stringTokenFromSharedPrefs?.let {
+            EncSharedPreferences.convertJsonStringToTestClass(
+                it
+            )
         }
         Log.e("RETURNED TOKEN FUN TOKEN IMP:","$token")
         return token
@@ -67,19 +58,14 @@ class AccessTokenProviderImp : AccessTokenProvider {
                     token_type = response.body()?.token_type ?: ""
                 )
                 if (newAccessToken!!.access_token != "" && newAccessToken != null){
-                    runBlocking {
-                        val job: Job = launch(IO) {
-                            val stringAccessToken = EncSharedPreferences.convertTestClassToJsonString(
-                                newAccessToken!!
-                            )
-                            if (utilityApplicationContext != null) {
-                                EncSharedPreferences.saveToEncryptedSharedPrefsString(keyStringAccessKey,stringAccessToken,utilityApplicationContext)
-                            }
-                            Log.e("NEW ACCESS TOKen ADDED TO DATABASE FROM IMP", "$newAccessToken")
-                            refreshCallback(true)
-                            joinAll()
-                        }
+                    val stringAccessToken = EncSharedPreferences.convertTestClassToJsonString(
+                        newAccessToken!!
+                    )
+                    if (utilityApplicationContext != null) {
+                        EncSharedPreferences.saveToEncryptedSharedPrefsString(keyStringAccessKey,stringAccessToken,utilityApplicationContext)
                     }
+                    Log.e("NEW ACCESS TOKen ADDED TO DATABASE FROM IMP", "$newAccessToken")
+                    refreshCallback(true)
                 }else{
                     refreshCallback(false)
                 }

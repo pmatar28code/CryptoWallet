@@ -13,7 +13,7 @@ class TokenRefreshAuthenticatorCoinBase(
     private val tokenProvider: AccessTokenProvider
 ) : Authenticator {
     private val keyStringAccessKey = "Access_key"
-    val utilityApplicationContext = Utility.getInstance()?.applicationContext
+    private val utilityApplicationContext = Utility.getInstance()?.applicationContext
 
     override fun authenticate(route: Route?, response: Response): Request? {
         val token = tokenProvider.token() ?: return null
