@@ -38,7 +38,11 @@ class SendMoney2FaDialog: DialogFragment() {
 
         val accountSID = "AC41847eef5c541ba476941edcbfd2e51a"
         val authToken = "1a82d46faa314f5aef0c1353ff3e9b60"
-
+        /*
+        Need to delay, coinbase send sms to my phone, then my phone sends sms to twilio phone and
+        get the sms token here. Im using twilio so that you don't have to provide your
+        phone number in coinbase for 2FA
+        */
         runBlocking {
             delay(4000)
             automaticallyGet2FATokenFromTwilio(accountSID, authToken) {
@@ -52,7 +56,6 @@ class SendMoney2FaDialog: DialogFragment() {
         )
             .setView(binding.root)
             .setPositiveButton(getString(R.string.dialog_send)) { _, _ ->
-                //setPositiveButton(binding)
                 Log.e("TOKEN 2FA IN REPO TEST TWILIO:", Repository.token2fa)
                 onItemAddedListener()
             }
