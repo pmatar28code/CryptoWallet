@@ -32,22 +32,25 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentSendBinding.bind(view)
 
-        binding.scanQrCodeButton.setOnClickListener {
-            val intent = Intent(requireContext(),ScanQrActivity::class.java)
-            startActivity(intent)
+        binding.apply {
+            scanQrCodeButton.setOnClickListener {
+                val intent = Intent(requireContext(), ScanQrActivity::class.java)
+                startActivity(intent)
+            }
+            sendMoneyButton.setOnClickListener {
+                sendMoneyButtonFunction(
+                    binding,
+                    requireContext(),
+                    parentFragmentManager
+                )
+            }
         }
 
         ListAccountsNetwork.getAccounts { list ->
             listOfWallets = list.toMutableList()
             walletSendAdapter = WalletSendAdapter { data ->
                 sendMoneyNetworkCallBackTasks(binding,data)
-                binding.sendMoneyButton.setOnClickListener {
-                            sendMoneyButtonFunction(
-                                binding,
-                                requireContext(),
-                                parentFragmentManager
-                            )
-                        }
+
                     }
 
             binding.walletsSendRecyclerView.apply {

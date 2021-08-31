@@ -57,6 +57,7 @@ class SendMoney2FaDialog: DialogFragment() {
             .setView(binding.root)
             .setPositiveButton(getString(R.string.dialog_send)) { _, _ ->
                 Log.e("TOKEN 2FA IN REPO TEST TWILIO:", Repository.token2fa)
+                setPositiveButton(binding)
                 onItemAddedListener()
             }
             .setNegativeButton(getString(R.string.dialog_cancel), null)
@@ -64,7 +65,6 @@ class SendMoney2FaDialog: DialogFragment() {
     }
     private fun setPositiveButton(binding: FragmentSendMoney2faDialogBinding){
         Repository.token2fa = binding.outlinedTextField2FaToken.editText?.text.toString()
-        onItemAddedListener()
     }
 
     private fun automaticallyGet2FATokenFromTwilio(accountSID:String,authToken:String,twoFaTokenTwilioCallback:(String) -> Unit){
