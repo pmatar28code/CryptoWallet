@@ -46,14 +46,18 @@ class MainActivity : AppCompatActivity() {
             )
         }
         codeFromShared = EncSharedPreferences.getValueString(keyStringCode,applicationContext)
-        stringTokenFromShared = EncSharedPreferences.getValueString(keyStringAccesskey,applicationContext)
+        stringTokenFromShared = EncSharedPreferences.getValueString(
+            keyStringAccesskey,applicationContext
+        )
 
         if (codeFromShared == null || codeFromShared == "") {
             binding.bottomNavigationContainer.isGone = true
 
             swapFragments(AuthorizationFragment())
         } else {
-            stringTokenFromShared = EncSharedPreferences.getValueString(keyStringAccesskey,applicationContext)
+            stringTokenFromShared = EncSharedPreferences.getValueString(
+                keyStringAccesskey,applicationContext
+            )
 
             binding.apply {
                 bottomNavigationContainer.setOnNavigationItemSelectedListener {
@@ -115,8 +119,12 @@ class MainActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
             btnConfirm.setOnClickListener {
-                EncSharedPreferences.saveToEncryptedSharedPrefsString(keyStringCode,"",this@MainActivity)
-                val intent = Intent(this@MainActivity, MainActivity::class.java)
+                EncSharedPreferences.saveToEncryptedSharedPrefsString(
+                    keyStringCode,"",this@MainActivity
+                )
+                val intent = Intent(
+                    this@MainActivity, MainActivity::class.java
+                )
                 startActivity(intent)
             }
             dialog.setCancelable(false)

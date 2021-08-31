@@ -3,15 +3,11 @@ package com.example.cryptowallet.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.cryptowallet.R
 import com.example.cryptowallet.databinding.ItemTransactionsBinding
 import com.example.cryptowallet.network.classesapi.ListTransactions
-import com.example.cryptowallet.utilities.Utility
 
 class TransactionsAdapter(
     val onCLickSetId:(ListTransactions.Data) -> Unit
@@ -40,10 +36,6 @@ class TransactionsAdapter(
     override fun onBindViewHolder(holder: TransactionsViewHolder, position: Int) {
         holder.onBind(getItem(position))
         holder.itemView.setOnClickListener { onCLickSetId(getItem(position)) }
-        //val currentWalletCurrency = getItem(position).balance?.currency
-       // if (currentWalletCurrency != null) {
-         //   setIcon(currentWalletCurrency,holder)
-        //}
     }
     class TransactionsViewHolder(
         private val binding: ItemTransactionsBinding,
@@ -59,14 +51,6 @@ class TransactionsAdapter(
                 transactionNativeAmountCurrencyText.text = "${transaction.nativeAmount?.amount.toString()} / ${transaction.nativeAmount?.currency.toString()}"
                 transactionDateTimeText.text = transaction.createdAt.toString()
             }
-        }
-    }
-    private fun setIcon(currency: String, holder:TransactionsViewHolder){
-        Utility.getInstance()?.applicationContext?.let {
-            Glide.with(it)
-                .load("https://api.coinicons.net/icon/$currency/128x128")
-                .into(holder.itemView
-                    .findViewById<ImageView>(R.id.wallet_icon_image_view))
         }
     }
 }

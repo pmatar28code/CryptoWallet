@@ -61,7 +61,6 @@ class ScanQrActivity:AppCompatActivity() {
                 .build()
             imageAnalysis.setAnalyzer(cameraExecutor, analyzer)
 
-
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
             try {
                 cameraProvider.unbindAll()
@@ -75,7 +74,6 @@ class ScanQrActivity:AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
 
     }
-    private fun takePhoto() {}
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(

@@ -12,16 +12,12 @@ object Repository {
     var currency=""
     var address =""
     var iconAddress =""
-
     var sendMoneyAmount =""
     var sendMonetTo=""
-    var sendMoneyAddress=""
     var sendMoneyCurrency=""
     var sendMoneyAccountId=""
     var repoSendMoneyResponseCode =0
-
     var walletDetailsAccountId =""
-
     var sendMoneyDataObj = SendMoney.Data(
         amount = SendMoney.Data.Amount("",""),
         createdAt = "",
@@ -37,9 +33,7 @@ object Repository {
         type="",
         updatedAt= ""
     )
-
     var setTransactionIdForSpecificNetworkRequest =""
     var setTransactionCurrencyForIcon=""
-
     var didntRequiredTwoFA = false
 }

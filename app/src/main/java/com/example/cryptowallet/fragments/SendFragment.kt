@@ -74,7 +74,9 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         })
     }
 
-    private fun search(text: String?,listOfAccounts:List<ListAccounts.Data>,binding:FragmentSendBinding) {
+    private fun search(
+        text: String?,listOfAccounts:List<ListAccounts.Data>,binding:FragmentSendBinding
+    ) {
         val listOfAccountsToWork = listOfAccounts
         val searchResultList = mutableListOf<ListAccounts.Data>()
         text?.let {
@@ -149,7 +151,9 @@ class SendFragment: Fragment(R.layout.fragment_send) {
             }
         }
     }
-    private fun sendMoneyNetworkCallBackTasks(binding: FragmentSendBinding,data:ListAccounts.Data) {
+    private fun sendMoneyNetworkCallBackTasks(
+        binding: FragmentSendBinding,data:ListAccounts.Data
+    ) {
         Repository.sendMoneyAccountId = data.id.toString()
         Repository.sendMoneyCurrency = data.balance?.currency.toString()
         binding.outlinedTextFieldCurrency.editText?.setText(Repository.sendMoneyCurrency)

@@ -45,8 +45,11 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
             performSearch(binding,listOfWallets)
         }
     }
-    private fun performSearch(binding: FragmentRequestBinding, listSearch:List<ListAccounts.Data>) {
-        binding.searchViewRequest.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+    private fun performSearch(
+        binding: FragmentRequestBinding, listSearch:List<ListAccounts.Data>
+    ) {
+        binding.searchViewRequest.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 search(query,listSearch,binding)
                 return true
@@ -60,7 +63,8 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
     }
 
     private fun search(
-        text: String?,listOfAccounts:List<ListAccounts.Data>,binding: FragmentRequestBinding) {
+        text: String?,listOfAccounts:List<ListAccounts.Data>,binding: FragmentRequestBinding
+    ) {
         val listOfAccountsToWork = listOfAccounts
         val searchResultList = mutableListOf<ListAccounts.Data>()
         text?.let {

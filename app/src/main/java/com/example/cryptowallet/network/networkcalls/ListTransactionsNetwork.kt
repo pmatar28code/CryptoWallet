@@ -48,8 +48,6 @@ object ListTransactionsNetwork {
                 listOfTransactions = emptyList<ListTransactions.Data>().toMutableList()
                 onSuccess(listOfTransactions)
             }
-
-
         }
         override fun onFailure(call: Call<ListTransactions>, t: Throwable) {
             Log.e("On Failure LIST Transactions NETWork:", "This is T : $t")

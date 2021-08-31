@@ -1,7 +1,6 @@
 package com.example.cryptowallet.codereader
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.fragment.app.FragmentManager

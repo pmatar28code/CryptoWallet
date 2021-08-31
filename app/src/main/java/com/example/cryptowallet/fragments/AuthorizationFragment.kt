@@ -3,7 +3,6 @@ package com.example.cryptowallet.fragments
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -116,19 +115,11 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
 
     private fun getUserAndListAccountsFromNetwork() {
         UserNetwork.getUser {
-            Log.e("SHOWING USER", "${it.name}, id: ${it.id} WITH TOKEN = ${MainActivity.accessTokenFromShared?.access_token}}"
-            )
             Repository.userId = it.id.toString()
             Repository.userName = it.name.toString()
 
             ListAccountsNetwork.getAccounts {
                 Repository.accounts = it as MutableList<ListAccounts.Data>
-
-                Log.e(
-                    "LIST OF ACCOUNTS MAIN OJO: ",
-                    "ID: ${it[0].id}, ${it[0].name},type = ${it[0].type},primary = ${it[0].primary}, ${it[0].balance}, ${it[0].currency} WITH TOKEN = ${MainActivity.accessTokenFromShared?.access_token}"
-                )
-                Log.e("ALL THE LIST OFF ACCOUNTS MAIN:", "$it")
                 val intent = Intent(requireContext(),MainActivity::class.java)
                 startActivity(intent)
             }

@@ -27,7 +27,8 @@ class WalletFragment: Fragment(R.layout.fragment_wallet) {
 
         walletAdapter = WalletsAdapter {
             Repository.walletDetailsAccountId = it.id.toString()
-            WalletDetailsDialog.create {  }.show(parentFragmentManager,"to open wallet details dialog")
+            WalletDetailsDialog.create {
+            }.show(parentFragmentManager,"to open wallet details dialog")
         }
         binding.walletsRecyclerView.apply {
             adapter = walletAdapter
