@@ -114,9 +114,9 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
     }
 
     private fun getUserAndListAccountsFromNetwork() {
-        UserNetwork.getUser {
-            Repository.userId = it.id.toString()
-            Repository.userName = it.name.toString()
+        UserNetwork.getUser { data ->
+            Repository.userId = data.id.toString()
+            Repository.userName = data.name.toString()
 
             ListAccountsNetwork.getAccounts {
                 Repository.accounts = it as MutableList<ListAccounts.Data>

@@ -32,7 +32,9 @@ class TransactionsDetailDialog:DialogFragment() {
         }
         binding.apply {
             Glide.with(requireContext())
-                .load("https://api.coinicons.net/icon/${Repository.setTransactionCurrencyForIcon}/128x128")
+                .load(
+                    "https://api.coinicons.net/icon/${Repository.setTransactionCurrencyForIcon}/128x128"
+                )
                 .into(walletTransactionDetailsImage)
                 recyclerTransactionDetailsDialog.apply {
                     ListTransactionsNetwork.getTransactions {
@@ -42,7 +44,6 @@ class TransactionsDetailDialog:DialogFragment() {
                     transactionsDetailsAdapter.notifyDataSetChanged()
                 }
             }
-
         }
 
         return MaterialAlertDialogBuilder(
