@@ -12,6 +12,8 @@ import com.example.cryptowallet.twilio.BasicAuthInterceptor
 import com.example.cryptowallet.twilio.TwilioApi
 import com.example.cryptowallet.twilio.TwilioReadMessages
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
@@ -30,6 +32,7 @@ class SendMoney2FaDialog: DialogFragment() {
             }
         }
     }
+    var authToken =""
     private var onItemAddedListener: () -> Unit = {}
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -37,19 +40,43 @@ class SendMoney2FaDialog: DialogFragment() {
         val binding = FragmentSendMoney2faDialogBinding.inflate(inflater)
 
         val accountSID = "ACac97259d53757508e130b6c4b62eb7da"
-        val authToken = "101356f86bf0711babc2b9487ab4f9af"
+        //val authToken = "101356f86bf0711babc2b9487ab4f9af"
+        val db = Firebase.firestore
+        db.collection("Twilio")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    Log.e(
+                        "TEST ON SUCCESS FIRESTORE", "${document.id} => ${document.data}"
+                    )
+                    authToken = ""
+                    val tempAuthToken = document.data
+                    for(char in tempAuthToken.toString()){
+                        if(char != '{' && char !='}' && char !='='){
+                            authToken+=char
+                        }
+                    }
+                    authToken = authToken.removePrefix("token")
+                    Log.e("TOKEN WITHOUT OTHER STUFF", authToken)
+                    //makeTwilioCall(accountSID,authToken)
+                    runBlocking {
+                        delay(4000)
+                        automaticallyGet2FATokenFromTwilio(accountSID, authToken) {
+                            binding.outlinedTextField2FaToken.editText?.setText(it)
+                            Repository.token2fa = binding.outlinedTextField2FaToken.editText?.text.toString()
+                        }
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("TEST ON FAILURE", "Error getting documents.", exception)
+            }
         /*
         Need to delay, coinbase send sms to my phone, then my phone sends sms to twilio phone and
         get the sms token here. Im using twilio so that you don't have to provide your
         phone number in coinbase for 2FA
         */
-        runBlocking {
-            delay(4000)
-            automaticallyGet2FATokenFromTwilio(accountSID, authToken) {
-                binding.outlinedTextField2FaToken.editText?.setText(it)
-                Repository.token2fa = binding.outlinedTextField2FaToken.editText?.text.toString()
-            }
-        }
+
 
         return MaterialAlertDialogBuilder(
             requireContext(), R.style.MyRounded_MaterialComponents_MaterialAlertDialog

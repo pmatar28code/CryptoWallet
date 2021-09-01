@@ -22,7 +22,7 @@
     <string name="fragment_send_scan">Scan</string>
     <string name="fragment_send_money2fa_dialog_content_description_media">content_description_media</string>
     <string name="fragment_send_money2fa_dialog_two_factor_authentication_token">Two Factor Authentication Token:</string>
-    <string name="fragment_send_money2fa_dialog_two_factor_authentication_token_recieved_from_sms">Two Factor Authentication Token (Recieved from SMS)</string>
+    <string name="fragment_send_money2fa_dialog_two_factor_authentication_token_recieved_from_sms">Please wait for SMS</string>
     <string name="fragment_send_money_confirm_dialog_content_description_media">content_description_media</string>
     <string name="fragment_send_money_confirm_dialog_confirmation">Confirmation:</string>
     <string name="fragment_transaction_details_content_description_media">content_description_media</string>
