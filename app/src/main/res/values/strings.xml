@@ -16,7 +16,7 @@
     <string name="fragment_send_content_description_media">content_description_media</string>
     <string name="fragment_send_send_money">Send Money</string>
     <string name="fragment_send_amount">Amount</string>
-    <string name="fragment_send_currency_search_or_select">Currency (Search or Select)</string>
+    <string name="fragment_send_currency_search_or_select">Currency (Search/Select from wallets)</string>
     <string name="fragment_send_to_email_or_address">To (Email or Address)</string>
     <string name="fragment_send_send">Send</string>
     <string name="fragment_send_scan">Scan</string>
