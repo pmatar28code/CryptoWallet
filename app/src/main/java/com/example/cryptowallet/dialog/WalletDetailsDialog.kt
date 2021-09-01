@@ -1,5 +1,6 @@
 package com.example.cryptowallet.dialog
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,6 +20,7 @@ class WalletDetailsDialog: DialogFragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = LayoutInflater.from(requireContext())
         val binding = FragmentWalletDetailsBinding.inflate(inflater)
@@ -27,8 +29,8 @@ class WalletDetailsDialog: DialogFragment() {
             for(wallet in ListOfAccounts){
                 if(wallet.id == Repository.walletDetailsAccountId){
                     binding.walletDetailsNameText.text = wallet.name
-                    binding.walletDetailsBalanceAmount.text = wallet.balance?.amount
-                    binding.walletDetailsCurrency.text = wallet.balance?.currency
+                    binding.walletDetailsBalanceAmount.text = "Balance: ${wallet.balance?.amount}"
+                    binding.walletDetailsCurrency.text = "Currency: ${wallet.balance?.currency}"
                 }
             }
         }
