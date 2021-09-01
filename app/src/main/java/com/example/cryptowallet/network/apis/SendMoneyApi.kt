@@ -15,6 +15,5 @@ interface SendMoneyApi {
         @Field("to")to:String,//address to send
         @Field("amount")amount:String,
         @Field("currency")currency:String,//BTC
-        //@Field("idem")idem:String//create unique code with date/time string
     ): Call<SendMoney.Data>
 }

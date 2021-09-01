@@ -1,5 +1,6 @@
 package com.example.cryptowallet.dialog
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +10,6 @@ import com.example.cryptowallet.Repository
 import com.example.cryptowallet.databinding.FragmentSendMoneyConfirmDialogBinding
 import com.example.cryptowallet.network.networkcalls.SendMoney2FANetwork
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.coroutines.runBlocking
 
 class SendMoneyConfirmDialog: DialogFragment() {
     companion object {
@@ -19,33 +19,37 @@ class SendMoneyConfirmDialog: DialogFragment() {
             }
         }
     }
-
+    @SuppressLint("SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = LayoutInflater.from(requireContext())
         val binding = FragmentSendMoneyConfirmDialogBinding.inflate(inflater)
         if(!Repository.didntRequiredTwoFA){
-        runBlocking {
-            SendMoney2FANetwork.sendMoney {
+            SendMoney2FANetwork.sendMoney { sendMoneyData ->
                 binding.apply {
-                    sendConfirmDialogY.text = it.toString()
+                    if (sendMoneyData.id == "0") {
+                        sendConfirmId.text = getString(R.string.send_confirm_dialog_transaction_not_completed)
+                    } else {
+                        sendConfirmId.text = getString(R.string.send_confirm_dialog_transaction_successful)
+                    }
                 }
             }
-        }
         }else{
             Repository.didntRequiredTwoFA = false
-            binding.apply{
-                sendConfirmDialogY.text = Repository.sendMoneyDataObj.toString()
-            }
+                binding.apply {
+                    if (Repository.sendMoneyDataObj.id == null) {
+                        sendConfirmId.text = getString(R.string.send_confirm_dialog_transaction_not_completed)
+                    } else {
+                        sendConfirmId.text = getString(R.string.send_confirm_dialog_transaction_successful)
+                    }
+                }
         }
 
         return MaterialAlertDialogBuilder(
             requireContext(), R.style.MyRounded_MaterialComponents_MaterialAlertDialog
         )
             .setView(binding.root)
-            .setPositiveButton("Send") { _, _ ->
+            .setPositiveButton(getString(R.string.accept_button)) { _, _ ->
             }
-            .setNegativeButton("Cancel", null)
             .create()
     }
-
 }

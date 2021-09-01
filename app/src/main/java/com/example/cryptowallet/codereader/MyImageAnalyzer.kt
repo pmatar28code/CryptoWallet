@@ -1,7 +1,6 @@
 package com.example.cryptowallet.codereader
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.fragment.app.FragmentManager
@@ -29,14 +28,12 @@ class MyImageAnalyzer(
                     imageProxy.close()
                     if (it.isSuccessful) {
                         readBarcodeData(it.result as List<Barcode>)
-                        Log.e("READ BARCODE DATA?","${it.result}")
                     } else {
                         it.exception?.printStackTrace()
                     }
                 }
         }
     }
-
     private fun readBarcodeData(barcodes: List<Barcode>) {
         for (barcode in barcodes) {
             when (barcode.valueType) {

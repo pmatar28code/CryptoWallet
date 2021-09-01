@@ -12,7 +12,7 @@
             android:id="@+id/cardLogo_wallet_details"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="@dimen/standard_8dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -29,7 +29,7 @@
                     android:id="@+id/wallet_details_image"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:contentDescription="logo"
+                    android:contentDescription="@string/fragment_wallet_details_logo"
                     android:scaleType="centerCrop"
                     app:srcCompat="@drawable/logo" />
 
@@ -37,53 +37,49 @@
                     android:id="@+id/wallet_details_name_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:text="Name:"
+                    android:layout_margin="@dimen/standard_4dp"
+                    android:text="@string/fragment_wallet_details_name"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:typeface="sans"
                     android:textAlignment="center"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingBottom="8dp"
+                    android:paddingStart="@dimen/standard_8dp"
+                    android:paddingEnd="@dimen/standard_8dp"
+                    android:paddingBottom="@dimen/standard_8dp"
                     android:background="@android:drawable/editbox_background" />
-
-                <!-- Media -->
-
 
                 <TextView
                     android:id="@+id/wallet_details_currency"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:text="Currency:"
+                    android:layout_margin="@dimen/standard_4dp"
+                    android:text="@string/fragment_wallet_details_currency"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:typeface="sans"
                     android:textAlignment="center"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingBottom="8dp"
+                    android:paddingStart="@dimen/standard_8dp"
+                    android:paddingEnd="@dimen/standard_8dp"
+                    android:paddingBottom="@dimen/standard_8dp"
                     android:background="@android:drawable/editbox_background"/>
 
                 <TextView
                     android:id="@+id/wallet_details_balance_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:text="Amount:"
+                    android:layout_margin="@dimen/standard_4dp"
+                    android:text="@string/fragment_wallet_details_amount"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:typeface="sans"
                     android:textAlignment="center"
                     android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingBottom="8dp"
+                    android:paddingEnd="@dimen/standard_8dp"
+                    android:paddingBottom="@dimen/standard_8dp"
                     android:background="@android:drawable/editbox_background"/>
-
 
             </LinearLayout>
 

@@ -1,14 +1,12 @@
 package com.example.cryptowallet.fragments
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
-import com.example.cryptowallet.ShowAddressesForDifferentWalletsActivity
 import com.example.cryptowallet.adapter.WalletsAdapter
 import com.example.cryptowallet.databinding.FragmentWalletBinding
 import com.example.cryptowallet.dialog.WalletDetailsDialog
@@ -29,7 +27,8 @@ class WalletFragment: Fragment(R.layout.fragment_wallet) {
 
         walletAdapter = WalletsAdapter {
             Repository.walletDetailsAccountId = it.id.toString()
-            WalletDetailsDialog.create {  }.show(parentFragmentManager,"to open wallet details dialog")
+            WalletDetailsDialog.create {
+            }.show(parentFragmentManager,"to open wallet details dialog")
         }
         binding.walletsRecyclerView.apply {
             adapter = walletAdapter

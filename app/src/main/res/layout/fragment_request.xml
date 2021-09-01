@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/purple_custom"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -10,9 +9,9 @@
         android:id="@+id/cardLogo_request"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="@dimen/standard_16dp"
+        android:layout_marginTop="@dimen/standard_16dp"
+        android:layout_marginEnd="@dimen/standard_16dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="30dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,12 +23,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Media -->
             <ImageView
                 android:id="@+id/logo_image_request"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:contentDescription="content_description_media"
+                android:contentDescription="@string/fragment_request_content_description_media"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/logo" />
 
@@ -37,26 +35,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
-                android:text="Request Money (Share Addrress/Qr)"
+                android:text="@string/fragment_request_request_money_share_addrress_qr"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:typeface="sans" />
+
         </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
-
-
-
-
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardSearch_request"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="@dimen/standard_16dp"
+        android:layout_marginTop="@dimen/standard_16dp"
+        android:layout_marginEnd="@dimen/standard_16dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="30dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +64,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Media -->
             <SearchView
                 android:id="@+id/searchViewRequest"
                 android:layout_width="match_parent"
@@ -76,26 +71,23 @@
                 android:background="#55F5F5F5"
                 android:elevation="1dp"
                 android:queryHint="Search"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/standard_8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:iconifiedByDefault="false"/>
-
         </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
-
-
-
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_request"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginStart="@dimen/standard_16dp"
+        android:layout_marginTop="@dimen/standard_16dp"
+        android:layout_marginEnd="@dimen/standard_16dp"
+        android:layout_marginBottom="@dimen/standard_32dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -103,19 +95,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardSearch_request">
 
-
-        <!-- Buttons -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!-- Title, secondary and supporting text -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/wallets_request_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

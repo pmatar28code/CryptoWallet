@@ -20,7 +20,7 @@ data class SendMoney(
         @Json(name = "details")
         val details: Details?,
         @Json(name = "id")
-        val id: String?,
+        var id: String?,
         @Json(name = "native_amount")
         val nativeAmount: NativeAmount?,
         @Json(name = "network")
@@ -41,7 +41,7 @@ data class SendMoney(
         @JsonClass(generateAdapter = true)
         data class Amount(
             @Json(name = "amount")
-            val amount: String?,
+            var amount: String?,
             @Json(name = "currency")
             val currency: String?
         )

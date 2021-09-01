@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
@@ -23,10 +22,6 @@ import com.example.cryptowallet.network.classesapi.SendMoney
 import com.example.cryptowallet.network.networkcalls.AddressNetwork
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 import com.example.cryptowallet.network.networkcalls.SendMoneyNetwork
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class SendFragment: Fragment(R.layout.fragment_send) {
@@ -37,36 +32,38 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentSendBinding.bind(view)
 
-        runBlocking {
-            var job: Job = launch {
-                ListAccountsNetwork.getAccounts { list ->
-                    listOfWallets = list.toMutableList()
-                    walletSendAdapter = WalletSendAdapter { data ->
-                        sendMoneyNetworkCallBackTasks(binding,data)
+        binding.scanQrCodeButton.setOnClickListener {
+            val intent = Intent(requireContext(), ScanQrActivity::class.java)
+            startActivity(intent)
+        }
 
-                        binding.sendMoneyButton.setOnClickListener {
-                            sendMoneyButtonFunction(
-                                binding,
-                                requireContext(),
-                                parentFragmentManager
-                            )
-                        }
-                        binding.scanQrCodeButton.setOnClickListener {
-                            val intent = Intent(requireContext(),ScanQrActivity::class.java)
-                            startActivity(intent)
-                        }
-                    }
-
-                    binding.walletsSendRecyclerView.apply {
-                        adapter = walletSendAdapter
-                        layoutManager = LinearLayoutManager(context)
-                        walletSendAdapter?.submitList(listOfWallets.toList().reversed())
-                        walletSendAdapter?.notifyDataSetChanged()
-                    }
-                    performSearch(binding,listOfWallets)
+        ListAccountsNetwork.getAccounts { list ->
+            listOfWallets = mutableListOf()
+            for(wallet in list){
+                if(wallet.balance?.amount != "0.00000000" && wallet.balance?.amount != "0.000000"
+                    && wallet.balance?.amount != "0.0000" && wallet.balance?.amount != "0.0000000000"
+                    && wallet.balance?.amount != "0.000000000" && wallet.balance?.amount != "0.0000000"){
+                    listOfWallets.add(wallet)
                 }
-
             }
+            walletSendAdapter = WalletSendAdapter { data ->
+                sendMoneyNetworkCallBackTasks(binding,data)
+                binding.sendMoneyButton.setOnClickListener {
+                    sendMoneyButtonFunction(
+                        binding,
+                        requireContext(),
+                        parentFragmentManager
+                    )
+                }
+            }
+
+            binding.walletsSendRecyclerView.apply {
+                adapter = walletSendAdapter
+                layoutManager = LinearLayoutManager(context)
+                walletSendAdapter?.submitList(listOfWallets.toList().reversed())
+                walletSendAdapter?.notifyDataSetChanged()
+            }
+            performSearch(binding,listOfWallets)
         }
     }
 
@@ -84,10 +81,11 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         })
     }
 
-    private fun search(text: String?,listOfAccounts:List<ListAccounts.Data>,binding:FragmentSendBinding) {
-        var listOfAccountsToWork = listOfAccounts
-        var searchResultList = mutableListOf<ListAccounts.Data>()
-
+    private fun search(
+        text: String?,listOfAccounts:List<ListAccounts.Data>,binding:FragmentSendBinding
+    ) {
+        val listOfAccountsToWork = listOfAccounts
+        val searchResultList = mutableListOf<ListAccounts.Data>()
         text?.let {
             listOfAccountsToWork.forEach { Account ->
                 if (Account.balance?.currency == text.uppercase(Locale.getDefault()) ||
@@ -98,26 +96,17 @@ class SendFragment: Fragment(R.layout.fragment_send) {
             }
             if(searchResultList.isEmpty()){
                 updateRecyclerView(listOfAccountsToWork.reversed())
-                Toast.makeText(requireContext(), "No match found!", Toast.LENGTH_SHORT).show()
             }else{
                 updateRecyclerView(searchResultList.reversed())
             }
-            //updateRecyclerView(searchResultList)
-           // if (searchResultList.isEmpty()) {
-            //    Toast.makeText(requireContext(), "No match found!", Toast.LENGTH_SHORT).show()
-           // }
-            //updateRecyclerView(searchResultList)
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun updateRecyclerView(searchResultList:List<ListAccounts.Data>) {
         walletSendAdapter?.submitList(searchResultList)
         walletSendAdapter?.notifyDataSetChanged()
-
     }
-
-
-
     private fun sendMoneyButtonFunction(
         binding: FragmentSendBinding,
         requireContext: Context,
@@ -126,90 +115,59 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         Repository.sendMoneyAmount = binding.outlinedTextFieldAmount.editText?.text.toString()
         Repository.sendMonetTo = binding.outlinedTextFieldTo.editText?.text.toString()
         Repository.sendMoneyCurrency = binding.outlinedTextFieldCurrency.editText?.text.toString()
-        Log.e("CURRRENCY THISS:", Repository.currency)
 
-        runBlocking {
-            val job: Job = launch(Dispatchers.IO) {
-                SendMoneyNetwork.sendMoney {
-                    Log.e("SEND MONEY FIRST REQUEST FROM DIALOG:", "$it")
-                    Log.e("RESPONSE CODE SEND:", "${Repository.repoSendMoneyResponseCode}")
-                    if (Repository.repoSendMoneyResponseCode == 402) {
-                        Repository.repoSendMoneyResponseCode = 400
-                        Toast.makeText(
-                            requireContext,
-                            "Two Factor Was Required",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Log.e("Two Factor Was required", "${Repository.repoSendMoneyResponseCode}")
-                        SendMoney2FaDialog.create {
-                            SendMoneyConfirmDialog.create {
+        SendMoneyNetwork.sendMoney {
+            if (Repository.repoSendMoneyResponseCode == 402) {
+                Repository.repoSendMoneyResponseCode = 400
+                Toast.makeText(
+                    requireContext,
+                    "Two Factor Was Required",
+                    Toast.LENGTH_SHORT
+                ).show()
+                Repository.didntRequiredTwoFA = false
+                SendMoney2FaDialog.create {
+                    SendMoneyConfirmDialog.create {
 
-                            }.show(parentFragmentManager, "From Send Money to Send Confirm")
-                        }.show(parentFragmentManager, "To Send 2Fa Dialog")
-                    } else {
-                        Repository.didntRequiredTwoFA = true
-                        Repository.sendMoneyDataObj = SendMoney.Data(
-                            amount = it.amount,
-                            createdAt = it.createdAt,
-                            description = it.description,
-                            details = it.details,
-                            id = it.id,
-                            nativeAmount = it.nativeAmount,
-                            network = it.network,
-                            resource = it.resource,
-                            resourcePath = it.resourcePath,
-                            status = it.status,
-                            to = it.to,
-                            type = it.type,
-                            updatedAt = it.updatedAt
-                        )
-                        SendMoneyConfirmDialog.create {
+                    }.show(parentFragmentManager, "From Send Money to Send Confirm")
+                }.show(parentFragmentManager, "To Send 2Fa Dialog")
+            } else {
+                Repository.didntRequiredTwoFA = true
+                Repository.sendMoneyDataObj = SendMoney.Data(
+                    amount = it.amount,
+                    createdAt = it.createdAt,
+                    description = it.description,
+                    details = it.details,
+                    id = it.id,
+                    nativeAmount = it.nativeAmount,
+                    network = it.network,
+                    resource = it.resource,
+                    resourcePath = it.resourcePath,
+                    status = it.status,
+                    to = it.to,
+                    type = it.type,
+                    updatedAt = it.updatedAt
+                )
+                SendMoneyConfirmDialog.create {
+                }.show(parentFragmentManager, "From Send Money to Send Confirm")
 
-
-                        }.show(parentFragmentManager, "From Send Money to Send Confirm")
-
-                        Log.e(
-                            "Two Factor Was NOT  Required",
-                            "${Repository.repoSendMoneyResponseCode}"
-                        )
-                        Toast.makeText(
-                            requireContext,
-                            "TWO FACTOR NOT REQUIRED ${it.createdAt}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+                Toast.makeText(
+                    requireContext,
+                    "TWO FACTOR ID NOT REQUIRED ${it.createdAt}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
-    //launch dialog fragment perform first send money request
-    // for 2fa token input and then make the 2fa request for send money now with token
-
-    //SendMoney2FaDialog.create {
-
-    //}.show(parentFragmentManager,"To Send 2Fa Dialog")
-
-    private fun sendMoneyNetworkCallBackTasks(binding: FragmentSendBinding,data:ListAccounts.Data) {
-        //Log.e("INSIDE WALLET ACTIVITY NETWORK CALL:", "$list")
-        //listOfWallets = list.toMutableList()
-        //Log.e("Wallets Activity list:", "$listOfWallets")
-
+    private fun sendMoneyNetworkCallBackTasks(
+        binding: FragmentSendBinding,data:ListAccounts.Data
+    ) {
         Repository.sendMoneyAccountId = data.id.toString()
         Repository.sendMoneyCurrency = data.balance?.currency.toString()
         binding.outlinedTextFieldCurrency.editText?.setText(Repository.sendMoneyCurrency)
-        Repository.iconAddress =
-            "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
-        runBlocking {
-            val job: Job = launch(Dispatchers.IO) {
-                AddressNetwork.getAddresses {
-                    Repository.address = it.address.toString()
-                /*
-                    RequestMoneyDialog.create {
-                }.show(parentFragmentManager, "Open Edit Recipe")
+        Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
 
-                */
-                }
-            }
+        AddressNetwork.getAddresses {
+            Repository.address = it.address.toString()
         }
     }
 }

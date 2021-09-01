@@ -34,7 +34,7 @@ class ScanQrActivity:AppCompatActivity() {
         val inflater = LayoutInflater.from(this)
         val binding = ActivityQrReaderBinding.inflate(inflater)
         setContentView(binding.root)
-        // Request camera permissions
+
         if (allPermissionsGranted()) {
             startCamera()
         } else {
@@ -43,8 +43,6 @@ class ScanQrActivity:AppCompatActivity() {
         }
 
         previewView = findViewById(R.id.viewFinder)
-        // Set up the listener for take photo button
-       // camera_capture_button.setOnClickListener { takePhoto() }
 
         outputDirectory = getOutputDirectory()
 
@@ -57,15 +55,11 @@ class ScanQrActivity:AppCompatActivity() {
                 .also {
                     it.setSurfaceProvider(viewFinder.surfaceProvider)
                 }
-
-
             val analyzer = MyImageAnalyzer(supportFragmentManager)
             val imageAnalysis = ImageAnalysis.Builder()
-                //.setTargetResolution(Size(1280, 720))
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
             imageAnalysis.setAnalyzer(cameraExecutor, analyzer)
-
 
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
             try {
@@ -80,7 +74,6 @@ class ScanQrActivity:AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
 
     }
-    private fun takePhoto() {}
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
@@ -125,10 +118,7 @@ class ScanQrActivity:AppCompatActivity() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
         cameraProviderFuture.addListener(Runnable {
-            // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-
-            // Preview
             val preview = Preview.Builder()
                 .build()
                 .also {
@@ -136,19 +126,14 @@ class ScanQrActivity:AppCompatActivity() {
                 }
             val analyzer =MyImageAnalyzer(supportFragmentManager)
             val imageAnalysis = ImageAnalysis.Builder()
-                //.setTargetResolution(Size(1280, 720))
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
             imageAnalysis.setAnalyzer(cameraExecutor, analyzer)
 
-            // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
             try {
-                // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
-
-                // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview,imageAnalysis)
 

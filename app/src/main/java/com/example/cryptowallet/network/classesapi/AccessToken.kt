@@ -7,16 +7,12 @@ import com.squareup.moshi.JsonClass
 data class AccessToken (
     @Json(name= "access_token")
     val access_token:String,
-
     @Json(name= "token_type")
     val token_type :String,
-
     @Json(name = "expires_in")
     val expires_in :Int,
-
     @Json(name= "refresh_token")
     val refresh_token :String,
-
     @Json(name ="scope")
     val scope :String
 )

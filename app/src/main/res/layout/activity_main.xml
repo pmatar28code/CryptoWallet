@@ -26,5 +26,4 @@
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"/>
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

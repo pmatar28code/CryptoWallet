@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
 android:background="@color/purple_custom"
 android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -10,9 +9,9 @@ android:layout_width="match_parent"
         android:id="@+id/cardLogo_send"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="@dimen/standard_16dp"
+        android:layout_marginTop="@dimen/standard_16dp"
+        android:layout_marginEnd="@dimen/standard_16dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="30dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,12 +23,11 @@ android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Media -->
             <ImageView
                 android:id="@+id/logo_image_send"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-                android:contentDescription="content_description_media"
+                android:contentDescription="@string/fragment_send_content_description_media"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/logo" />
 
@@ -37,32 +35,24 @@ android:layout_width="match_parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
-                android:text="Send Money"
+                android:text="@string/fragment_send_send_money"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:typeface="sans" />
+
         </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
-
-
-
-
-
-
-
-
-
-
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardSearch_send"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="@dimen/standard_16dp"
+        android:layout_marginTop="@dimen/standard_16dp"
+        android:layout_marginEnd="@dimen/standard_16dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="30dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +64,6 @@ android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Media -->
             <SearchView
                 android:id="@+id/searchView"
                 android:layout_width="match_parent"
@@ -89,20 +78,16 @@ android:layout_width="match_parent"
                 android:iconifiedByDefault="false"/>
 
         </LinearLayout>
+
     </com.google.android.material.card.MaterialCardView>
-
-
-
-
-
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_send"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="@dimen/standard_16dp"
+        android:layout_marginTop="@dimen/standard_16dp"
+        android:layout_marginEnd="@dimen/standard_16dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="30dp"
         app:layout_constraintBottom_toTopOf="@+id/card_form"
@@ -110,13 +95,11 @@ android:layout_width="match_parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardSearch_send">
 
-        <!-- Buttons -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!-- Title, secondary and supporting text -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/wallets_send_recycler_view"
                 android:layout_width="0dp"
@@ -134,10 +117,10 @@ android:layout_width="match_parent"
         android:id="@+id/card_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="@dimen/standard_16dp"
+        android:layout_marginTop="@dimen/standard_16dp"
+        android:layout_marginEnd="@dimen/standard_16dp"
+        android:layout_marginBottom="@dimen/standard_16dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -155,10 +138,10 @@ android:layout_width="match_parent"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Amount"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingBottom="8dp">
+                android:hint="@string/fragment_send_amount"
+                android:paddingStart="@dimen/standard_8dp"
+                android:paddingEnd="@dimen/standard_8dp"
+                android:paddingBottom="@dimen/standard_8dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -172,10 +155,10 @@ android:layout_width="match_parent"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Currency (Search or Select)"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingBottom="8dp">
+                android:hint="@string/fragment_send_currency_search_or_select"
+                android:paddingStart="@dimen/standard_8dp"
+                android:paddingEnd="@dimen/standard_8dp"
+                android:paddingBottom="@dimen/standard_8dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -189,10 +172,10 @@ android:layout_width="match_parent"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="To (Email or Address) "
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingBottom="8dp">
+                android:hint="@string/fragment_send_to_email_or_address"
+                android:paddingStart="@dimen/standard_8dp"
+                android:paddingEnd="@dimen/standard_8dp"
+                android:paddingBottom="@dimen/standard_8dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -200,7 +183,6 @@ android:layout_width="match_parent"
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -213,28 +195,27 @@ android:layout_width="match_parent"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Send"
+                    android:layout_marginStart="@dimen/standard_8dp"
+                    android:layout_marginEnd="@dimen/standard_8dp"
+                    android:text="@string/fragment_send_send"
                     app:icon="@drawable/ic_wallet"
                     app:strokeColor="@color/purple_custom"
-                    app:strokeWidth="2dp" />
+                    app:strokeWidth="@dimen/standard_2dp" />
 
                 <Button
                     android:id="@+id/scan_qr_code_button"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="Scan"
-                    app:icon="@drawable/ic_wallet"
+                    android:layout_marginStart="@dimen/standard_8dp"
+                    android:layout_marginEnd="@dimen/standard_8dp"
+                    android:text="@string/fragment_send_scan"
+                    app:icon="@drawable/ic_scan_qr_code"
                     app:strokeColor="@color/purple_custom"
-                    app:strokeWidth="2dp" />
-
+                    app:strokeWidth="@dimen/standard_2dp" />
             </LinearLayout>
-        </LinearLayout>
 
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 

@@ -14,9 +14,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 object SendMoney2FANetwork {
     private val logger = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -38,10 +35,6 @@ object SendMoney2FANetwork {
     private class SendMoneyCallBack(
         private val onSuccess:(SendMoney.Data) -> Unit): Callback<SendMoney.Data> {
         override fun onResponse(call: Call<SendMoney.Data>, response: Response<SendMoney.Data>) {
-            Log.e(
-                "ON Response Send Money 2FA Network:",
-                "${response.body()?.details} status: ${response.body()?.status}"
-            )
             val sendMoneyData = SendMoney.Data(
                 amount = response.body()?.amount,
                 createdAt = response.body()?.createdAt,
@@ -57,26 +50,29 @@ object SendMoney2FANetwork {
                 type = response.body()?.type,
                 updatedAt = response.body()?.updatedAt
             )
-
             Repository.sendMoneyDataObj = sendMoneyData
-            onSuccess(sendMoneyData)
+            if(response.code() == 400){
+                sendMoneyData.id = "0"
+                onSuccess(sendMoneyData)
+            }else{
+                Repository.sendMoneyDataObj = sendMoneyData
+                onSuccess(sendMoneyData)
+            }
         }
-
         override fun onFailure(call: Call<SendMoney.Data>, t: Throwable) {
             Log.e("On Failure Send Money 2FA Network:","$t")
         }
     }
-
     fun sendMoney (onSuccess: (SendMoney.Data) -> Unit){
         val token = AccessTokenProviderImp().token()?.access_token?:""
-        //var idem = LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))
-        var token2fa = Repository.token2fa
+        val token2fa = Repository.token2fa
         val accountId = Repository.sendMoneyAccountId
         val to = Repository.sendMonetTo
         val currency = Repository.sendMoneyCurrency
         val amount = Repository.sendMoneyAmount
-        Log.e("2fa NETWORK  TOKEN sms :", "$token2fa")
-        sendMoney2FAAPI.sendMoney ("Bearer $token",Repository.token2fa,accountId,"send",to,amount,currency).enqueue(
+
+        sendMoney2FAAPI.sendMoney ("Bearer $token",token2fa,accountId,
+            "send",to,amount,currency).enqueue(
             SendMoneyCallBack(onSuccess)
         )
     }

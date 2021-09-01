@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_items"
+        android:id="@+id/card_items_transaction_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_10dp"
@@ -21,39 +21,65 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/wallet_icon_image_view"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/logo" />
-
             <TextView
-                android:id="@+id/wallet_name_text"
+                android:id="@+id/transaction_id_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:typeface="sans" />
+                android:typeface="sans"
+                android:background="@android:drawable/editbox_background"/>
 
             <TextView
-                android:id="@+id/wallet_currency_text"
+                android:id="@+id/transaction_amount_currency_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:typeface="sans" />
+                android:typeface="sans"
+                android:background="@android:drawable/editbox_background"/>
 
             <TextView
-                android:id="@+id/wallet_id_text"
+                android:id="@+id/transaction_status_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:typeface="sans" />
+                android:typeface="sans"
+                android:background="@android:drawable/editbox_background"/>
+
+            <TextView
+                android:id="@+id/transaction_native_amount_currency_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="sans"
+                android:background="@android:drawable/editbox_background"/>
+
+            <TextView
+                android:id="@+id/transaction_type_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="sans"
+                android:background="@android:drawable/editbox_background"/>
+
+            <TextView
+                android:id="@+id/transaction_date_time_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="sans"
+                android:background="@android:drawable/editbox_background"/>
 
         </LinearLayout>
 

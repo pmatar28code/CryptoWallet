@@ -51,8 +51,8 @@ class WalletSendAdapter(
         fun onBind(wallet: ListAccounts.Data) {
             binding.apply {
                 walletNameText.text = wallet.name
-                walletIdText.text = wallet.id
-                walletCurrencyText.text = wallet.balance?.currency
+                walletIdText.text = "Balance: ${wallet.balance?.amount}"
+                walletCurrencyText.text = "Currency: ${wallet.balance?.currency}"
             }
         }
     }

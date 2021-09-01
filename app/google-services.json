@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "24893002063",
+    "project_id": "test-f38e3",
+    "storage_bucket": "test-f38e3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24893002063:android:6bf3824ad47257cbc2b53a",
+        "android_client_info": {
+          "package_name": "com.example.cryptowallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "24893002063-8btnlkpfgh7e02v147lcamcis4s6vbj9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-DPnjJEEy4r0qo2ZOlfm6tmiye1MjlIQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "24893002063-8btnlkpfgh7e02v147lcamcis4s6vbj9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24893002063:android:78b9c4593efc63cec2b53a",
+        "android_client_info": {
+          "package_name": "com.example.twiliotesting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "24893002063-8btnlkpfgh7e02v147lcamcis4s6vbj9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-DPnjJEEy4r0qo2ZOlfm6tmiye1MjlIQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "24893002063-8btnlkpfgh7e02v147lcamcis4s6vbj9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
