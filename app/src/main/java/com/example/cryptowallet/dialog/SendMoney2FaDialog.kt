@@ -78,7 +78,6 @@ class SendMoney2FaDialog: DialogFragment() {
         )
             .setView(binding.root)
             .setPositiveButton(getString(R.string.dialog_send)) { _, _ ->
-                Log.e("TOKEN 2FA IN REPO TEST TWILIO:", Repository.token2fa)
                 setPositiveButton(binding)
                 onItemAddedListener()
             }
