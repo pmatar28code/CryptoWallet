@@ -1,5 +1,6 @@
 package com.example.cryptowallet.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -48,11 +49,12 @@ class WalletsAdapter(
         private val binding: ItemWalletsBinding,
         private val onCLickForDetails: (ListAccounts.Data) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun onBind(wallet: ListAccounts.Data) {
             binding.apply {
                 walletNameText.text = wallet.name
-                walletIdText.text = wallet.id
-                walletCurrencyText.text = wallet.balance?.currency
+                walletIdText.text = "ID:${wallet.id}"
+                walletCurrencyText.text = "Currency: ${wallet.balance?.currency}"
             }
         }
     }

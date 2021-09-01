@@ -44,12 +44,20 @@ class TransactionsAdapter(
         @SuppressLint("SetTextI18n")
         fun onBind(transaction: ListTransactions.Data) {
             binding.apply {
-                transactionIdText.text = transaction.id.toString()
-                transactionAmountCurrencyText.text =  "${transaction.amount?.amount.toString()} / ${transaction.amount?.currency.toString()}"
-                transactionStatusText.text = transaction.status.toString()
-                transactionTypeText.text = transaction.type.toString()
-                transactionNativeAmountCurrencyText.text = "${transaction.nativeAmount?.amount.toString()} / ${transaction.nativeAmount?.currency.toString()}"
-                transactionDateTimeText.text = transaction.createdAt.toString()
+                transactionIdText.text = "ID: ${transaction.id.toString()}"
+                val amount = "Amount: ${transaction.amount?.amount.toString()} / "
+                val currency = transaction.amount?.currency.toString()
+                transactionAmountCurrencyText.text =  amount + currency
+                transactionStatusText.text = "Status: ${transaction.status.toString()}"
+                val nativeAmount = "Native Amount: ${transaction.nativeAmount?.amount.toString()} / "
+                val nativeCurrency = transaction.nativeAmount?.currency.toString()
+                if(transaction.amount?.amount.toString().contains("-")){
+                    transactionTypeText.text = "Transaction: Debited/Sent"//transaction.type.toString()
+                }else{
+                    transactionTypeText.text = "Transaction: Deposit/Received"
+                }
+                transactionNativeAmountCurrencyText.text = nativeAmount + nativeCurrency
+                transactionDateTimeText.text = "Created at: ${transaction.createdAt.toString()}"
             }
         }
     }
