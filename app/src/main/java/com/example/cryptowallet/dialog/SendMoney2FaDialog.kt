@@ -39,7 +39,7 @@ class SendMoney2FaDialog: DialogFragment() {
         val inflater = LayoutInflater.from(requireContext())
         val binding = FragmentSendMoney2faDialogBinding.inflate(inflater)
 
-        val accountSID = "ACac97259d53757508e130b6c4b62eb7da"
+        val accountSID = "AC4698942c2ff41f84319940ff2868cbdf"
         val db = Firebase.firestore
         db.collection("Twilio")
             .get()
