@@ -37,7 +37,7 @@ class SendMoney2FaDialog: DialogFragment() {
         val binding = FragmentSendMoney2faDialogBinding.inflate(inflater)
 
         val accountSID = "ACac97259d53757508e130b6c4b62eb7da"
-        val authToken = "adf29c25c63e669131df512e46eb0fc2"
+        val authToken = "101356f86bf0711babc2b9487ab4f9af"
         /*
         Need to delay, coinbase send sms to my phone, then my phone sends sms to twilio phone and
         get the sms token here. Im using twilio so that you don't have to provide your
