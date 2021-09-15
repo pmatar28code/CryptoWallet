@@ -11,6 +11,7 @@ import com.example.cryptowallet.R
 import com.example.cryptowallet.databinding.ItemWalletsBinding
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.utilities.Utility
+import java.util.*
 
 class WalletSendAdapter(
     val onCLickSetId:(ListAccounts.Data) -> Unit
@@ -57,9 +58,10 @@ class WalletSendAdapter(
         }
     }
     private fun setIcon(currency: String, holder:WalletsSendViewHolder){
+        val currencyToLowercase = currency.lowercase(Locale.getDefault())
         Utility.getInstance()?.applicationContext?.let {
             Glide.with(it)
-                .load("https://api.coinicons.net/icon/$currency/128x128")
+                .load("https://cryptoicon-api.vercel.app/api/icon/$currencyToLowercase")
                 .into(holder.itemView
                     .findViewById<ImageView>(R.id.wallet_icon_image_view))
         }
