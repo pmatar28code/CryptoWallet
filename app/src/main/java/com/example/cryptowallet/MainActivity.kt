@@ -39,12 +39,6 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(inflater)
         setContentView(binding.root)
 
-        if (allPermissionsGranted()) {
-        } else {
-            ActivityCompat.requestPermissions(
-                this,REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
-            )
-        }
         codeFromShared = EncSharedPreferences.getValueString(keyStringCode,applicationContext)
         stringTokenFromShared = EncSharedPreferences.getValueString(
             keyStringAccesskey,applicationContext
