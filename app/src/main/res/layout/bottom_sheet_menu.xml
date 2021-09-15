@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,24 +21,29 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/idBtnDismiss"
+            style="?attr/materialButtonOutlinedStyle"
+            android:id="@+id/button_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/standard_100dp"
             android:layout_below="@id/idTVCourseName"
             android:gravity="center"
-            android:text="@string/bottom_sheet_menu_cancel"
-            android:textAllCaps="false" />
+            android:text="@string/bottom_sheet_menu_logout"
+            android:textAllCaps="false"
+            app:strokeColor="@color/purple_custom"
+            app:strokeWidth="@dimen/standard_2dp"/>
 
         <Button
-            android:id="@+id/button_confirm"
+            android:id="@+id/idBtnDismiss"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/standard_10dp"
             android:layout_below="@id/idTVCourseName"
-            android:layout_toEndOf="@id/idBtnDismiss"
-            android:text="@string/bottom_sheet_menu_logout"
+            android:layout_toEndOf="@id/button_confirm"
+            android:text="@string/bottom_sheet_menu_cancel"
             android:textAllCaps="false" />
+
+
 
     </RelativeLayout>
 
