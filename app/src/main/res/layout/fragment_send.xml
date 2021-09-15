@@ -13,7 +13,7 @@ android:layout_width="match_parent"
         android:layout_marginTop="@dimen/standard_16dp"
         android:layout_marginEnd="@dimen/standard_16dp"
         app:cardCornerRadius="10dp"
-        app:cardElevation="30dp"
+        app:cardElevation="@dimen/card_elevation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -54,7 +54,7 @@ android:layout_width="match_parent"
         android:layout_marginTop="@dimen/standard_16dp"
         android:layout_marginEnd="@dimen/standard_16dp"
         app:cardCornerRadius="10dp"
-        app:cardElevation="30dp"
+        app:cardElevation="@dimen/card_elevation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardLogo_send">
@@ -72,10 +72,10 @@ android:layout_width="match_parent"
                 android:elevation="1dp"
                 android:queryHint="Search"
                 android:layout_margin="8dp"
+                android:iconifiedByDefault="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:iconifiedByDefault="false"/>
+                app:layout_constraintTop_toTopOf="parent"/>
 
         </LinearLayout>
 
@@ -89,7 +89,7 @@ android:layout_width="match_parent"
         android:layout_marginTop="@dimen/standard_16dp"
         android:layout_marginEnd="@dimen/standard_16dp"
         app:cardCornerRadius="10dp"
-        app:cardElevation="30dp"
+        app:cardElevation="@dimen/card_elevation"
         app:layout_constraintBottom_toTopOf="@+id/card_form"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +107,7 @@ android:layout_width="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -122,7 +122,7 @@ android:layout_width="match_parent"
         android:layout_marginEnd="@dimen/standard_16dp"
         android:layout_marginBottom="@dimen/standard_16dp"
         app:cardCornerRadius="10dp"
-        app:cardElevation="30dp"
+        app:cardElevation="@dimen/card_elevation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -134,8 +134,8 @@ android:layout_width="match_parent"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/outlinedTextFieldAmount"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/outlinedTextFieldAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/fragment_send_amount"
@@ -151,8 +151,8 @@ android:layout_width="match_parent"
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/outlinedTextFieldCurrency"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/outlinedTextFieldCurrency"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/fragment_send_currency_search_or_select"
@@ -168,8 +168,8 @@ android:layout_width="match_parent"
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/outlinedTextFieldTo"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/outlinedTextFieldTo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/fragment_send_to_email_or_address"
@@ -191,8 +191,8 @@ android:layout_width="match_parent"
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/send_money_button"
                     style="?attr/materialButtonOutlinedStyle"
+                    android:id="@+id/send_money_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_8dp"
@@ -203,8 +203,8 @@ android:layout_width="match_parent"
                     app:strokeWidth="@dimen/standard_2dp" />
 
                 <Button
-                    android:id="@+id/scan_qr_code_button"
                     style="?attr/materialButtonOutlinedStyle"
+                    android:id="@+id/scan_qr_code_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/standard_8dp"
