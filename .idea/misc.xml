@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/ic_exit.xml" value="0.13991228070175438" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_qr_reader.xml" value="0.23771929824561402" />
         <entry key="app/src/main/res/layout/activity_show_addresses_for_different_wallets.xml" value="0.5" />
@@ -21,9 +22,11 @@
         <entry key="app/src/main/res/layout/fragment_transactions_details_dialog.xml" value="0.12587719298245614" />
         <entry key="app/src/main/res/layout/fragment_wallet.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_wallet_details.xml" value="0.14210526315789473" />
+        <entry key="app/src/main/res/layout/header_navigation_drawer.xml" value="0.12631578947368421" />
         <entry key="app/src/main/res/layout/item_transactions.xml" value="0.11096491228070175" />
         <entry key="app/src/main/res/layout/item_wallets.xml" value="0.4166666666666667" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.10614035087719298" />
+        <entry key="app/src/main/res/menu/main_menu.xml" value="0.12631578947368421" />
       </map>
     </option>
   </component>

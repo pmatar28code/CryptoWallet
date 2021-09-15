@@ -54,7 +54,6 @@ class WalletsAdapter(
         fun onBind(wallet: ListAccounts.Data) {
             binding.apply {
                 walletNameText.text = wallet.name
-                walletIdText.text = "ID:${wallet.id}"
                 walletCurrencyText.text = "Currency: ${wallet.balance?.currency}"
             }
         }

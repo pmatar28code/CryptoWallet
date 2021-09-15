@@ -4,7 +4,9 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -38,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         val inflater = LayoutInflater.from(this)
         val binding = ActivityMainBinding.inflate(inflater)
         setContentView(binding.root)
+
+        initializeMenuDrawerAndTopAppBar(binding)
 
         codeFromShared = EncSharedPreferences.getValueString(keyStringCode,applicationContext)
         stringTokenFromShared = EncSharedPreferences.getValueString(
@@ -103,29 +107,6 @@ class MainActivity : AppCompatActivity() {
             swapFragments(ShowTransactionsFragment())
             true
         }
-        R.id.menu_other -> {
-            val dialog = BottomSheetDialog(this)
-            val view = layoutInflater.inflate(R.layout.bottom_sheet_menu, null)
-            val btnClose = view.findViewById<Button>(R.id.idBtnDismiss)
-            val btnConfirm = view.findViewById<Button>(R.id.button_confirm)
-
-            btnClose.setOnClickListener {
-                dialog.dismiss()
-            }
-            btnConfirm.setOnClickListener {
-                EncSharedPreferences.saveToEncryptedSharedPrefsString(
-                    keyStringCode,"",this@MainActivity
-                )
-                val intent = Intent(
-                    this@MainActivity, MainActivity::class.java
-                )
-                startActivity(intent)
-            }
-            dialog.setCancelable(false)
-            dialog.setContentView(view)
-            dialog.show()
-            true
-        }
         else -> false
     }
     private fun swapFragments(fragment: Fragment) {
@@ -133,5 +114,46 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.fragment_container, fragment)
             .addToBackStack("back")
             .commit()
+    }
+
+    private fun initializeMenuDrawerAndTopAppBar(binding:ActivityMainBinding){
+        binding.topAppBar.setNavigationOnClickListener {
+            binding.drawerLayout.openDrawer(Gravity.LEFT)
+        }
+
+        binding.navigationView.setNavigationItemSelectedListener { menuItem ->
+            handleDrawerMenu(menuItem)
+            menuItem.isChecked = true
+            binding.drawerLayout.closeDrawers()
+            true
+        }
+    }
+
+    private fun handleDrawerMenu(menuItem: MenuItem){
+        when(menuItem.itemId){
+            R.id.logout -> {
+                val dialog = BottomSheetDialog(this)
+                val view = layoutInflater.inflate(R.layout.bottom_sheet_menu, null)
+                val btnClose = view.findViewById<Button>(R.id.idBtnDismiss)
+                val btnConfirm = view.findViewById<Button>(R.id.button_confirm)
+
+                btnClose.setOnClickListener {
+                    dialog.dismiss()
+                }
+                btnConfirm.setOnClickListener {
+                    EncSharedPreferences.saveToEncryptedSharedPrefsString(
+                        keyStringCode,"",this@MainActivity
+                    )
+                    val intent = Intent(
+                        this@MainActivity, MainActivity::class.java
+                    )
+                    startActivity(intent)
+                }
+                dialog.setCancelable(false)
+                dialog.setContentView(view)
+                dialog.show()
+            }
+            else->false
+        }
     }
 }
