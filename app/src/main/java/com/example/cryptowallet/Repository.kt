@@ -1,5 +1,6 @@
 package com.example.cryptowallet
 
+import com.example.cryptowallet.network.classesapi.AccessToken
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.classesapi.SendMoney
 
@@ -36,4 +37,5 @@ object Repository {
     var setTransactionIdForSpecificNetworkRequest =""
     var setTransactionCurrencyForIcon=""
     var didntRequiredTwoFA = false
+    var tempAccessToken : AccessToken?= null
 }

@@ -7,12 +7,15 @@ import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.cryptowallet.MainActivity
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.adapter.TransactionsAdapter
 import com.example.cryptowallet.databinding.FragmentTransactionsDetailsDialogBinding
 import com.example.cryptowallet.network.networkcalls.ListTransactionsNetwork
+import com.example.cryptowallet.utilities.EncSharedPreferences
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.util.*
 
 class TransactionsDetailDialog:DialogFragment() {
     companion object {
@@ -32,16 +35,19 @@ class TransactionsDetailDialog:DialogFragment() {
         }
         binding.apply {
             Glide.with(requireContext())
-                .load(
-                    "https://api.coinicons.net/icon/${Repository.setTransactionCurrencyForIcon}/128x128"
+                .load("https://cryptoicon-api.vercel.app/api/icon/${
+                        Repository.setTransactionCurrencyForIcon.lowercase(
+                        Locale.getDefault()
+                    )}"
                 )
                 .into(walletTransactionDetailsImage)
                 recyclerTransactionDetailsDialog.apply {
                     ListTransactionsNetwork.getTransactions {
-                    adapter = transactionsDetailsAdapter
-                    layoutManager = LinearLayoutManager(requireContext())
-                    transactionsDetailsAdapter.submitList(it)
-                    transactionsDetailsAdapter.notifyDataSetChanged()
+                        storeMostRecentTokenInEncSharedPreferences()
+                        adapter = transactionsDetailsAdapter
+                        layoutManager = LinearLayoutManager(requireContext())
+                        transactionsDetailsAdapter.submitList(it)
+                        transactionsDetailsAdapter.notifyDataSetChanged()
                 }
             }
         }
@@ -53,5 +59,15 @@ class TransactionsDetailDialog:DialogFragment() {
 
             }
             .create()
+    }
+    private fun storeMostRecentTokenInEncSharedPreferences(){
+        val stringAccessToken = Repository.tempAccessToken?.let { accessToken ->
+            EncSharedPreferences.convertTestClassToJsonString(
+                accessToken
+            )
+        }
+        if (stringAccessToken != null) {
+            EncSharedPreferences.saveToEncryptedSharedPrefsString(MainActivity.keyStringAccesskey,stringAccessToken,requireContext())
+        }
     }
 }

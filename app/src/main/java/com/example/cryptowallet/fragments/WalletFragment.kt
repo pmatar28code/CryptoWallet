@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.cryptowallet.MainActivity
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.adapter.WalletsAdapter
@@ -12,6 +13,7 @@ import com.example.cryptowallet.databinding.FragmentWalletBinding
 import com.example.cryptowallet.dialog.WalletDetailsDialog
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
+import com.example.cryptowallet.utilities.EncSharedPreferences
 
 class WalletFragment: Fragment(R.layout.fragment_wallet) {
     companion object{
@@ -49,9 +51,20 @@ class WalletFragment: Fragment(R.layout.fragment_wallet) {
     override fun onResume() {
         super.onResume()
         ListAccountsNetwork.getAccounts {
+            storeMostRecentTokenInEncSharedPreferences()
             Repository.accounts = it as MutableList<ListAccounts.Data>
             walletAdapter?.submitList(Repository.accounts.reversed())
             walletAdapter?.notifyDataSetChanged()
+        }
+    }
+    private fun storeMostRecentTokenInEncSharedPreferences(){
+        val stringAccessToken = Repository.tempAccessToken?.let { accessToken ->
+            EncSharedPreferences.convertTestClassToJsonString(
+                accessToken
+            )
+        }
+        if (stringAccessToken != null) {
+            EncSharedPreferences.saveToEncryptedSharedPrefsString(MainActivity.keyStringAccesskey,stringAccessToken,requireContext())
         }
     }
 }

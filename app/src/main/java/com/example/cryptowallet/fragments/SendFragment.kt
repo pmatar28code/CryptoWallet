@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.cryptowallet.MainActivity
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.ScanQrActivity
@@ -22,6 +23,7 @@ import com.example.cryptowallet.network.classesapi.SendMoney
 import com.example.cryptowallet.network.networkcalls.AddressNetwork
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 import com.example.cryptowallet.network.networkcalls.SendMoneyNetwork
+import com.example.cryptowallet.utilities.EncSharedPreferences
 import java.util.*
 
 class SendFragment: Fragment(R.layout.fragment_send) {
@@ -38,6 +40,7 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         }
 
         ListAccountsNetwork.getAccounts { list ->
+            storeMostRecentTokenInEncSharedPreferences()
             listOfWallets = mutableListOf()
             for(wallet in list){
                 if(wallet.balance?.amount != "0.00000000" && wallet.balance?.amount != "0.000000"
@@ -117,6 +120,7 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         Repository.sendMoneyCurrency = binding.outlinedTextFieldCurrency.editText?.text.toString()
 
         SendMoneyNetwork.sendMoney {
+            storeMostRecentTokenInEncSharedPreferences()
             if (Repository.repoSendMoneyResponseCode == 402) {
                 Repository.repoSendMoneyResponseCode = 400
                 Toast.makeText(
@@ -167,7 +171,18 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
 
         AddressNetwork.getAddresses {
+            storeMostRecentTokenInEncSharedPreferences()
             Repository.address = it.address.toString()
+        }
+    }
+    private fun storeMostRecentTokenInEncSharedPreferences(){
+        val stringAccessToken = Repository.tempAccessToken?.let { accessToken ->
+            EncSharedPreferences.convertTestClassToJsonString(
+                accessToken
+            )
+        }
+        if (stringAccessToken != null) {
+            EncSharedPreferences.saveToEncryptedSharedPrefsString(MainActivity.keyStringAccesskey,stringAccessToken,requireContext())
         }
     }
 }

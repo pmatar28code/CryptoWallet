@@ -5,10 +5,12 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
+import com.example.cryptowallet.MainActivity
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.databinding.FragmentSendMoneyConfirmDialogBinding
 import com.example.cryptowallet.network.networkcalls.SendMoney2FANetwork
+import com.example.cryptowallet.utilities.EncSharedPreferences
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class SendMoneyConfirmDialog: DialogFragment() {
@@ -25,6 +27,7 @@ class SendMoneyConfirmDialog: DialogFragment() {
         val binding = FragmentSendMoneyConfirmDialogBinding.inflate(inflater)
         if(!Repository.didntRequiredTwoFA){
             SendMoney2FANetwork.sendMoney { sendMoneyData ->
+                storeMostRecentTokenInEncSharedPreferences()
                 binding.apply {
                     if (sendMoneyData.id == "0") {
                         sendConfirmId.text = getString(R.string.send_confirm_dialog_transaction_not_completed)
@@ -51,5 +54,16 @@ class SendMoneyConfirmDialog: DialogFragment() {
             .setPositiveButton(getString(R.string.accept_button)) { _, _ ->
             }
             .create()
+    }
+
+    private fun storeMostRecentTokenInEncSharedPreferences(){
+        val stringAccessToken = Repository.tempAccessToken?.let { accessToken ->
+            EncSharedPreferences.convertTestClassToJsonString(
+                accessToken
+            )
+        }
+        if (stringAccessToken != null) {
+            EncSharedPreferences.saveToEncryptedSharedPrefsString(MainActivity.keyStringAccesskey,stringAccessToken,requireContext())
+        }
     }
 }

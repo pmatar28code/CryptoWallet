@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.cryptowallet.MainActivity
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.adapter.WalletRequestAdapter
@@ -14,6 +15,7 @@ import com.example.cryptowallet.dialog.RequestMoneyDialog
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.networkcalls.AddressNetwork
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
+import com.example.cryptowallet.utilities.EncSharedPreferences
 import java.util.*
 
 class RequestFragment: Fragment(R.layout.fragment_request) {
@@ -25,6 +27,7 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
         val binding = FragmentRequestBinding.bind(view)
         var listOfWallets = mutableListOf<ListAccounts.Data>()
         ListAccountsNetwork.getAccounts { list ->
+            storeMostRecentTokenInEncSharedPreferences()
             listOfWallets = list.toMutableList()
             walletsRequestAdapter = WalletRequestAdapter { data ->
                 Repository.accountId = data.id.toString()
@@ -87,5 +90,15 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
     private fun updateRecyclerView(searchResultList:List<ListAccounts.Data>) {
         walletsRequestAdapter?.submitList(searchResultList)
         walletsRequestAdapter?.notifyDataSetChanged()
+    }
+    private fun storeMostRecentTokenInEncSharedPreferences(){
+        val stringAccessToken = Repository.tempAccessToken?.let { accessToken ->
+            EncSharedPreferences.convertTestClassToJsonString(
+                accessToken
+            )
+        }
+        if (stringAccessToken != null) {
+            EncSharedPreferences.saveToEncryptedSharedPrefsString(MainActivity.keyStringAccesskey,stringAccessToken,requireContext())
+        }
     }
 }

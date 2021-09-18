@@ -98,6 +98,7 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                     refresh_token = response.body()?.refresh_token ?: "",
                     scope = response.body()?.scope ?: ""
                 )
+                Repository.tempAccessToken = accessToken
                 val jsonAccessToken =
                     EncSharedPreferences.convertTestClassToJsonString(accessToken)
                 Utility.getInstance()?.applicationContext?.let {

@@ -14,13 +14,13 @@ import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.databinding.FragmentRequestMoneyDialogBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.util.*
 
 
 class RequestMoneyDialog:DialogFragment() {
     companion object {
         fun create(listener: () -> Unit): RequestMoneyDialog {
             return RequestMoneyDialog().apply {
-
             }
         }
     }
@@ -30,7 +30,10 @@ class RequestMoneyDialog:DialogFragment() {
 
         binding.apply {
                 Glide.with(requireContext())
-                    .load("https://api.coinicons.net/icon/${Repository.currency}/128x128")
+                    .load("https://cryptoicon-api.vercel.app/api/icon/${
+                        Repository.currency.lowercase(
+                        Locale.getDefault()
+                    )}")
                     .into(requestDialogIcon)
             requestDialogAddressText.text = Repository.address
             requestDialogTitleText.text = Repository.currency

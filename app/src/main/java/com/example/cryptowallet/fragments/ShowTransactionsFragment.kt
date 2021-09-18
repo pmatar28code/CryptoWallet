@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.cryptowallet.MainActivity
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.adapter.WalletRequestAdapter
@@ -13,6 +14,7 @@ import com.example.cryptowallet.databinding.FragmentShowTransactionsBinding
 import com.example.cryptowallet.dialog.TransactionsDetailDialog
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
+import com.example.cryptowallet.utilities.EncSharedPreferences
 import java.util.*
 
 class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
@@ -79,6 +81,7 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
         binding: FragmentShowTransactionsBinding, listOfWallets: MutableList<ListAccounts.Data>
     ){
         ListAccountsNetwork.getAccounts { list ->
+            storeMostRecentTokenInEncSharedPreferences()
             for(account in list){
                 if(account.balance?.amount != "0.00000000" && account.balance?.amount != "0.000000"
                     && account.balance?.amount != "0.0000" && account.balance?.amount != "0.0000000000"
@@ -90,7 +93,10 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
             walletsShowTransactionsAdapter = WalletRequestAdapter { data ->
                 Repository.setTransactionIdForSpecificNetworkRequest = data.id.toString()
                 Repository.setTransactionCurrencyForIcon = data.balance?.currency.toString()
-                Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
+                Repository.iconAddress =
+                    "https://cryptoicon-api.vercel.app/api/icon/${
+                        data.balance?.currency?.toLowerCase(Locale.ROOT)
+                }"
                 TransactionsDetailDialog.create {
 
                 }.show(parentFragmentManager,"open wallet transaction details")
@@ -103,6 +109,16 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
                 walletsShowTransactionsAdapter?.notifyDataSetChanged()
             }
             performSearch(binding,listOfWallets)
+        }
+    }
+    private fun storeMostRecentTokenInEncSharedPreferences(){
+        val stringAccessToken = Repository.tempAccessToken?.let { accessToken ->
+            EncSharedPreferences.convertTestClassToJsonString(
+                accessToken
+            )
+        }
+        if (stringAccessToken != null) {
+            EncSharedPreferences.saveToEncryptedSharedPrefsString(MainActivity.keyStringAccesskey,stringAccessToken,requireContext())
         }
     }
 }

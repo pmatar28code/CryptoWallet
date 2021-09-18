@@ -56,6 +56,10 @@ class MainActivity : AppCompatActivity() {
             stringTokenFromShared = EncSharedPreferences.getValueString(
                 keyStringAccesskey,applicationContext
             )
+            Repository.tempAccessToken = stringTokenFromShared?.let {
+                EncSharedPreferences.convertJsonStringToTestClass(
+                    it)
+            }
 
             binding.apply {
                 bottomNavigationContainer.setOnNavigationItemSelectedListener {
