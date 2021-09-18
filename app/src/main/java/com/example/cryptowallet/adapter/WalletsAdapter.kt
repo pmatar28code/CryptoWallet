@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide
 import com.example.cryptowallet.R
 import com.example.cryptowallet.databinding.ItemWalletsBinding
 import com.example.cryptowallet.network.classesapi.ListAccounts
-import com.example.cryptowallet.utilities.Utility
 import java.util.*
 
 class WalletsAdapter(

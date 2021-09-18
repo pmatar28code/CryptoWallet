@@ -5,8 +5,6 @@ import com.example.cryptowallet.MainActivity
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.network.apis.RefreshTokenApi
 import com.example.cryptowallet.network.classesapi.AccessToken
-import com.example.cryptowallet.utilities.EncSharedPreferences
-import com.example.cryptowallet.utilities.Utility
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

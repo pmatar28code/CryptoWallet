@@ -18,7 +18,6 @@ import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 import com.example.cryptowallet.network.networkcalls.UserNetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
-import com.example.cryptowallet.utilities.Utility
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -51,12 +50,10 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                 if (code.contains("?") && code.length == 106) {
                     code = code.removeRange(0, 41)
                     code = code.dropLast(1)
-                    Utility.getInstance()?.applicationContext?.let {
-                        EncSharedPreferences.saveToEncryptedSharedPrefsString(
-                            "Auth_code", code,
-                            it
-                        )
-                    }
+                    EncSharedPreferences.saveToEncryptedSharedPrefsString(
+                        "Auth_code", code,
+                        requireContext()
+                    )
                     getTokenNetworkRequest(code)
                     getUserAndListAccountsFromNetwork()
                     return true
@@ -86,7 +83,7 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
             MainActivity.CLIENT_SECRET,
             MainActivity.MY_REDIRECT_URI
         )
-        accessTokenCall?.enqueue(object : Callback<AccessToken> {
+        accessTokenCall.enqueue(object : Callback<AccessToken> {
             override fun onResponse(
                 call: Call<AccessToken>,
                 response: Response<AccessToken>
@@ -101,14 +98,13 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                 Repository.tempAccessToken = accessToken
                 val jsonAccessToken =
                     EncSharedPreferences.convertTestClassToJsonString(accessToken)
-                Utility.getInstance()?.applicationContext?.let {
-                    EncSharedPreferences.saveToEncryptedSharedPrefsString(
-                        MainActivity.keyStringAccesskey, jsonAccessToken,
-                        it
-                    )
-                }
 
+                EncSharedPreferences.saveToEncryptedSharedPrefsString(
+                    MainActivity.keyStringAccesskey, jsonAccessToken,
+                    requireContext()
+                )
             }
+
             override fun onFailure(call: Call<AccessToken>, t: Throwable) {
             }
         })
