@@ -1,5 +1,7 @@
 package com.example.cryptowallet.adapter
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -40,15 +42,17 @@ class WalletSendAdapter(
     override fun onBindViewHolder(holder: WalletsSendViewHolder, position: Int) {
         holder.onBind(getItem(position))
         holder.itemView.setOnClickListener { onCLickSetId(getItem(position)) }
+        val context = holder.itemView.context
         val currentWalletCurrency = getItem(position).balance?.currency
         if (currentWalletCurrency != null) {
-            setIcon(currentWalletCurrency,holder)
+            setIcon(context,currentWalletCurrency,holder)
         }
     }
     class WalletsSendViewHolder(
         private val binding: ItemWalletsBinding,
         private val onCLickForDetails: (ListAccounts.Data) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun onBind(wallet: ListAccounts.Data) {
             binding.apply {
                 walletNameText.text = wallet.name
@@ -57,13 +61,11 @@ class WalletSendAdapter(
             }
         }
     }
-    private fun setIcon(currency: String, holder:WalletsSendViewHolder){
+    private fun setIcon(context: Context, currency: String, holder:WalletsSendViewHolder){
         val currencyToLowercase = currency.lowercase(Locale.getDefault())
-        Utility.getInstance()?.applicationContext?.let {
-            Glide.with(it)
-                .load("https://cryptoicon-api.vercel.app/api/icon/$currencyToLowercase")
-                .into(holder.itemView
-                    .findViewById<ImageView>(R.id.wallet_icon_image_view))
-        }
+        Glide.with(context)
+            .load("https://cryptoicon-api.vercel.app/api/icon/$currencyToLowercase")
+            .into(holder.itemView
+                .findViewById<ImageView>(R.id.wallet_icon_image_view))
     }
 }
