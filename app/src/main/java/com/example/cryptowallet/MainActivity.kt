@@ -105,31 +105,35 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleDrawerMenu(menuItem: MenuItem){
-        when(menuItem.itemId){
+    private fun handleDrawerMenu(menuItem: MenuItem) {
+        when (menuItem.itemId) {
             R.id.logout -> {
-                val dialog = BottomSheetDialog(this)
-                val view = layoutInflater.inflate(R.layout.bottom_sheet_menu, null)
-                val btnClose = view.findViewById<Button>(R.id.idBtnDismiss)
-                val btnConfirm = view.findViewById<Button>(R.id.button_confirm)
-
-                btnClose.setOnClickListener {
-                    dialog.dismiss()
-                }
-                btnConfirm.setOnClickListener {
-                    EncSharedPreferences.saveToEncryptedSharedPrefsString(
-                        keyStringCode,"",this@MainActivity
-                    )
-                    val intent = Intent(
-                        this@MainActivity, MainActivity::class.java
-                    )
-                    startActivity(intent)
-                }
-                dialog.setCancelable(false)
-                dialog.setContentView(view)
-                dialog.show()
+                drawerMenuFunctionForLogout()
             }
-            else->false
+            else -> false
         }
+    }
+
+    fun drawerMenuFunctionForLogout(){
+        val dialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_menu, null)
+        val btnClose = view.findViewById<Button>(R.id.idBtnDismiss)
+        val btnConfirm = view.findViewById<Button>(R.id.button_confirm)
+
+        btnClose.setOnClickListener {
+            dialog.dismiss()
+        }
+        btnConfirm.setOnClickListener {
+            EncSharedPreferences.saveToEncryptedSharedPrefsString(
+                keyStringCode,"",this@MainActivity
+            )
+            val intent = Intent(
+                this@MainActivity, MainActivity::class.java
+            )
+            startActivity(intent)
+        }
+        dialog.setCancelable(false)
+        dialog.setContentView(view)
+        dialog.show()
     }
 }
