@@ -44,9 +44,6 @@ class MainActivity : AppCompatActivity() {
         initializeMenuDrawerAndTopAppBar(binding)
 
         codeFromShared = EncSharedPreferences.getValueString(keyStringCode,applicationContext)
-        stringTokenFromShared = EncSharedPreferences.getValueString(
-            keyStringAccesskey,applicationContext
-        )
 
         if (codeFromShared == null || codeFromShared == "") {
             binding.bottomNavigationContainer.isGone = true
@@ -54,7 +51,8 @@ class MainActivity : AppCompatActivity() {
             swapFragments(AuthorizationFragment())
         } else {
             stringTokenFromShared = EncSharedPreferences.getValueString(
-                keyStringAccesskey,applicationContext
+                keyStringAccesskey,
+                applicationContext
             )
             Repository.tempAccessToken = stringTokenFromShared?.let {
                 EncSharedPreferences.convertJsonStringToTestClass(
@@ -62,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             binding.apply {
-                bottomNavigationContainer.setOnNavigationItemSelectedListener {
+                bottomNavigationContainer.setOnItemSelectedListener {
                     handleBottomNavigation(it.itemId, binding)
                 }
             }
@@ -125,7 +123,7 @@ class MainActivity : AppCompatActivity() {
             binding.drawerLayout.openDrawer(Gravity.LEFT)
         }
 
-        binding.navigationView.setNavigationItemSelectedListener { menuItem ->
+        binding.navigationView.setNavigationItemSelectedListener  { menuItem ->
             handleDrawerMenu(menuItem)
             menuItem.isChecked = true
             binding.drawerLayout.closeDrawers()
