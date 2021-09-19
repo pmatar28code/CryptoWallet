@@ -18,7 +18,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:cardElevation="@dimen/card_elevation"
-            app:cardCornerRadius="10dp">
+            app:cardCornerRadius="@dimen/fragmentWalletDetails_CardViewCardLogoWallDetails_cornerRadius">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                 <ImageView
                     android:id="@+id/wallet_details_image"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="@dimen/fragmentWalletDetails_ImageViewDetailsImage_height"
                     android:contentDescription="@string/fragment_wallet_details_logo"
                     android:scaleType="centerCrop"
                     app:srcCompat="@drawable/logo" />
@@ -39,10 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/standard_4dp"
                     android:text="@string/fragment_wallet_details_name"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="sans"
+                    android:textAppearance="@style/TextAppearance.Body1"
                     android:textAlignment="center"
                     android:paddingStart="@dimen/standard_8dp"
                     android:paddingEnd="@dimen/standard_8dp"
@@ -55,10 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/standard_4dp"
                     android:text="@string/fragment_wallet_details_currency"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="sans"
+                    android:textAppearance="@style/TextAppearance.Body1"
                     android:textAlignment="center"
                     android:paddingStart="@dimen/standard_8dp"
                     android:paddingEnd="@dimen/standard_8dp"
@@ -71,12 +65,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/standard_4dp"
                     android:text="@string/fragment_wallet_details_amount"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="sans"
+                    android:textAppearance="@style/TextAppearance.Body1"
                     android:textAlignment="center"
-                    android:paddingStart="8dp"
+                    android:paddingStart="@dimen/fragmentWalletDetails_TextViewDetailsBalaceAmount_paddingStart"
                     android:paddingEnd="@dimen/standard_8dp"
                     android:paddingBottom="@dimen/standard_8dp"
                     android:background="@android:drawable/editbox_background"/>

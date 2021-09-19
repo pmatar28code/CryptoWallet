@@ -14,7 +14,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
     app:cardElevation="@dimen/card_elevation"
-    app:cardCornerRadius="10dp">
+    app:cardCornerRadius="@dimen/fragReqMoneyDialog_cardLogoReq_cornerRadius">
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -24,7 +24,7 @@
     <ImageView
         android:id="@+id/request_dialog_icon"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/fragReqMoneyDialog_imageView_requestDialogIcon_height"
         android:contentDescription="@string/fragment_request_money_dialog_content_description_media"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/logo" />
@@ -33,16 +33,13 @@
         android:id="@+id/request_dialog_title_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:typeface="sans"
+        android:textAppearance="@style/TextAppearance.Body1"
         android:textAlignment="center"/>
 
     <ImageView
         android:id="@+id/request_dialog_qrcode_image"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="@dimen/fragReqMoneyDialog_ImgViewQrCodeImage_height"
         android:contentDescription="@string/fragment_request_money_dialog_content_description_media"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/logo" />
@@ -50,23 +47,17 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_margin="@dimen/fragReqMoneyDialog_textView_layoutMargin"
         android:text="@string/fragment_request_money_dialog_address"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:typeface="sans"
+        android:textAppearance="@style/TextAppearance.Body1"
         android:textAlignment="center"/>
 
     <TextView
         android:id="@+id/request_dialog_address_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:typeface="sans"
+        android:layout_margin="@dimen/fragReqMoneyDialog_textView_layoutMargin"
+        android:textAppearance="@style/TextAppearance.Body1"
         android:textAlignment="center"
         android:background="@android:drawable/editbox_background"/>
 

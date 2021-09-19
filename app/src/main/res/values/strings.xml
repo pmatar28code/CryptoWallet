@@ -43,4 +43,6 @@
     <string name="fragment_show_transactions_select_for_details">Transactions(Select for Details)</string>
     <string name="bottom_nav_menu_transactions">Transactions</string>
     <string name="bottom_nav_menu_logout">Logout</string>
+    <string name="fragmentSend_searchView_hint">Search</string>
+    <string name="fragmentShowTransactions_searchView_queryHint">Search</string>
 </resources>

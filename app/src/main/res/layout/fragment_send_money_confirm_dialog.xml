@@ -28,7 +28,7 @@
                 <ImageView
                     android:id="@+id/send_confirm_dialog_logo"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="@dimen/sendMoneyConfirmDialog_imageViewConfDialogLogo_height"
                     android:contentDescription="@string/fragment_send_money_confirm_dialog_content_description_media"
                     android:scaleType="centerCrop"
                     app:srcCompat="@drawable/logo" />
@@ -37,20 +37,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/fragment_send_money_confirm_dialog_confirmation"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="sans"
+                    android:textAppearance="@style/TextAppearance.Body1"
                     android:textAlignment="center"/>
 
                 <TextView
                     android:id="@+id/send_confirm_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="sans"
+                    android:textAppearance="@style/TextAppearance.Body1"
                     android:textAlignment="center"
                     android:background="@android:drawable/editbox_background"
                     />

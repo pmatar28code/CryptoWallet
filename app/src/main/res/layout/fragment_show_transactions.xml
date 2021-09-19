@@ -8,11 +8,11 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardLogo_show_transactions"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/fragmentShowTransactions_cardViewLogoShowTrans_height"
         android:layout_marginStart="@dimen/standard_16dp"
         android:layout_marginTop="@dimen/standard_16dp"
         android:layout_marginEnd="@dimen/standard_16dp"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="@dimen/fragmentShowTransactions_cardViewLogoShowTrans_cornerRadius"
         app:cardElevation="@dimen/card_elevation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
             <ImageView
                 android:id="@+id/logo_image_show_transactions"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="@dimen/fragmentShowTransactions_imageViewShowTransact_height"
                 android:contentDescription="@string/fragment_request_content_description_media"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/logo" />
@@ -37,10 +37,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/fragment_show_transactions_select_for_details"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:typeface="sans" />
+                android:textAppearance="@style/TextAppearance.Body1"/>
 
         </LinearLayout>
 
@@ -53,7 +50,7 @@
         android:layout_marginStart="@dimen/standard_16dp"
         android:layout_marginTop="@dimen/standard_16dp"
         android:layout_marginEnd="@dimen/standard_16dp"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="@dimen/fragmentShowTransactions_cardViewShowTrans_cornerRadius"
         app:cardElevation="@dimen/card_elevation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,8 +66,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#55F5F5F5"
-                android:elevation="1dp"
-                android:queryHint="Search"
+                android:elevation="@dimen/fragmentShowTransactions_searchViewShowTransactions_elevation"
+                android:queryHint="@string/fragmentShowTransactions_searchView_queryHint"
                 android:layout_margin="@dimen/standard_8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -83,12 +80,12 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_show_transactions"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/fragmentShowTransactions_cardViewShowTransact_height"
         android:layout_marginStart="@dimen/standard_16dp"
         android:layout_marginTop="@dimen/standard_16dp"
         android:layout_marginEnd="@dimen/standard_16dp"
         android:layout_marginBottom="@dimen/standard_32dp"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="@dimen/fragmentShowTransactions_cardViewShowTransact_cornerRadius"
         app:cardElevation="@dimen/card_elevation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +100,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/wallets_show_transactions_recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="@dimen/fragmentShowTransactions_recyclerViewShowTransactions_height"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

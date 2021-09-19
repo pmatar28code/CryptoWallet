@@ -28,7 +28,7 @@
                 <ImageView
                     android:id="@+id/send_dialog_icon"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="@dimen/sendMoney2FaDialog_ImageViewSendDialogIcon_height"
                     android:contentDescription="@string/fragment_send_money2fa_dialog_content_description_media"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/two_fa" />
@@ -37,10 +37,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/fragment_send_money2fa_dialog_two_factor_authentication_token"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="sans"
+                    android:textAppearance="@style/TextAppearance.Body1"
                     android:textAlignment="center"/>
 
                 <com.google.android.material.textfield.TextInputLayout
