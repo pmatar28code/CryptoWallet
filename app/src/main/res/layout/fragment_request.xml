@@ -65,11 +65,11 @@
                 android:id="@+id/searchViewRequest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#55F5F5F5"
                 android:elevation="@dimen/fragment_request_searchViewRequest_elevation"
                 android:queryHint="Search"
                 android:layout_margin="@dimen/standard_8dp"
                 android:iconifiedByDefault="false"
+                android:paddingEnd="@dimen/standard_16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
