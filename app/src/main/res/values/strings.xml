@@ -45,4 +45,5 @@
     <string name="bottom_nav_menu_logout">Logout</string>
     <string name="fragmentSend_searchView_hint">Search</string>
     <string name="fragmentShowTransactions_searchView_queryHint">Search</string>
+    <string name="fragmentRequest_SearchViewRequest_queryHint">Search</string>
 </resources>
