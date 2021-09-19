@@ -2,21 +2,16 @@ package com.example.cryptowallet
 
 import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import com.example.cryptowallet.databinding.ActivityMainBinding
 import com.example.cryptowallet.fragments.*
-import com.example.cryptowallet.network.classesapi.AccessToken
 import com.example.cryptowallet.utilities.EncSharedPreferences
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -29,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         const val keyStringCode = "Auth_code"
         var codeFromShared:String ?= null
         var stringTokenFromShared:String ?= null
-        var accessTokenFromShared:AccessToken ?= null
 
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
@@ -67,28 +61,8 @@ class MainActivity : AppCompatActivity() {
             swapFragments(WalletFragment())
         }
     }
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
-        ContextCompat.checkSelfPermission(
-            baseContext, it) == PackageManager.PERMISSION_GRANTED
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults:
-        IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (allPermissionsGranted()) {
-            } else {
-                Toast.makeText(this,
-                    "Permissions not granted by the user.",
-                    Toast.LENGTH_SHORT).show()
-                finish()
-            }
-        }
-    }
-
     private fun handleBottomNavigation(
-        menuItemId: Int, binding: ActivityMainBinding
+        menuItemId: Int
     ): Boolean = when (menuItemId) {
 
         R.id.menu_wallet -> {
