@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
             binding.apply {
                 bottomNavigationContainer.setOnItemSelectedListener {
-                    handleBottomNavigation(it.itemId, binding)
+                    handleBottomNavigation(it.itemId)
                 }
             }
             swapFragments(WalletFragment())
