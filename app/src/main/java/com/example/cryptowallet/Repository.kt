@@ -1,8 +1,13 @@
 package com.example.cryptowallet
 
+import android.content.Context
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.cryptowallet.adapter.WalletRequestAdapter
 import com.example.cryptowallet.network.classesapi.AccessToken
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.classesapi.SendMoney
+import java.util.*
 
 object Repository {
     var userId = ""
@@ -38,4 +43,12 @@ object Repository {
     var setTransactionCurrencyForIcon=""
     var didntRequiredTwoFA = false
     var tempAccessToken : AccessToken?= null
+
+    fun setIcon(context: Context, currency: String, holder: RecyclerView.ViewHolder){
+        val currencyToLowercase = currency.lowercase(Locale.getDefault())
+        Glide.with(context)
+            .load("https://cryptoicon-api.vercel.app/api/icon/$currencyToLowercase")
+            .into(holder.itemView
+                .findViewById(R.id.wallet_icon_image_view))
+    }
 }

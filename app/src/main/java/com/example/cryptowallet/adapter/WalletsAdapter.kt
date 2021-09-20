@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cryptowallet.R
+import com.example.cryptowallet.Repository
 import com.example.cryptowallet.databinding.ItemWalletsBinding
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import java.util.*
@@ -44,7 +45,7 @@ class WalletsAdapter(
         val context = holder.itemView.context
         val currentWalletCurrency = getItem(position).balance?.currency
         if (currentWalletCurrency != null) {
-            setIcon(context,currentWalletCurrency,holder)
+            Repository.setIcon(context,currentWalletCurrency,holder)
         }
     }
     class WalletsViewHolder(
@@ -58,12 +59,5 @@ class WalletsAdapter(
                 walletCurrencyText.text = "Currency: ${wallet.balance?.currency}"
             }
         }
-    }
-    private fun setIcon(context: Context, currency: String, holder:WalletsViewHolder){
-        val currencyToLowercase = currency.lowercase(Locale.getDefault())
-        Glide.with(context)
-            .load("https://cryptoicon-api.vercel.app/api/icon/$currencyToLowercase")
-            .into(holder.itemView
-                .findViewById<ImageView>(R.id.wallet_icon_image_view))
     }
 }
