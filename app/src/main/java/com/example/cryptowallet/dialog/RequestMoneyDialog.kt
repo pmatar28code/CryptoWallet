@@ -28,44 +28,38 @@ class RequestMoneyDialog:DialogFragment() {
         val inflater = LayoutInflater.from(requireContext())
         val binding = FragmentRequestMoneyDialogBinding.inflate(inflater)
 
-        binding.apply {
-                Glide.with(requireContext())
-                    .load("https://cryptoicon-api.vercel.app/api/icon/${
-                        Repository.currency.lowercase(
-                        Locale.getDefault()
-                    )}")
-                    .into(requestDialogIcon)
-            requestDialogAddressText.text = Repository.address
-            requestDialogTitleText.text = Repository.currency
-            val urlForQr = "http://api.qrserver.com/v1/create-qr-code/?data=${Repository.address}&size=1600x1600"
-            Glide.with(requireContext())
-                .load(urlForQr)
-                .into(requestDialogQrcodeImage)
-        }
-
+        Repository.glideForRequestMoneyDialog(binding,requireContext())
+        
         return MaterialAlertDialogBuilder(
-            requireContext(),R.style.MyRounded_MaterialComponents_MaterialAlertDialog)
+            requireContext(),
+            R.style.MyRounded_MaterialComponents_MaterialAlertDialog
+        )
             .setView(binding.root)
             .setPositiveButton(getString(R.string.dialog_request)){ _, _ ->
-                val bitmapDrawable =
-                    binding.requestDialogQrcodeImage.drawable.toBitmap(1000,1000).toDrawable(resources)// get the from imageview or use your drawable from drawable folder
-
-                val bitmap1 = bitmapDrawable.bitmap
-                val imgBitmapPath = MediaStore.Images.Media.insertImage(
-                    requireContext().contentResolver,
-                    bitmap1,
-                    Repository.address,
-                    null
-                )
-                val imgBitmapUri: Uri = Uri.parse(imgBitmapPath)
-                val shareText = binding.requestDialogAddressText.text
-                val shareIntent = Intent(Intent.ACTION_SEND)
-                shareIntent.type = "*/*"
-                shareIntent.putExtra(Intent.EXTRA_STREAM, imgBitmapUri)
-                shareIntent.putExtra(Intent.EXTRA_TEXT, shareText)
-                startActivity(Intent.createChooser(shareIntent, "Share Wallpaper using"))
+                setPositiveButton(binding)
             }
             .setNegativeButton(R.string.dialog_cancel,null)
             .create()
+    }
+    private fun setPositiveButton(binding:FragmentRequestMoneyDialogBinding){
+        val bitmapDrawable =
+            binding.requestDialogQrcodeImage.drawable.toBitmap(
+                1000,
+                1000
+            ).toDrawable(resources)
+        val bitmap1 = bitmapDrawable.bitmap
+        val imgBitmapPath = MediaStore.Images.Media.insertImage(
+            requireContext().contentResolver,
+            bitmap1,
+            Repository.address,
+            null
+        )
+        val imgBitmapUri: Uri = Uri.parse(imgBitmapPath)
+        val shareText = binding.requestDialogAddressText.text
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "*/*"
+        shareIntent.putExtra(Intent.EXTRA_STREAM, imgBitmapUri)
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareText)
+        startActivity(Intent.createChooser(shareIntent, "Share Wallpaper using"))
     }
 }
