@@ -29,7 +29,7 @@ class RequestMoneyDialog:DialogFragment() {
         val binding = FragmentRequestMoneyDialogBinding.inflate(inflater)
 
         Repository.glideForRequestMoneyDialog(binding,requireContext())
-        
+
         return MaterialAlertDialogBuilder(
             requireContext(),
             R.style.MyRounded_MaterialComponents_MaterialAlertDialog
