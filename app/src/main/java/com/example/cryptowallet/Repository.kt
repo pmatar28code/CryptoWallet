@@ -3,7 +3,6 @@ package com.example.cryptowallet
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.cryptowallet.adapter.WalletRequestAdapter
 import com.example.cryptowallet.network.classesapi.AccessToken
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.classesapi.SendMoney
