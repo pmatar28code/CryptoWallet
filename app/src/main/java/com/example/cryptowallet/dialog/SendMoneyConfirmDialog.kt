@@ -12,7 +12,10 @@ import com.example.cryptowallet.databinding.FragmentSendMoneyConfirmDialogBindin
 import com.example.cryptowallet.network.networkcalls.SendMoney2FANetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SendMoneyConfirmDialog: DialogFragment() {
     companion object {
         fun create(listener: () -> Unit): SendMoneyConfirmDialog {
@@ -21,12 +24,14 @@ class SendMoneyConfirmDialog: DialogFragment() {
             }
         }
     }
+    @Inject
+    lateinit var sendMoney2FANetwork: SendMoney2FANetwork
     @SuppressLint("SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = LayoutInflater.from(requireContext())
         val binding = FragmentSendMoneyConfirmDialogBinding.inflate(inflater)
         if(!Repository.didntRequiredTwoFA){
-            SendMoney2FANetwork.sendMoney { sendMoneyData ->
+            sendMoney2FANetwork.sendMoney { sendMoneyData ->
                 storeMostRecentTokenInEncSharedPreferences()
                 binding.apply {
                     if (sendMoneyData.id == "0") {
