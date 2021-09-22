@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class RequestFragment: Fragment(R.layout.fragment_request) {
-
+    @Inject lateinit var listAccountsNetwork: ListAccountsNetwork
     @Inject lateinit var addressNetwork: AddressNetwork
     @SuppressLint("NotifyDataSetChanged")
     var walletsRequestAdapter:WalletRequestAdapter ?= null
@@ -32,7 +32,7 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentRequestBinding.bind(view)
         var listOfWallets = mutableListOf<ListAccounts.Data>()
-        ListAccountsNetwork.getAccounts { list ->
+        listAccountsNetwork.getAccounts { list ->
             storeMostRecentTokenInEncSharedPreferences()
             listOfWallets = list.toMutableList()
             walletsRequestAdapter = WalletRequestAdapter { data ->

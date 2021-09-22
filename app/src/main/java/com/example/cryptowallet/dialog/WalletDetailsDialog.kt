@@ -12,22 +12,28 @@ import com.example.cryptowallet.databinding.FragmentWalletDetailsBinding
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class WalletDetailsDialog: DialogFragment() {
     companion object {
-        fun create(listener: () -> Unit): WalletDetailsDialog {
+        fun create(
+            listener: () -> Unit
+        ): WalletDetailsDialog {
             return WalletDetailsDialog().apply {
-
             }
         }
     }
+    @Inject
+    lateinit var listAccountsNetwork: ListAccountsNetwork
 
     @SuppressLint("SetTextI18n")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = LayoutInflater.from(requireContext())
         val binding = FragmentWalletDetailsBinding.inflate(inflater)
 
-        ListAccountsNetwork.getAccounts { ListOfAccounts ->
+        listAccountsNetwork.getAccounts { ListOfAccounts ->
             storeMostRecentTokenInEncSharedPreferences()
             for(wallet in ListOfAccounts){
                 if(wallet.id == Repository.walletDetailsAccountId){

@@ -30,6 +30,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class SendFragment: Fragment(R.layout.fragment_send) {
+    @Inject lateinit var listAccountsNetwork: ListAccountsNetwork
     @Inject lateinit var addressNetwork: AddressNetwork
     private var walletSendAdapter:WalletSendAdapter?=null
     private lateinit var listOfWallets: MutableList<ListAccounts.Data>
@@ -43,7 +44,7 @@ class SendFragment: Fragment(R.layout.fragment_send) {
             startActivity(intent)
         }
 
-        ListAccountsNetwork.getAccounts { list ->
+        listAccountsNetwork.getAccounts { list ->
             storeMostRecentTokenInEncSharedPreferences()
             listOfWallets = mutableListOf()
             for(wallet in list){

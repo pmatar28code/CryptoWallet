@@ -14,12 +14,17 @@ import com.example.cryptowallet.dialog.WalletDetailsDialog
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class WalletFragment: Fragment(R.layout.fragment_wallet) {
     companion object{
         var listOfAccountsWithCondition = mutableListOf<ListAccounts.Data>()
         var walletAdapter:WalletsAdapter ?= null
     }
+    @Inject
+    lateinit var listAccountsNetwork: ListAccountsNetwork
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,7 +55,7 @@ class WalletFragment: Fragment(R.layout.fragment_wallet) {
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-        ListAccountsNetwork.getAccounts {
+        listAccountsNetwork.getAccounts {
             storeMostRecentTokenInEncSharedPreferences()
             Repository.accounts = it as MutableList<ListAccounts.Data>
             walletAdapter?.submitList(Repository.accounts.reversed())

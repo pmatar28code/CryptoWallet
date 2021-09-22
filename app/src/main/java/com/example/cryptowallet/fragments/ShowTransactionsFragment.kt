@@ -15,8 +15,11 @@ import com.example.cryptowallet.dialog.TransactionsDetailDialog
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
     @SuppressLint("NotifyDataSetChanged")
     var walletsShowTransactionsAdapter:WalletRequestAdapter ?= null
@@ -29,6 +32,8 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
 
         setVariablesAndRecyclerView(binding,listOfWallets)
     }
+    @Inject
+    lateinit var listAccountsNetwork: ListAccountsNetwork
 
     private fun performSearch(
         binding: FragmentShowTransactionsBinding, listSearch:List<ListAccounts.Data>
@@ -80,7 +85,7 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
     private fun setVariablesAndRecyclerView(
         binding: FragmentShowTransactionsBinding, listOfWallets: MutableList<ListAccounts.Data>
     ){
-        ListAccountsNetwork.getAccounts { list ->
+        listAccountsNetwork.getAccounts { list ->
             storeMostRecentTokenInEncSharedPreferences()
             for(account in list){
                 if(account.balance?.amount != "0.00000000" && account.balance?.amount != "0.000000"

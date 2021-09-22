@@ -18,6 +18,7 @@ import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 import com.example.cryptowallet.network.networkcalls.UserNetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -25,13 +26,16 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
     companion object {
         private const val MY_CLIENT_ID = "c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188"
         const val urlString = "https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&account=all&scope=wallet:accounts:read wallet:addresses:create wallet:addresses:read wallet:accounts:update wallet:accounts:create wallet:transactions:send wallet:transactions:request wallet:transactions:read&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day"
     }
+    @Inject
+    lateinit var listAccountsNetwork: ListAccountsNetwork
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -115,7 +119,7 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
             Repository.userId = data.id.toString()
             Repository.userName = data.name.toString()
 
-            ListAccountsNetwork.getAccounts {
+            listAccountsNetwork.getAccounts {
                 Repository.accounts = it as MutableList<ListAccounts.Data>
                 val intent = Intent(requireContext(),MainActivity::class.java)
                 startActivity(intent)
