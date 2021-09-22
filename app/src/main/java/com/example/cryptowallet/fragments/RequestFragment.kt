@@ -16,12 +16,18 @@ import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.networkcalls.AddressNetwork
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RequestFragment: Fragment(R.layout.fragment_request) {
+
+    @Inject lateinit var addressNetwork: AddressNetwork
     @SuppressLint("NotifyDataSetChanged")
     var walletsRequestAdapter:WalletRequestAdapter ?= null
     @SuppressLint("NotifyDataSetChanged")
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentRequestBinding.bind(view)
@@ -33,7 +39,8 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
                 Repository.accountId = data.id.toString()
                 Repository.currency = data.balance?.currency.toString()
                 Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
-                AddressNetwork.getAddresses {
+
+                addressNetwork.getAddresses {
                     Repository.address = it.address.toString()
                     RequestMoneyDialog.create {
                     }.show(parentFragmentManager, "Open Edit Recipe")

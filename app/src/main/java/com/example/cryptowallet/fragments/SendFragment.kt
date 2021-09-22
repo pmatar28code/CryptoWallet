@@ -24,9 +24,13 @@ import com.example.cryptowallet.network.networkcalls.AddressNetwork
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 import com.example.cryptowallet.network.networkcalls.SendMoneyNetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SendFragment: Fragment(R.layout.fragment_send) {
+    @Inject lateinit var addressNetwork: AddressNetwork
     private var walletSendAdapter:WalletSendAdapter?=null
     private lateinit var listOfWallets: MutableList<ListAccounts.Data>
     @SuppressLint("NotifyDataSetChanged")
@@ -170,7 +174,7 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         binding.outlinedTextFieldCurrency.editText?.setText(Repository.sendMoneyCurrency)
         Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
 
-        AddressNetwork.getAddresses {
+        addressNetwork.getAddresses {
             storeMostRecentTokenInEncSharedPreferences()
             Repository.address = it.address.toString()
         }

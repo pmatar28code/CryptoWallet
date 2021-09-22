@@ -14,7 +14,9 @@ import com.example.cryptowallet.databinding.ActivityMainBinding
 import com.example.cryptowallet.fragments.*
 import com.example.cryptowallet.utilities.EncSharedPreferences
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     companion object {
         const val MY_CLIENT_ID = "c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188"
