@@ -7,30 +7,31 @@ import com.example.cryptowallet.network.classesapi.ListTransactions
 import com.example.cryptowallet.oauth.AccessTokenProviderImp
 import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
 import com.example.cryptowallet.oauth.TokenRefreshAuthenticatorCoinBase
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Inject
 
-object ListTransactionsNetwork {
+class ListTransactionsNetwork @Inject constructor(
+    private val superNetwork: SuperNetwork
+    ) {
     private val accessTokenProvider = AccessTokenProviderImp()
-    private val logger = HttpLoggingInterceptor()
-        .setLevel(HttpLoggingInterceptor.Level.BODY )
-    private val client = OkHttpClient.Builder()
-        .addInterceptor(logger)
-        .addNetworkInterceptor(TokenAuthorizationInterceptor(accessTokenProvider))
-        .authenticator(TokenRefreshAuthenticatorCoinBase(accessTokenProvider))
-        .build()
+    private val tokenAuthorizationInterceptor =
+        TokenAuthorizationInterceptor(
+            accessTokenProvider
+        )
+    private val tokenRefreshAuthenticatorCoinBase =
+        TokenRefreshAuthenticatorCoinBase(
+            accessTokenProvider
+        )
+
+    private val client = superNetwork.buildOkHttpClient(
+        tokenAuthorizationInterceptor,
+        tokenRefreshAuthenticatorCoinBase
+    )
     private val listTransactionsApi: ListTransactionsApi
         get() {
-            return Retrofit.Builder()
-                .baseUrl("https://api.coinbase.com/")
-                .client(client)
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build()
+            return superNetwork.buildRetrofit(client)
                 .create(ListTransactionsApi::class.java)
         }
 

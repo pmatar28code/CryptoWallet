@@ -15,8 +15,11 @@ import com.example.cryptowallet.databinding.FragmentTransactionsDetailsDialogBin
 import com.example.cryptowallet.network.networkcalls.ListTransactionsNetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class TransactionsDetailDialog:DialogFragment() {
     companion object {
         fun create(listener: () -> Unit): TransactionsDetailDialog {
@@ -25,6 +28,9 @@ class TransactionsDetailDialog:DialogFragment() {
             }
         }
     }
+    @Inject
+    lateinit var listTransactionsNetwork: ListTransactionsNetwork
+
     @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = LayoutInflater.from(requireContext())
@@ -42,7 +48,7 @@ class TransactionsDetailDialog:DialogFragment() {
                 )
                 .into(walletTransactionDetailsImage)
                 recyclerTransactionDetailsDialog.apply {
-                    ListTransactionsNetwork.getTransactions {
+                    listTransactionsNetwork.getTransactions {
                         storeMostRecentTokenInEncSharedPreferences()
                         adapter = transactionsDetailsAdapter
                         layoutManager = LinearLayoutManager(requireContext())
