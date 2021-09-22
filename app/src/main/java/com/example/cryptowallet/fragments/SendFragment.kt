@@ -32,6 +32,7 @@ import javax.inject.Inject
 class SendFragment: Fragment(R.layout.fragment_send) {
     @Inject lateinit var listAccountsNetwork: ListAccountsNetwork
     @Inject lateinit var addressNetwork: AddressNetwork
+    @Inject lateinit var sendMoneyNetwork: SendMoneyNetwork
     private var walletSendAdapter:WalletSendAdapter?=null
     private lateinit var listOfWallets: MutableList<ListAccounts.Data>
     @SuppressLint("NotifyDataSetChanged")
@@ -124,7 +125,7 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         Repository.sendMonetTo = binding.outlinedTextFieldTo.editText?.text.toString()
         Repository.sendMoneyCurrency = binding.outlinedTextFieldCurrency.editText?.text.toString()
 
-        SendMoneyNetwork.sendMoney {
+        sendMoneyNetwork.sendMoney {
             storeMostRecentTokenInEncSharedPreferences()
             if (Repository.repoSendMoneyResponseCode == 402) {
                 Repository.repoSendMoneyResponseCode = 400
