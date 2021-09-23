@@ -15,6 +15,7 @@ import com.example.cryptowallet.databinding.FragmentAuthorizationBinding
 import com.example.cryptowallet.network.apis.CoinBaseClient
 import com.example.cryptowallet.network.classesapi.AccessToken
 import com.example.cryptowallet.network.classesapi.ListAccounts
+import com.example.cryptowallet.network.networkcalls.GetTokenNetwork
 import com.example.cryptowallet.network.networkcalls.ListAccountsNetwork
 import com.example.cryptowallet.network.networkcalls.UserNetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
@@ -33,9 +34,12 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
     companion object {
         private const val MY_CLIENT_ID = "c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188"
         const val urlString = "https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&account=all&scope=wallet:accounts:read wallet:addresses:create wallet:addresses:read wallet:accounts:update wallet:accounts:create wallet:transactions:send wallet:transactions:request wallet:transactions:read&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day"
+        var code: String = ""
     }
     @Inject
     lateinit var listAccountsNetwork: ListAccountsNetwork
+    @Inject lateinit var userNetwork: UserNetwork
+    @Inject lateinit var getTokenNetwork: GetTokenNetwork
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,7 +54,7 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                 view: WebView,
                 request: WebResourceRequest
             ): Boolean {
-                var code = request.url.toString()
+                code = request.url.toString()
                 if (code.contains("?") && code.length == 106) {
                     code = code.removeRange(0, 41)
                     code = code.dropLast(1)
@@ -58,7 +62,17 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                         "Auth_code", code,
                         requireContext()
                     )
-                    getTokenNetworkRequest(code)
+                    getTokenNetwork.getFirstToken {
+                        Repository.tempAccessToken = it
+                        val jsonAccessToken =
+                            EncSharedPreferences.convertTestClassToJsonString(it)
+
+                        EncSharedPreferences.saveToEncryptedSharedPrefsString(
+                            MainActivity.keyStringAccesskey, jsonAccessToken,
+                            requireContext()
+                        )
+                    }
+                    //getTokenNetworkRequest(code)
                     getUserAndListAccountsFromNetwork()
                     return true
                 }
@@ -115,7 +129,7 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
     }
 
     private fun getUserAndListAccountsFromNetwork() {
-        UserNetwork.getUser { data ->
+        userNetwork.getUser { data ->
             Repository.userId = data.id.toString()
             Repository.userName = data.name.toString()
 

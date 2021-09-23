@@ -22,6 +22,10 @@ class SuperNetwork @Inject constructor() {
         return client as OkHttpClient
     }
 
+    fun buildSimpleOkHttpClient():OkHttpClient{
+        return OkHttpClient()
+    }
+
     fun buildRetrofit(client:OkHttpClient):Retrofit{
         retrofit = Retrofit.Builder()
             .baseUrl("https://api.coinbase.com/")
