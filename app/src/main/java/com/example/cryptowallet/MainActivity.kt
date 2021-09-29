@@ -19,9 +19,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     companion object {
-        const val MY_CLIENT_ID = "c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188"
-        const val CLIENT_SECRET = "311b687baee92bbd8e584527bb757f27c9ed363f7a3922a18b381bcd4309b5b4"
-        const val MY_REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob"
+        const val MY_CLIENT_ID = BuildConfig.MY_CLIENT_ID//"c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188"
+        const val CLIENT_SECRET = BuildConfig.CLIENT_SECRET//"311b687baee92bbd8e584527bb757f27c9ed363f7a3922a18b381bcd4309b5b4"
+        const val MY_REDIRECT_URI = BuildConfig.MY_REDIRECT_URI//"urn:ietf:wg:oauth:2.0:oob"
         const val keyStringAccesskey = "Access_key"
         const val keyStringCode = "Auth_code"
         var codeFromShared:String ?= null

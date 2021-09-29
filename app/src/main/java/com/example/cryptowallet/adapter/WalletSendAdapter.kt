@@ -1,19 +1,14 @@
 package com.example.cryptowallet.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.cryptowallet.R
-import com.example.cryptowallet.Repository
 import com.example.cryptowallet.databinding.ItemWalletsBinding
 import com.example.cryptowallet.network.classesapi.ListAccounts
-import java.util.*
+import com.example.cryptowallet.utilities.setIcon
 
 class WalletSendAdapter(
     val onCLickSetId:(ListAccounts.Data) -> Unit
@@ -45,7 +40,7 @@ class WalletSendAdapter(
         val context = holder.itemView.context
         val currentWalletCurrency = getItem(position).balance?.currency
         if (currentWalletCurrency != null) {
-            Repository.setIcon(context,currentWalletCurrency,holder)
+            holder.setIcon(context, currentWalletCurrency, holder)
         }
     }
     class WalletsSendViewHolder(

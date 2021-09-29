@@ -45,14 +45,6 @@ object Repository {
     var didntRequiredTwoFA = false
     var tempAccessToken : AccessToken?= null
 
-    fun setIcon(context: Context, currency: String, holder: RecyclerView.ViewHolder){
-        val currencyToLowercase = currency.lowercase(Locale.getDefault())
-        Glide.with(context)
-            .load("https://cryptoicon-api.vercel.app/api/icon/$currencyToLowercase")
-            .into(holder.itemView
-                .findViewById(R.id.wallet_icon_image_view))
-    }
-
     fun glideForRequestMoneyDialog(
         binding: FragmentRequestMoneyDialogBinding,
         context:Context

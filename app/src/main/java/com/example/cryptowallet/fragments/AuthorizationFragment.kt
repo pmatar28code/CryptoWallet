@@ -3,11 +3,13 @@ package com.example.cryptowallet.fragments
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings.Global.getString
 import android.view.View
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
+import com.example.cryptowallet.BuildConfig
 import com.example.cryptowallet.MainActivity
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
@@ -32,8 +34,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
     companion object {
-        private const val MY_CLIENT_ID = "c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188"
-        const val urlString = "https://www.coinbase.com/oauth/authorize?client_id=$MY_CLIENT_ID&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code&account=all&scope=wallet:accounts:read wallet:addresses:create wallet:addresses:read wallet:accounts:update wallet:accounts:create wallet:transactions:send wallet:transactions:request wallet:transactions:read&meta[send_limit_amount]=1&meta[send_limit_currency]=USD&meta[send_limit_period]=day"
+        private const val MY_CLIENT_ID = BuildConfig.MY_CLIENT_ID
         var code: String = ""
     }
     @Inject
@@ -45,6 +46,12 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = FragmentAuthorizationBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
+
+        val urlString = String.format(
+            resources.getString(
+                R.string.url_string
+            ), MY_CLIENT_ID
+        )
 
         val webView: WebView = binding.webViewAuthorization
         webView.settings.javaScriptEnabled = true
