@@ -63,5 +63,7 @@
     <string name="wallets_adapter_wallets_currency_text">Currency: %1$s</string>
     <string name="wallet_send_adapter_wallet_id_text">Balance: %1$s</string>
     <string name="wallet_send_adapter_wallet_currency_text">Currency: %1$s</string>
+    <string name="repository_icon_address">https://cryptoicon-api.vercel.app/api/icon/%1$s</string>
+    <string name="repository_url_for_qr">http://api.qrserver.com/v1/create-qr-code/?data=%1$s&amp;size=1600x1600</string>
 
 </resources>

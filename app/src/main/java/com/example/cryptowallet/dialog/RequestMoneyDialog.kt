@@ -28,7 +28,7 @@ class RequestMoneyDialog:DialogFragment() {
         val inflater = LayoutInflater.from(requireContext())
         val binding = FragmentRequestMoneyDialogBinding.inflate(inflater)
 
-        Repository.glideForRequestMoneyDialog(binding,requireContext())
+        Repository.glideForRequestMoneyDialog(resources,binding,requireContext())
 
         return MaterialAlertDialogBuilder(
             requireContext(),

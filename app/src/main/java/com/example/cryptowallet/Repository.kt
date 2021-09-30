@@ -1,6 +1,7 @@
 package com.example.cryptowallet
 
 import android.content.Context
+import android.content.res.Resources
 import android.renderscript.ScriptGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -46,23 +47,26 @@ object Repository {
     var tempAccessToken : AccessToken?= null
 
     fun glideForRequestMoneyDialog(
+        resources: Resources,
         binding: FragmentRequestMoneyDialogBinding,
         context:Context
     ) {
+        val iconAddress = String.format(
+            resources.getString(
+                R.string.repository_icon_address
+            ), currency.lowercase(Locale.getDefault())
+        )
         binding.apply {
             Glide.with(context)
-                .load(
-                    "https://cryptoicon-api.vercel.app/api/icon/${
-                        currency.lowercase(
-                            Locale.getDefault()
-                        )
-                    }"
-                )
+                .load(iconAddress)
                 .into(requestDialogIcon)
             requestDialogAddressText.text = address
             requestDialogTitleText.text = currency
-            val urlForQr =
-                "http://api.qrserver.com/v1/create-qr-code/?data=$address&size=1600x1600"
+            val urlForQr = String.format(
+                resources.getString(
+                    R.string.repository_url_for_qr
+                ),address
+            )
             Glide.with(context)
                 .load(urlForQr)
                 .into(requestDialogQrcodeImage)
