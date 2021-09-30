@@ -10,6 +10,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 class AccessTokenProviderImp : AccessTokenProvider {
     var token: AccessToken?=null
@@ -24,7 +25,7 @@ class AccessTokenProviderImp : AccessTokenProvider {
     override fun refreshToken(refreshCallback: (Boolean) -> Unit) {
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl("https://api.coinbase.com/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
         val retrofit = retrofitBuilder.build()
         val refreshClient = retrofit.create(RefreshTokenApi::class.java)
         val refreshTokenCall = AccessTokenProviderImp().token()?.refresh_token?.let {
