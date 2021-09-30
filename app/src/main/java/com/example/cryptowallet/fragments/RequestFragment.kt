@@ -1,6 +1,5 @@
 package com.example.cryptowallet.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
@@ -24,9 +23,7 @@ import javax.inject.Inject
 class RequestFragment: Fragment(R.layout.fragment_request) {
     @Inject lateinit var listAccountsNetwork: ListAccountsNetwork
     @Inject lateinit var addressNetwork: AddressNetwork
-    @SuppressLint("NotifyDataSetChanged")
     var walletsRequestAdapter:WalletRequestAdapter ?= null
-    @SuppressLint("NotifyDataSetChanged")
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,7 +35,11 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
             walletsRequestAdapter = WalletRequestAdapter { data ->
                 Repository.accountId = data.id.toString()
                 Repository.currency = data.balance?.currency.toString()
-                Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
+                Repository.iconAddress = String.format(
+                    resources.getString(
+                        R.string.icon_address_request_fragment
+                    ),data.balance?.currency
+                )
 
                 addressNetwork.getAddresses {
                     Repository.address = it.address.toString()
@@ -50,7 +51,6 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
                 adapter = walletsRequestAdapter
                 layoutManager = LinearLayoutManager(context)
                 walletsRequestAdapter?.submitList(listOfWallets.toList().reversed())
-                walletsRequestAdapter?.notifyDataSetChanged()
             }
             performSearch(binding,listOfWallets)
         }
@@ -93,10 +93,8 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun updateRecyclerView(searchResultList:List<ListAccounts.Data>) {
         walletsRequestAdapter?.submitList(searchResultList)
-        walletsRequestAdapter?.notifyDataSetChanged()
     }
     private fun storeMostRecentTokenInEncSharedPreferences(){
         val stringAccessToken = Repository.tempAccessToken?.let { accessToken ->

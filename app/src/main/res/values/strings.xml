@@ -47,4 +47,6 @@
     <string name="fragmentShowTransactions_searchView_queryHint">Search</string>
     <string name="fragmentRequest_SearchViewRequest_queryHint">Search</string>
     <string name = "url_string">https://www.coinbase.com/oauth/authorize?client_id=%1$s&amp;redirect_uri=urn:ietf:wg:oauth:2.0:oob&amp;response_type=code&amp;account=all&amp;scope=wallet:accounts:read wallet:addresses:create wallet:addresses:read wallet:accounts:update wallet:accounts:create wallet:transactions:send wallet:transactions:request wallet:transactions:read&amp;meta[send_limit_amount]=1&amp;meta[send_limit_currency]=USD&amp;meta[send_limit_period]=day</string>
+    <string name="icon_address_request_fragment">https://api.coinicons.net/icon/%1$s/128x128</string>
+    <string name="icon_address_send_fragment">https://api.coinicons.net/icon/%1$s/128x128</string>
 </resources>

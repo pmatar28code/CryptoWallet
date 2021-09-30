@@ -1,8 +1,8 @@
 package com.example.cryptowallet.fragments
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
@@ -35,7 +35,7 @@ class SendFragment: Fragment(R.layout.fragment_send) {
     @Inject lateinit var sendMoneyNetwork: SendMoneyNetwork
     private var walletSendAdapter:WalletSendAdapter?=null
     private lateinit var listOfWallets: MutableList<ListAccounts.Data>
-    @SuppressLint("NotifyDataSetChanged")
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentSendBinding.bind(view)
@@ -56,7 +56,7 @@ class SendFragment: Fragment(R.layout.fragment_send) {
                 }
             }
             walletSendAdapter = WalletSendAdapter { data ->
-                sendMoneyNetworkCallBackTasks(binding,data)
+                sendMoneyNetworkCallBackTasks(binding,data,resources)
                 binding.sendMoneyButton.setOnClickListener {
                     sendMoneyButtonFunction(
                         binding,
@@ -70,7 +70,6 @@ class SendFragment: Fragment(R.layout.fragment_send) {
                 adapter = walletSendAdapter
                 layoutManager = LinearLayoutManager(context)
                 walletSendAdapter?.submitList(listOfWallets.toList().reversed())
-                walletSendAdapter?.notifyDataSetChanged()
             }
             performSearch(binding,listOfWallets)
         }
@@ -79,19 +78,19 @@ class SendFragment: Fragment(R.layout.fragment_send) {
     private fun performSearch(binding:FragmentSendBinding,listSearch:List<ListAccounts.Data>) {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                search(query,listSearch,binding)
+                search(query, listSearch)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                search(newText,listSearch,binding)
+                search(newText, listSearch)
                 return true
             }
         })
     }
 
     private fun search(
-        text: String?,listOfAccounts:List<ListAccounts.Data>,binding:FragmentSendBinding
+        text: String?, listOfAccounts: List<ListAccounts.Data>
     ) {
         val listOfAccountsToWork = listOfAccounts
         val searchResultList = mutableListOf<ListAccounts.Data>()
@@ -111,10 +110,8 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun updateRecyclerView(searchResultList:List<ListAccounts.Data>) {
         walletSendAdapter?.submitList(searchResultList)
-        walletSendAdapter?.notifyDataSetChanged()
     }
     private fun sendMoneyButtonFunction(
         binding: FragmentSendBinding,
@@ -169,12 +166,18 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         }
     }
     private fun sendMoneyNetworkCallBackTasks(
-        binding: FragmentSendBinding,data:ListAccounts.Data
+        binding: FragmentSendBinding,
+        data:ListAccounts.Data,
+        resources:Resources
     ) {
         Repository.sendMoneyAccountId = data.id.toString()
         Repository.sendMoneyCurrency = data.balance?.currency.toString()
         binding.outlinedTextFieldCurrency.editText?.setText(Repository.sendMoneyCurrency)
-        Repository.iconAddress = "https://api.coinicons.net/icon/${data.balance?.currency}/128x128"
+        Repository.iconAddress = String.format(
+            resources.getString(
+                R.string.icon_address_send_fragment
+            ),data.balance?.currency
+        )
 
         addressNetwork.getAddresses {
             storeMostRecentTokenInEncSharedPreferences()
@@ -188,7 +191,11 @@ class SendFragment: Fragment(R.layout.fragment_send) {
             )
         }
         if (stringAccessToken != null) {
-            EncSharedPreferences.saveToEncryptedSharedPrefsString(MainActivity.keyStringAccesskey,stringAccessToken,requireContext())
+            EncSharedPreferences.saveToEncryptedSharedPrefsString(
+                MainActivity.keyStringAccesskey,
+                stringAccessToken,
+                requireContext()
+            )
         }
     }
 }
