@@ -17,7 +17,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:cardElevation="30dp"
+            app:cardElevation="@dimen/card_elevation"
             app:cardCornerRadius="10dp">
 
             <LinearLayout
@@ -28,7 +28,7 @@
                 <ImageView
                     android:id="@+id/send_dialog_icon"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
+                    android:layout_height="@dimen/sendMoney2FaDialog_ImageViewSendDialogIcon_height"
                     android:contentDescription="@string/fragment_send_money2fa_dialog_content_description_media"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/two_fa" />
@@ -37,21 +37,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/fragment_send_money2fa_dialog_two_factor_authentication_token"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:typeface="sans"
+                    android:textAppearance="@style/TextAppearance.Body1"
                     android:textAlignment="center"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:id="@+id/outlinedTextField2FaToken"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="@dimen/standard_8dp"
                     android:paddingEnd="@dimen/standard_8dp"
                     android:paddingBottom="@dimen/standard_8dp"
-                    android:hint="@string/fragment_send_money2fa_dialog_two_factor_authentication_token_recieved_from_sms"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    android:hint="@string/fragment_send_money2fa_dialog_two_factor_authentication_token_recieved_from_sms">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"

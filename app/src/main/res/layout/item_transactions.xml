@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_10dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="30dp"
+        app:cardCornerRadius="@dimen/itemTransactions_CardViewItemsTransactionDetails_cornerRadius"
+        app:cardElevation="@dimen/card_elevation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,9 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:typeface="sans"
+                android:textAppearance="@style/TextAppearance.Body1LessSize"
                 android:background="@android:drawable/editbox_background"/>
 
             <TextView
@@ -36,9 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:typeface="sans"
+                android:textAppearance="@style/TextAppearance.Body1LessSize"
                 android:background="@android:drawable/editbox_background"/>
 
             <TextView
@@ -46,9 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:typeface="sans"
+                android:textAppearance="@style/TextAppearance.Body1LessSize"
                 android:background="@android:drawable/editbox_background"/>
 
             <TextView
@@ -56,9 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:typeface="sans"
+                android:textAppearance="@style/TextAppearance.Body1LessSize"
                 android:background="@android:drawable/editbox_background"/>
 
             <TextView
@@ -66,9 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:typeface="sans"
+                android:textAppearance="@style/TextAppearance.Body1LessSize"
                 android:background="@android:drawable/editbox_background"/>
 
             <TextView
@@ -76,9 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:typeface="sans"
+                android:textAppearance="@style/TextAppearance.Body1LessSize"
                 android:background="@android:drawable/editbox_background"/>
 
         </LinearLayout>

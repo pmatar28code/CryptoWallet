@@ -7,29 +7,30 @@ import com.example.cryptowallet.network.classesapi.SendMoney
 import com.example.cryptowallet.oauth.AccessTokenProviderImp
 import com.example.cryptowallet.oauth.TokenAuthorization2FAInterceptor
 import com.example.cryptowallet.oauth.TokenRefreshAuthenticator2FACoinbase
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Inject
 
-object SendMoney2FANetwork {
-    private val logger = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+class SendMoney2FANetwork @Inject constructor(
+    private val superNetwork: SuperNetwork
+) {
     private val accessTokenProvider = AccessTokenProviderImp()
-    private val client = OkHttpClient.Builder()
-        .addNetworkInterceptor(TokenAuthorization2FAInterceptor(accessTokenProvider))
-        .addInterceptor(logger)
-        .authenticator(TokenRefreshAuthenticator2FACoinbase(accessTokenProvider))
-        .build()
+    private val tokenAuthorization2FAInterceptor =
+        TokenAuthorization2FAInterceptor(
+            accessTokenProvider
+        )
+    private val tokenRefreshAuthenticator2FACoinbase =
+        TokenRefreshAuthenticator2FACoinbase(
+            accessTokenProvider
+        )
+    private val client = superNetwork.buildOkHttpClient(
+        tokenAuthorization2FAInterceptor,
+        tokenRefreshAuthenticator2FACoinbase
+    )
     private val sendMoney2FAAPI: SendMoney2FAAPI
         get(){
-            return Retrofit.Builder()
-                .baseUrl("https://api.coinbase.com/")
-                .client(client)
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build()
+            return superNetwork.buildRetrofit(client)
                 .create(SendMoney2FAAPI::class.java)
         }
     private class SendMoneyCallBack(

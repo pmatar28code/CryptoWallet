@@ -13,20 +13,27 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Inject
 
-object AddressNetwork {
+class AddressNetwork @Inject constructor(
+    private val superNetwork: SuperNetwork
+    ) {
     private val accessTokenProvider = AccessTokenProviderImp()
-    private val client = OkHttpClient.Builder()
-        .addNetworkInterceptor(TokenAuthorizationInterceptor(accessTokenProvider))
-        .authenticator(TokenRefreshAuthenticatorCoinBase(accessTokenProvider))
-        .build()
+    private val tokenAuthorizationInterceptor =
+        TokenAuthorizationInterceptor(
+        accessTokenProvider
+    )
+    private val tokenRefreshAuthenticatorCoinBase =
+        TokenRefreshAuthenticatorCoinBase(
+            accessTokenProvider
+        )
+    var client = superNetwork.buildOkHttpClient(
+        tokenAuthorizationInterceptor,
+        tokenRefreshAuthenticatorCoinBase
+        )
     private val addressApi: AddressApi
         get() {
-            return Retrofit.Builder()
-                .baseUrl("https://api.coinbase.com/")
-                .client(client)
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build()
+            return superNetwork.buildRetrofit(client)
                 .create(AddressApi::class.java)
         }
 

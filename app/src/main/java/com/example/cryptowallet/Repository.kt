@@ -1,7 +1,15 @@
 package com.example.cryptowallet
 
+import android.content.Context
+import android.content.res.Resources
+import android.renderscript.ScriptGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.cryptowallet.databinding.FragmentRequestMoneyDialogBinding
+import com.example.cryptowallet.network.classesapi.AccessToken
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.network.classesapi.SendMoney
+import java.util.*
 
 object Repository {
     var userId = ""
@@ -36,4 +44,32 @@ object Repository {
     var setTransactionIdForSpecificNetworkRequest =""
     var setTransactionCurrencyForIcon=""
     var didntRequiredTwoFA = false
+    var tempAccessToken : AccessToken?= null
+
+    fun glideForRequestMoneyDialog(
+        resources: Resources,
+        binding: FragmentRequestMoneyDialogBinding,
+        context:Context
+    ) {
+        val iconAddress = String.format(
+            resources.getString(
+                R.string.repository_icon_address
+            ), currency.lowercase(Locale.getDefault())
+        )
+        binding.apply {
+            Glide.with(context)
+                .load(iconAddress)
+                .into(requestDialogIcon)
+            requestDialogAddressText.text = address
+            requestDialogTitleText.text = currency
+            val urlForQr = String.format(
+                resources.getString(
+                    R.string.repository_url_for_qr
+                ),address
+            )
+            Glide.with(context)
+                .load(urlForQr)
+                .into(requestDialogQrcodeImage)
+        }
+    }
 }

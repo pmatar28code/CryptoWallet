@@ -23,8 +23,6 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class ScanQrActivity:AppCompatActivity() {
-    private var imageCapture: ImageCapture? = null
-
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var previewView: PreviewView
@@ -35,44 +33,10 @@ class ScanQrActivity:AppCompatActivity() {
         val binding = ActivityQrReaderBinding.inflate(inflater)
         setContentView(binding.root)
 
-        if (allPermissionsGranted()) {
-            startCamera()
-        } else {
-            ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
-        }
-
         previewView = findViewById(R.id.viewFinder)
-
         outputDirectory = getOutputDirectory()
-
         cameraExecutor = Executors.newSingleThreadExecutor()
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-        cameraProviderFuture.addListener(Runnable {
-            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-            val preview = Preview.Builder()
-                .build()
-                .also {
-                    it.setSurfaceProvider(viewFinder.surfaceProvider)
-                }
-            val analyzer = MyImageAnalyzer(supportFragmentManager)
-            val imageAnalysis = ImageAnalysis.Builder()
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build()
-            imageAnalysis.setAnalyzer(cameraExecutor, analyzer)
-
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-            try {
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview,imageAnalysis)
-            }
-            catch(exc: Exception) {
-                Log.e(TAG, "Use case binding failed", exc)
-            }
-
-        }, ContextCompat.getMainExecutor(this))
-
+        checkPermissionStartCamera()
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -83,8 +47,11 @@ class ScanQrActivity:AppCompatActivity() {
     private fun getOutputDirectory(): File {
         val mediaDir = externalMediaDirs.firstOrNull()?.let {
             File(it, resources.getString(R.string.app_name)).apply { mkdirs() } }
-        return if (mediaDir != null && mediaDir.exists())
-            mediaDir else filesDir
+        return if (mediaDir != null && mediaDir.exists()){
+            mediaDir
+        }else{
+            filesDir
+        }
     }
 
     override fun onDestroy() {
@@ -116,7 +83,6 @@ class ScanQrActivity:AppCompatActivity() {
     }
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-
         cameraProviderFuture.addListener(Runnable {
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
             val preview = Preview.Builder()
@@ -142,5 +108,17 @@ class ScanQrActivity:AppCompatActivity() {
             }
 
         }, ContextCompat.getMainExecutor(this))
+    }
+
+    private fun checkPermissionStartCamera(){
+        if (allPermissionsGranted()) {
+            startCamera()
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                REQUIRED_PERMISSIONS,
+                REQUEST_CODE_PERMISSIONS
+            )
+        }
     }
 }

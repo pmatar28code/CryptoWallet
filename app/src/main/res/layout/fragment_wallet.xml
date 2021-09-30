@@ -8,13 +8,12 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardLogo"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/fragmentWallet_CardViewCardLogo_height"
         android:layout_marginStart="@dimen/standard_16dp"
         android:layout_marginTop="@dimen/standard_16dp"
         android:layout_marginEnd="@dimen/standard_16dp"
-
         app:cardCornerRadius="10dp"
-        app:cardElevation="30dp"
+        app:cardElevation="@dimen/card_elevation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -26,7 +25,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="@dimen/fragmentWallet_imageView_height"
                 android:contentDescription="@string/fragment_wallet_content_description_media"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/logo" />
@@ -37,10 +36,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/fragment_wallet_your_wallets_click_for_details"
                 android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:typeface="sans" />
+                android:textAppearance="@style/TextAppearance.Body1"/>
 
         </LinearLayout>
 
@@ -49,13 +45,13 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/fragmentWallet_CardViewCard_height"
         android:layout_marginStart="@dimen/standard_16dp"
         android:layout_marginTop="@dimen/standard_16dp"
         android:layout_marginEnd="@dimen/standard_16dp"
         android:layout_marginBottom="@dimen/standard_32dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="30dp"
+        app:cardCornerRadius="@dimen/fragmentWallet_CardViewCard_cornerRadius"
+        app:cardElevation="@dimen/card_elevation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +64,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/wallets_recycler_view"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/fragmentWallet_RecyclerViewWalletsRecyclerView_width"
                 android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

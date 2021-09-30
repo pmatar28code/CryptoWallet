@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 
 interface ListAccountsApi {
-    @GET("v2/accounts?&limit=100")
+    @GET("v2/accounts?&limit=150")
     fun getAccounts(@Header("Authorization") token:String
     ):Call<ListAccounts>
 }

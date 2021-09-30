@@ -21,10 +21,4 @@
         android:enabled="true"
         android:icon="@drawable/ic_transactions"
         android:title="@string/bottom_nav_menu_transactions"/>
-
-    <item
-        android:id="@+id/menu_other"
-        android:enabled="true"
-        android:icon="@drawable/ic_exit"
-        android:title="@string/bottom_nav_menu_logout"/>
 </menu>

@@ -7,31 +7,30 @@ import com.example.cryptowallet.network.classesapi.SendMoney
 import com.example.cryptowallet.oauth.AccessTokenProviderImp
 import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
 import com.example.cryptowallet.oauth.TokenRefreshAuthenticatorCoinBase
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Inject
 
-
-object SendMoneyNetwork {
-    private val logger = HttpLoggingInterceptor()
-        .setLevel(HttpLoggingInterceptor.Level.BODY )
+class SendMoneyNetwork @Inject constructor(
+    private val superNetwork: SuperNetwork
+){
     private val accessTokenProvider = AccessTokenProviderImp()
-    private val client = OkHttpClient.Builder()
-        .addNetworkInterceptor(TokenAuthorizationInterceptor(accessTokenProvider))
-        .addInterceptor(logger)
-        .authenticator(TokenRefreshAuthenticatorCoinBase(accessTokenProvider))
-        .build()
+    private val tokenAuthorizationInterceptor =
+        TokenAuthorizationInterceptor(
+            accessTokenProvider
+        )
+    private val tokenRefreshAuthenticatorCoinBase =
+        TokenRefreshAuthenticatorCoinBase(
+            accessTokenProvider
+        )
+    private val client = superNetwork.buildOkHttpClient(
+        tokenAuthorizationInterceptor,
+        tokenRefreshAuthenticatorCoinBase
+    )
     private val sendMoneyApi: SendMoneyApi
         get(){
-            return Retrofit.Builder()
-                .baseUrl("https://api.coinbase.com/")
-                .client(client)
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build()
+            return superNetwork.buildRetrofit(client)
                 .create(SendMoneyApi::class.java)
         }
     private class SendMoneyCallBack(
@@ -66,7 +65,6 @@ object SendMoneyNetwork {
             Log.e("On Failure Send Money Network:","$t")
         }
     }
-
     fun sendMoney (onSuccess: (SendMoney.Data) -> Unit){
         val token = AccessTokenProviderImp().token()?.access_token?:""
         val accountId = Repository.sendMoneyAccountId

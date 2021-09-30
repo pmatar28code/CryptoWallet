@@ -2,33 +2,22 @@ package com.example.cryptowallet.oauth
 
 import android.util.Log
 import com.example.cryptowallet.MainActivity
+import com.example.cryptowallet.Repository
 import com.example.cryptowallet.network.apis.RefreshTokenApi
 import com.example.cryptowallet.network.classesapi.AccessToken
-import com.example.cryptowallet.utilities.EncSharedPreferences
-import com.example.cryptowallet.utilities.Utility
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 class AccessTokenProviderImp : AccessTokenProvider {
     var token: AccessToken?=null
     var newAccessToken: AccessToken?=null
-    val keyStringAccessKey = "Access_key"
-    val utilityApplicationContext = Utility.getInstance()?.applicationContext
 
     override fun token(): AccessToken? {
-        val stringTokenFromSharedPrefs = utilityApplicationContext?.let {
-            EncSharedPreferences.getValueString(keyStringAccessKey,
-                it
-            )
-        }
-        token = stringTokenFromSharedPrefs?.let {
-            EncSharedPreferences.convertJsonStringToTestClass(
-                it
-            )
-        }
+        token = Repository.tempAccessToken
         Log.e("RETURNED TOKEN FUN TOKEN IMP:","$token")
         return token
     }
@@ -36,7 +25,7 @@ class AccessTokenProviderImp : AccessTokenProvider {
     override fun refreshToken(refreshCallback: (Boolean) -> Unit) {
         val retrofitBuilder = Retrofit.Builder()
             .baseUrl("https://api.coinbase.com/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(MoshiConverterFactory.create())
         val retrofit = retrofitBuilder.build()
         val refreshClient = retrofit.create(RefreshTokenApi::class.java)
         val refreshTokenCall = AccessTokenProviderImp().token()?.refresh_token?.let {
@@ -58,12 +47,9 @@ class AccessTokenProviderImp : AccessTokenProvider {
                     token_type = response.body()?.token_type ?: ""
                 )
                 if (newAccessToken!!.access_token != "" && newAccessToken != null){
-                    val stringAccessToken = EncSharedPreferences.convertTestClassToJsonString(
-                        newAccessToken!!
-                    )
-                    if (utilityApplicationContext != null) {
-                        EncSharedPreferences.saveToEncryptedSharedPrefsString(keyStringAccessKey,stringAccessToken,utilityApplicationContext)
-                    }
+
+                    Repository.tempAccessToken = newAccessToken
+
                     Log.e("NEW ACCESS TOKen ADDED TO DATABASE FROM IMP", "$newAccessToken")
                     refreshCallback(true)
                 }else{

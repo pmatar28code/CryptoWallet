@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
+import com.example.cryptowallet.BuildConfig
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.databinding.FragmentSendMoney2faDialogBinding
@@ -39,7 +40,7 @@ class SendMoney2FaDialog: DialogFragment() {
         val inflater = LayoutInflater.from(requireContext())
         val binding = FragmentSendMoney2faDialogBinding.inflate(inflater)
 
-        val accountSID = "ACc27112fb4b4e922d6c19495ae01fa60b"
+        val accountSID = BuildConfig.ACCOUNT_SID
         val db = Firebase.firestore
         db.collection("Twilio")
             .get()
@@ -91,6 +92,20 @@ class SendMoney2FaDialog: DialogFragment() {
     private fun automaticallyGet2FATokenFromTwilio(
         accountSID:String,authToken:String,twoFaTokenTwilioCallback:(String) -> Unit
     ){
+        val twilioObject = object: Callback<TwilioReadMessages> {
+            override fun onResponse(
+                call: Call<TwilioReadMessages>, response: Response<TwilioReadMessages>
+            ) {
+                val theActualMessageWithToken = response.body()?.messages?.get(1)?.body.toString()
+                val actualCleanTokenFromMessage =
+                    getTheCorrectTokenMessageAndCleanIt(theActualMessageWithToken)
+                twoFaTokenTwilioCallback(actualCleanTokenFromMessage)
+            }
+            override fun onFailure(call: Call<TwilioReadMessages>, t: Throwable) {
+                Log.e("ON FAILURE","$t")
+                twoFaTokenTwilioCallback("Did not get the Token")
+            }
+        }
         val logger = HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BODY)
         val okHttpClient = OkHttpClient.Builder()
@@ -104,20 +119,7 @@ class SendMoney2FaDialog: DialogFragment() {
         val retrofit = retrofitBuilder.build()
         val twilioClient = retrofit.create(TwilioApi::class.java)
         val twilioCall = twilioClient.getMessages()
-        twilioCall.enqueue(object: Callback<TwilioReadMessages> {
-            override fun onResponse(
-                call: Call<TwilioReadMessages>, response: Response<TwilioReadMessages>
-            ) {
-                val theActualMessageWithToken = response.body()?.messages?.get(1)?.body.toString()
-                val actualCleanTokenFromMessage =
-                    getTheCorrectTokenMessageAndCleanIt(theActualMessageWithToken)
-                twoFaTokenTwilioCallback(actualCleanTokenFromMessage)
-            }
-            override fun onFailure(call: Call<TwilioReadMessages>, t: Throwable) {
-                Log.e("ON FAILURE","$t")
-                twoFaTokenTwilioCallback("Did not get the Token")
-            }
-        })
+        twilioCall.enqueue(twilioObject)
     }
     fun getTheCorrectTokenMessageAndCleanIt(theActualMessageWithToken:String):String{
         var theCorrectMessageWithToken =""

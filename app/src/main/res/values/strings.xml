@@ -43,4 +43,27 @@
     <string name="fragment_show_transactions_select_for_details">Transactions(Select for Details)</string>
     <string name="bottom_nav_menu_transactions">Transactions</string>
     <string name="bottom_nav_menu_logout">Logout</string>
+    <string name="fragmentSend_searchView_hint">Search</string>
+    <string name="fragmentShowTransactions_searchView_queryHint">Search</string>
+    <string name="fragmentRequest_SearchViewRequest_queryHint">Search</string>
+    <string name = "url_string">https://www.coinbase.com/oauth/authorize?client_id=%1$s&amp;redirect_uri=urn:ietf:wg:oauth:2.0:oob&amp;response_type=code&amp;account=all&amp;scope=wallet:accounts:read wallet:addresses:create wallet:addresses:read wallet:accounts:update wallet:accounts:create wallet:transactions:send wallet:transactions:request wallet:transactions:read&amp;meta[send_limit_amount]=1&amp;meta[send_limit_currency]=USD&amp;meta[send_limit_period]=day</string>
+    <string name="icon_address_request_fragment">https://api.coinicons.net/icon/%1$s/128x128</string>
+    <string name="icon_address_send_fragment">https://api.coinicons.net/icon/%1$s/128x128</string>
+    <string name ="icon_address_show_transactions_fragment">https://cryptoicon-api.vercel.app/api/icon/%1$s</string>
+    <string name="transactions_details_dialog_icon_address">"https://cryptoicon-api.vercel.app/api/icon/%1$s</string>
+    <string name="transaction_adapter_transaction_id_text">ID: %1$s</string>
+    <string name="transaction_adapter_amount">Amount: %1$s / </string>
+    <string name="transaction_adapter_transaction_status_text">Status: %1$s</string>
+    <string name="transaction_adapter_native_amount">Native Amount: %1$s / "</string>
+    <string name="transaction_adapter_transaction_type_sent_debited">Transaction: Debited/Sent</string>
+    <string name="transaction_adapter_transaction_type_received_deposit">Transaction: Deposit/Received</string>
+    <string name="transaction_adapter_transaction_day_time_text">Created at: %1$s</string>
+    <string name="wallet_request_adapter_wallet_id_text">Balance: %1$s</string>
+    <string name="wallet_request_adapter_wallet_currency_text">Currency: %1$s</string>
+    <string name="wallets_adapter_wallets_currency_text">Currency: %1$s</string>
+    <string name="wallet_send_adapter_wallet_id_text">Balance: %1$s</string>
+    <string name="wallet_send_adapter_wallet_currency_text">Currency: %1$s</string>
+    <string name="repository_icon_address">https://cryptoicon-api.vercel.app/api/icon/%1$s</string>
+    <string name="repository_url_for_qr">http://api.qrserver.com/v1/create-qr-code/?data=%1$s&amp;size=1600x1600</string>
+
 </resources>
