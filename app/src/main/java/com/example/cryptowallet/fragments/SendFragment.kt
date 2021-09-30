@@ -55,7 +55,7 @@ class SendFragment: Fragment(R.layout.fragment_send) {
                     listOfWallets.add(wallet)
                 }
             }
-            walletSendAdapter = WalletSendAdapter { data ->
+            walletSendAdapter = WalletSendAdapter(resources) { data ->
                 sendMoneyNetworkCallBackTasks(binding,data,resources)
                 binding.sendMoneyButton.setOnClickListener {
                     sendMoneyButtonFunction(

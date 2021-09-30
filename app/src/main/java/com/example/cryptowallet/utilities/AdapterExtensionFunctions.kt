@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cryptowallet.R
 import com.example.cryptowallet.adapter.TransactionsAdapter
 import com.example.cryptowallet.adapter.WalletRequestAdapter
+import com.example.cryptowallet.adapter.WalletSendAdapter
 import com.example.cryptowallet.adapter.WalletsAdapter
 
 fun RecyclerView.ViewHolder.setIcon(context: Context, currency: String, holder: RecyclerView.ViewHolder){
@@ -35,6 +36,15 @@ fun WalletRequestAdapter.WalletsRequestViewHolder.setStringFromStringResources(
 }
 
 fun WalletsAdapter.WalletsViewHolder.setStringFromStringResources(
+    resources: Resources,
+    stringResource:Int,
+    stringPlaceholder:String
+):String{
+
+    return String.format(resources.getString(stringResource),stringPlaceholder)
+}
+
+fun WalletSendAdapter.WalletsSendViewHolder.setStringFromStringResources(
     resources: Resources,
     stringResource:Int,
     stringPlaceholder:String
