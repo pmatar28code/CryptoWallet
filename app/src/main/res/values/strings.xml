@@ -58,4 +58,6 @@
     <string name="transaction_adapter_transaction_type_sent_debited">"Transaction: Debited/Sent"</string>
     <string name="transaction_adapter_transaction_type_received_deposit">"Transaction: Deposit/Received"</string>
     <string name="transaction_adapter_transaction_day_time_text">"Created at: %1$s</string>
+    <string name="wallet_request_adapter_wallet_id_text">"Balance: %1$s</string>
+    <string name="wallet_request_adapter_wallet_currency_text">"Currency: %1$s</string>
 </resources>

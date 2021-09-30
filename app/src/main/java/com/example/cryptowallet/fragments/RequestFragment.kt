@@ -32,7 +32,7 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
         listAccountsNetwork.getAccounts { list ->
             storeMostRecentTokenInEncSharedPreferences()
             listOfWallets = list.toMutableList()
-            walletsRequestAdapter = WalletRequestAdapter { data ->
+            walletsRequestAdapter = WalletRequestAdapter(resources) { data ->
                 Repository.accountId = data.id.toString()
                 Repository.currency = data.balance?.currency.toString()
                 Repository.iconAddress = String.format(

@@ -89,7 +89,7 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
                 }
 
             }
-            walletsShowTransactionsAdapter = WalletRequestAdapter { data ->
+            walletsShowTransactionsAdapter = WalletRequestAdapter(resources) { data ->
                 Repository.setTransactionIdForSpecificNetworkRequest = data.id.toString()
                 Repository.setTransactionCurrencyForIcon = data.balance?.currency.toString()
                 Repository.iconAddress = String.format(
