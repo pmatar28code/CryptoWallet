@@ -33,19 +33,7 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
             storeMostRecentTokenInEncSharedPreferences()
             listOfWallets = list.toMutableList()
             walletsRequestAdapter = WalletRequestAdapter(resources) { data ->
-                Repository.accountId = data.id.toString()
-                Repository.currency = data.balance?.currency.toString()
-                Repository.iconAddress = String.format(
-                    resources.getString(
-                        R.string.icon_address_request_fragment
-                    ),data.balance?.currency
-                )
-
-                addressNetwork.getAddresses {
-                    Repository.address = it.address.toString()
-                    RequestMoneyDialog.create {
-                    }.show(parentFragmentManager, "Open Edit Recipe")
-                }
+                walletRequestAdapterActions(data)
             }
             binding.walletsRequestRecyclerView.apply{
                 adapter = walletsRequestAdapter
@@ -104,6 +92,22 @@ class RequestFragment: Fragment(R.layout.fragment_request) {
         }
         if (stringAccessToken != null) {
             EncSharedPreferences.saveToEncryptedSharedPrefsString(MainActivity.keyStringAccesskey,stringAccessToken,requireContext())
+        }
+    }
+
+    private fun walletRequestAdapterActions(data:ListAccounts.Data){
+        Repository.accountId = data.id.toString()
+        Repository.currency = data.balance?.currency.toString()
+        Repository.iconAddress = String.format(
+            resources.getString(
+                R.string.icon_address_request_fragment
+            ),data.balance?.currency
+        )
+
+        addressNetwork.getAddresses {
+            Repository.address = it.address.toString()
+            RequestMoneyDialog.create {
+            }.show(parentFragmentManager, "Open Edit Recipe")
         }
     }
 }
