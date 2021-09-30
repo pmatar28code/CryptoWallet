@@ -9,12 +9,10 @@ import android.view.LayoutInflater
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
-import com.bumptech.glide.Glide
 import com.example.cryptowallet.R
 import com.example.cryptowallet.Repository
 import com.example.cryptowallet.databinding.FragmentRequestMoneyDialogBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.util.*
 
 
 class RequestMoneyDialog:DialogFragment() {

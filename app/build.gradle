@@ -31,11 +31,13 @@ android {
             buildConfigField "String", "MY_CLIENT_ID", "\"c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188\""
             buildConfigField "String", "CLIENT_SECRET", "\"311b687baee92bbd8e584527bb757f27c9ed363f7a3922a18b381bcd4309b5b4\""
             buildConfigField "String", "MY_REDIRECT_URI", "\"urn:ietf:wg:oauth:2.0:oob\""
+            buildConfigField "String", "ACCOUNT_SID", "\"ACc27112fb4b4e922d6c19495ae01fa60b\""
         }
         release {
             buildConfigField "String", "MY_CLIENT_ID", "\"c77416def5b58698219596f44ecf6236658c426805a522d517f45867b0348188\""
             buildConfigField "String", "CLIENT_SECRET", "\"311b687baee92bbd8e584527bb757f27c9ed363f7a3922a18b381bcd4309b5b4\""
             buildConfigField "String", "MY_REDIRECT_URI", "\"urn:ietf:wg:oauth:2.0:oob\""
+            buildConfigField "String", "ACCOUNT_SID", "\"ACc27112fb4b4e922d6c19495ae01fa60b\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

@@ -34,10 +34,10 @@ class SendMoneyConfirmDialog: DialogFragment() {
             sendMoney2FANetwork.sendMoney { sendMoneyData ->
                 storeMostRecentTokenInEncSharedPreferences()
                 binding.apply {
-                    if (sendMoneyData.id == "0") {
-                        sendConfirmId.text = getString(R.string.send_confirm_dialog_transaction_not_completed)
+                    sendConfirmId.text = if (sendMoneyData.id == "0") {
+                        getString(R.string.send_confirm_dialog_transaction_not_completed)
                     } else {
-                        sendConfirmId.text = getString(R.string.send_confirm_dialog_transaction_successful)
+                        getString(R.string.send_confirm_dialog_transaction_successful)
                     }
                 }
             }
