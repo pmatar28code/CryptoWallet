@@ -36,16 +36,19 @@ class TransactionsDetailDialog:DialogFragment() {
         val inflater = LayoutInflater.from(requireContext())
         val binding = FragmentTransactionsDetailsDialogBinding.inflate(inflater)
 
-        val transactionsDetailsAdapter = TransactionsAdapter{
+        val transactionsDetailsAdapter =TransactionsAdapter(resources){
 
         }
+
         binding.apply {
+            val iconAddress = String.format(
+                resources.getString(
+                    R.string.transactions_details_dialog_icon_address
+                ),Repository.setTransactionCurrencyForIcon.lowercase(
+                Locale.getDefault()
+            ))
             Glide.with(requireContext())
-                .load("https://cryptoicon-api.vercel.app/api/icon/${
-                        Repository.setTransactionCurrencyForIcon.lowercase(
-                        Locale.getDefault()
-                    )}"
-                )
+                .load(iconAddress)
                 .into(walletTransactionDetailsImage)
                 recyclerTransactionDetailsDialog.apply {
                     listTransactionsNetwork.getTransactions {
