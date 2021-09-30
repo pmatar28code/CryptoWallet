@@ -31,7 +31,7 @@ class WalletFragment: Fragment(R.layout.fragment_wallet) {
 
         justWalletAccountsWithCurrencyBTCAndWLUNA()
 
-        walletAdapter = WalletsAdapter {
+        walletAdapter = WalletsAdapter(resources) {
             Repository.walletDetailsAccountId = it.id.toString()
             WalletDetailsDialog.create {
             }.show(parentFragmentManager,"to open wallet details dialog")
