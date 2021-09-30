@@ -82,12 +82,9 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
         listAccountsNetwork.getAccounts { list ->
             storeMostRecentTokenInEncSharedPreferences()
             for(account in list){
-                if(account.balance?.amount != "0.00000000" && account.balance?.amount != "0.000000"
-                    && account.balance?.amount != "0.0000" && account.balance?.amount != "0.0000000000"
-                    && account.balance?.amount != "0.000000000" && account.balance?.amount != "0.0000000"){
+                if(!account.balance?.amount?.matches("^[0][.0]*".toRegex())!!){
                     listOfWallets.add(account)
                 }
-
             }
             walletsShowTransactionsAdapter = WalletRequestAdapter(resources) { data ->
                 Repository.setTransactionIdForSpecificNetworkRequest = data.id.toString()

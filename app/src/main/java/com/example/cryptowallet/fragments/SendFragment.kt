@@ -49,9 +49,7 @@ class SendFragment: Fragment(R.layout.fragment_send) {
             storeMostRecentTokenInEncSharedPreferences()
             listOfWallets = mutableListOf()
             for(wallet in list){
-                if(wallet.balance?.amount != "0.00000000" && wallet.balance?.amount != "0.000000"
-                    && wallet.balance?.amount != "0.0000" && wallet.balance?.amount != "0.0000000000"
-                    && wallet.balance?.amount != "0.000000000" && wallet.balance?.amount != "0.0000000"){
+                if(!wallet.balance?.amount?.matches("^[0][.0]*".toRegex())!!){
                     listOfWallets.add(wallet)
                 }
             }
