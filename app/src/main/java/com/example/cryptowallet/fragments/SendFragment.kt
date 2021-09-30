@@ -125,43 +125,9 @@ class SendFragment: Fragment(R.layout.fragment_send) {
         sendMoneyNetwork.sendMoney {
             storeMostRecentTokenInEncSharedPreferences()
             if (Repository.repoSendMoneyResponseCode == 402) {
-                Repository.repoSendMoneyResponseCode = 400
-                Toast.makeText(
-                    requireContext,
-                    "Two Factor Was Required",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Repository.didntRequiredTwoFA = false
-                SendMoney2FaDialog.create {
-                    SendMoneyConfirmDialog.create {
-
-                    }.show(parentFragmentManager, "From Send Money to Send Confirm")
-                }.show(parentFragmentManager, "To Send 2Fa Dialog")
+                sendMoneyNetworkIf(requireContext)
             } else {
-                Repository.didntRequiredTwoFA = true
-                Repository.sendMoneyDataObj = SendMoney.Data(
-                    amount = it.amount,
-                    createdAt = it.createdAt,
-                    description = it.description,
-                    details = it.details,
-                    id = it.id,
-                    nativeAmount = it.nativeAmount,
-                    network = it.network,
-                    resource = it.resource,
-                    resourcePath = it.resourcePath,
-                    status = it.status,
-                    to = it.to,
-                    type = it.type,
-                    updatedAt = it.updatedAt
-                )
-                SendMoneyConfirmDialog.create {
-                }.show(parentFragmentManager, "From Send Money to Send Confirm")
-
-                Toast.makeText(
-                    requireContext,
-                    "TWO FACTOR ID NOT REQUIRED ${it.createdAt}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                sendMoneyNetworkElse(requireContext,it)
             }
         }
     }
@@ -197,6 +163,47 @@ class SendFragment: Fragment(R.layout.fragment_send) {
                 requireContext()
             )
         }
+    }
+
+    private fun sendMoneyNetworkIf(requireContext: Context){
+        Repository.repoSendMoneyResponseCode = 400
+        Toast.makeText(
+            requireContext,
+            "Two Factor Was Required",
+            Toast.LENGTH_SHORT
+        ).show()
+        Repository.didntRequiredTwoFA = false
+        SendMoney2FaDialog.create {
+            SendMoneyConfirmDialog.create {
+
+            }.show(parentFragmentManager, "From Send Money to Send Confirm")
+        }.show(parentFragmentManager, "To Send 2Fa Dialog")
+    }
+    private fun sendMoneyNetworkElse(requireContext: Context,it:SendMoney.Data){
+        Repository.didntRequiredTwoFA = true
+        Repository.sendMoneyDataObj = SendMoney.Data(
+            amount = it.amount,
+            createdAt = it.createdAt,
+            description = it.description,
+            details = it.details,
+            id = it.id,
+            nativeAmount = it.nativeAmount,
+            network = it.network,
+            resource = it.resource,
+            resourcePath = it.resourcePath,
+            status = it.status,
+            to = it.to,
+            type = it.type,
+            updatedAt = it.updatedAt
+        )
+        SendMoneyConfirmDialog.create {
+        }.show(parentFragmentManager, "From Send Money to Send Confirm")
+
+        Toast.makeText(
+            requireContext,
+            "TWO FACTOR ID NOT REQUIRED ${it.createdAt}",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
 
