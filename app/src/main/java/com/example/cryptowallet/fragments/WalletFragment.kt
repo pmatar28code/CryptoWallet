@@ -1,6 +1,5 @@
 package com.example.cryptowallet.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -25,7 +24,7 @@ class WalletFragment: Fragment(R.layout.fragment_wallet) {
     }
     @Inject
     lateinit var listAccountsNetwork: ListAccountsNetwork
-    @SuppressLint("NotifyDataSetChanged")
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentWalletBinding.bind(view)
@@ -41,8 +40,6 @@ class WalletFragment: Fragment(R.layout.fragment_wallet) {
             adapter = walletAdapter
             layoutManager = LinearLayoutManager(requireContext())
             walletAdapter!!.submitList(Repository.accounts.reversed())
-            walletAdapter!!.notifyDataSetChanged()
-
         }
     }
     private fun justWalletAccountsWithCurrencyBTCAndWLUNA(){
@@ -52,14 +49,12 @@ class WalletFragment: Fragment(R.layout.fragment_wallet) {
             }
         }
     }
-    @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
         listAccountsNetwork.getAccounts {
             storeMostRecentTokenInEncSharedPreferences()
             Repository.accounts = it as MutableList<ListAccounts.Data>
             walletAdapter?.submitList(Repository.accounts.reversed())
-            walletAdapter?.notifyDataSetChanged()
         }
     }
     private fun storeMostRecentTokenInEncSharedPreferences(){
@@ -69,7 +64,11 @@ class WalletFragment: Fragment(R.layout.fragment_wallet) {
             )
         }
         if (stringAccessToken != null) {
-            EncSharedPreferences.saveToEncryptedSharedPrefsString(MainActivity.keyStringAccesskey,stringAccessToken,requireContext())
+            EncSharedPreferences.saveToEncryptedSharedPrefsString(
+                MainActivity.keyStringAccesskey,
+                stringAccessToken,
+                requireContext()
+            )
         }
     }
 }

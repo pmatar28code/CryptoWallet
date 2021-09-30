@@ -1,6 +1,5 @@
 package com.example.cryptowallet.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
@@ -21,7 +20,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
-    var walletsShowTransactionsAdapter:WalletRequestAdapter ?= null
+    private var walletsShowTransactionsAdapter:WalletRequestAdapter ?= null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,20 +39,19 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
         binding.searchViewShowTransactions.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                search(query,listSearch,binding)
+                search(query, listSearch)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                search(newText,listSearch,binding)
+                search(newText, listSearch)
                 return true
             }
         })
     }
 
     private fun search(
-        text: String?,listOfAccounts:List<ListAccounts.Data>,
-        binding: FragmentShowTransactionsBinding
+        text: String?, listOfAccounts: List<ListAccounts.Data>
     ){
         val listOfAccountsToWork = listOfAccounts
         val searchResultList = mutableListOf<ListAccounts.Data>()
