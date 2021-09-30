@@ -21,9 +21,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
-    @SuppressLint("NotifyDataSetChanged")
     var walletsShowTransactionsAdapter:WalletRequestAdapter ?= null
-    @SuppressLint("NotifyDataSetChanged")
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentShowTransactionsBinding.bind(view)
@@ -75,13 +74,10 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun updateRecyclerView(searchResultList:List<ListAccounts.Data>) {
         walletsShowTransactionsAdapter?.submitList(searchResultList)
-        walletsShowTransactionsAdapter?.notifyDataSetChanged()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun setVariablesAndRecyclerView(
         binding: FragmentShowTransactionsBinding, listOfWallets: MutableList<ListAccounts.Data>
     ){
@@ -98,10 +94,14 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
             walletsShowTransactionsAdapter = WalletRequestAdapter { data ->
                 Repository.setTransactionIdForSpecificNetworkRequest = data.id.toString()
                 Repository.setTransactionCurrencyForIcon = data.balance?.currency.toString()
-                Repository.iconAddress =
-                    "https://cryptoicon-api.vercel.app/api/icon/${
-                        data.balance?.currency?.toLowerCase(Locale.ROOT)
-                }"
+                Repository.iconAddress = String.format(
+                    resources.getString(
+                        R.string.icon_address_show_transactions_fragment
+                    ),
+                    data.balance?.currency?.lowercase(Locale.getDefault()
+                    )
+                )
+
                 TransactionsDetailDialog.create {
 
                 }.show(parentFragmentManager,"open wallet transaction details")
@@ -111,7 +111,6 @@ class ShowTransactionsFragment: Fragment(R.layout.fragment_show_transactions) {
                 adapter = walletsShowTransactionsAdapter
                 layoutManager = LinearLayoutManager(context)
                 walletsShowTransactionsAdapter?.submitList(listOfWallets.toList().reversed())
-                walletsShowTransactionsAdapter?.notifyDataSetChanged()
             }
             performSearch(binding,listOfWallets)
         }
