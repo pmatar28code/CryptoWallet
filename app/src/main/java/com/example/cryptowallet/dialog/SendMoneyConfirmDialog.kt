@@ -44,10 +44,10 @@ class SendMoneyConfirmDialog: DialogFragment() {
         }else{
             Repository.didntRequiredTwoFA = false
                 binding.apply {
-                    if (Repository.sendMoneyDataObj.id == null) {
-                        sendConfirmId.text = getString(R.string.send_confirm_dialog_transaction_not_completed)
+                    sendConfirmId.text = if (Repository.sendMoneyDataObj.id == null) {
+                        getString(R.string.send_confirm_dialog_transaction_not_completed)
                     } else {
-                        sendConfirmId.text = getString(R.string.send_confirm_dialog_transaction_successful)
+                        getString(R.string.send_confirm_dialog_transaction_successful)
                     }
                 }
         }
