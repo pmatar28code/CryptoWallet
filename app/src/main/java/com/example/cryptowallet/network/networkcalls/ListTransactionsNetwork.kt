@@ -2,7 +2,7 @@ package com.example.cryptowallet.network.networkcalls
 
 import android.util.Log
 import com.example.cryptowallet.Repository
-import com.example.cryptowallet.network.apis.ListTransactionsApi
+import com.example.cryptowallet.network.apis.Apis
 import com.example.cryptowallet.network.classesapi.ListTransactions
 import com.example.cryptowallet.oauth.AccessTokenProviderImp
 import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
@@ -29,10 +29,9 @@ class ListTransactionsNetwork @Inject constructor(
         tokenAuthorizationInterceptor,
         tokenRefreshAuthenticatorCoinBase
     )
-    private val listTransactionsApi: ListTransactionsApi
+    private val apis: Apis
         get() {
             return superNetwork.buildRetrofit(client)
-                .create(ListTransactionsApi::class.java)
         }
 
     private class TransactionsCallBack(
@@ -58,6 +57,6 @@ class ListTransactionsNetwork @Inject constructor(
     fun getTransactions(onSuccess: (List<ListTransactions.Data>) -> Unit) {
         val token = AccessTokenProviderImp().token()?.access_token ?: ""
         val accountId = Repository.setTransactionIdForSpecificNetworkRequest
-        listTransactionsApi.getTransactions("Bearer $token",accountId).enqueue(TransactionsCallBack(onSuccess))
+        apis.getTransactions("Bearer $token",accountId).enqueue(TransactionsCallBack(onSuccess))
     }
 }

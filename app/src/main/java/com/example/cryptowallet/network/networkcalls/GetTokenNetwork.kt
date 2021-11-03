@@ -3,7 +3,7 @@ package com.example.cryptowallet.network.networkcalls
 import android.util.Log
 import com.example.cryptowallet.MainActivity
 import com.example.cryptowallet.fragments.AuthorizationFragment
-import com.example.cryptowallet.network.apis.CoinBaseClient
+import com.example.cryptowallet.network.apis.Apis
 import com.example.cryptowallet.network.classesapi.AccessToken
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,10 +14,9 @@ class GetTokenNetwork @Inject constructor(
    private val superNetwork: SuperNetwork
 ) {
     private val client = superNetwork.buildSimpleOkHttpClient()
-    private val coinBaseClient:CoinBaseClient
+    private val apis: Apis
     get() {
         return superNetwork.buildRetrofit(client)
-            .create(CoinBaseClient::class.java)
     }
 
     private class TokenCallBack(
@@ -46,7 +45,7 @@ class GetTokenNetwork @Inject constructor(
         val clientSecret =  MainActivity.CLIENT_SECRET
         val redirectUri = MainActivity.MY_REDIRECT_URI
 
-        coinBaseClient.getToken(
+        apis.getToken(
             grantType,
             code,
             clientId,

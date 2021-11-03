@@ -2,17 +2,14 @@ package com.example.cryptowallet.network.networkcalls
 
 import android.util.Log
 import com.example.cryptowallet.Repository
-import com.example.cryptowallet.network.apis.AddressApi
+import com.example.cryptowallet.network.apis.Apis
 import com.example.cryptowallet.network.classesapi.NAddress
 import com.example.cryptowallet.oauth.AccessTokenProviderImp
 import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
 import com.example.cryptowallet.oauth.TokenRefreshAuthenticatorCoinBase
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Inject
 
 class AddressNetwork @Inject constructor(
@@ -31,10 +28,9 @@ class AddressNetwork @Inject constructor(
         tokenAuthorizationInterceptor,
         tokenRefreshAuthenticatorCoinBase
         )
-    private val addressApi: AddressApi
+    private val apis: Apis
         get() {
             return superNetwork.buildRetrofit(client)
-                .create(AddressApi::class.java)
         }
 
     private class AddressCallBack(
@@ -62,7 +58,7 @@ class AddressNetwork @Inject constructor(
     fun getAddresses(onSuccess: (NAddress.Data) -> Unit) {
         val token = AccessTokenProviderImp().token()?.access_token ?: ""
         val accountId = Repository.accountId
-        addressApi.getAddress("Bearer $token", accountId).enqueue(AddressCallBack(onSuccess))
+        apis.getAddress("Bearer $token", accountId).enqueue(AddressCallBack(onSuccess))
     }
 }
 

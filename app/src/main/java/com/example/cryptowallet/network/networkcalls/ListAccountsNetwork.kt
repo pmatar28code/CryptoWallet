@@ -1,7 +1,7 @@
 package com.example.cryptowallet.network.networkcalls
 
 import android.util.Log
-import com.example.cryptowallet.network.apis.ListAccountsApi
+import com.example.cryptowallet.network.apis.Apis
 import com.example.cryptowallet.network.classesapi.ListAccounts
 import com.example.cryptowallet.oauth.AccessTokenProviderImp
 import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
@@ -27,10 +27,9 @@ class ListAccountsNetwork @Inject constructor(
         tokenAuthorizationInterceptor,
         tokenRefreshAuthenticatorCoinBase
     )
-    private val listAccountsApi: ListAccountsApi
+    private val apis: Apis
         get() {
             return superNetwork.buildRetrofit(client)
-                .create(ListAccountsApi::class.java)
         }
 
     private class AccountsCallBack(
@@ -50,6 +49,6 @@ class ListAccountsNetwork @Inject constructor(
 
     fun getAccounts(onSuccess: (List<ListAccounts.Data>) -> Unit) {
         val token = AccessTokenProviderImp().token()?.access_token ?: ""
-        listAccountsApi.getAccounts("Bearer $token").enqueue(AccountsCallBack(onSuccess))
+        apis.getAccounts("Bearer $token").enqueue(AccountsCallBack(onSuccess))
     }
 }

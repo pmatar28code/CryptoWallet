@@ -2,7 +2,7 @@ package com.example.cryptowallet.network.networkcalls
 
 import android.util.Log
 import com.example.cryptowallet.Repository
-import com.example.cryptowallet.network.apis.SendMoneyApi
+import com.example.cryptowallet.network.apis.Apis
 import com.example.cryptowallet.network.classesapi.SendMoney
 import com.example.cryptowallet.oauth.AccessTokenProviderImp
 import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
@@ -28,10 +28,9 @@ class SendMoneyNetwork @Inject constructor(
         tokenAuthorizationInterceptor,
         tokenRefreshAuthenticatorCoinBase
     )
-    private val sendMoneyApi: SendMoneyApi
+    private val apis: Apis
         get(){
             return superNetwork.buildRetrofit(client)
-                .create(SendMoneyApi::class.java)
         }
     private class SendMoneyCallBack(
         private val onSuccess:(SendMoney.Data) -> Unit): Callback<SendMoney.Data> {
@@ -72,7 +71,7 @@ class SendMoneyNetwork @Inject constructor(
         val currency = Repository.sendMoneyCurrency
         val amount = Repository.sendMoneyAmount
 
-        sendMoneyApi.sendMoney (token,accountId,"send",to,amount,currency).enqueue(
+        apis.sendMoney (token,accountId,"send",to,amount,currency).enqueue(
             SendMoneyCallBack(onSuccess)
         )
     }

@@ -1,17 +1,14 @@
 package com.example.cryptowallet.network.networkcalls
 
 import android.util.Log
-import com.example.cryptowallet.network.apis.CoinBaseClientApiCalls
+import com.example.cryptowallet.network.apis.Apis
 import com.example.cryptowallet.network.classesapi.UserData
 import com.example.cryptowallet.oauth.AccessTokenProviderImp
 import com.example.cryptowallet.oauth.TokenAuthorizationInterceptor
 import com.example.cryptowallet.oauth.TokenRefreshAuthenticatorCoinBase
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Inject
 
 class UserNetwork @Inject constructor(
@@ -30,10 +27,9 @@ class UserNetwork @Inject constructor(
         accessTokenInterceptor,
         tokenRefreshAuthenticatorCoinBase
     )
-    private val coinBaseClientApiCalls: CoinBaseClientApiCalls
+    private val apis: Apis
         get(){
             return superNetwork.buildRetrofit(client)
-                .create(CoinBaseClientApiCalls::class.java)
         }
 
     private class UserCallBack(
@@ -59,6 +55,6 @@ class UserNetwork @Inject constructor(
     fun getUser (onSuccess: (UserData.Data) -> Unit){
         val token = accessTokenProvider.token()?.access_token ?:""
 
-        coinBaseClientApiCalls.getUser("Bearer $token").enqueue(UserCallBack(onSuccess)) //getUser(token).enqueue(AddressCallBack(onSuccess))
+        apis.getUser("Bearer $token").enqueue(UserCallBack(onSuccess)) //getUser(token).enqueue(AddressCallBack(onSuccess))
     }
 }
