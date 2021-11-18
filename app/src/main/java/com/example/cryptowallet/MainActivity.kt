@@ -1,6 +1,7 @@
 package com.example.cryptowallet
 
 import android.Manifest
+import android.content.ContentProvider
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +10,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.webkit.CookieManager
-import android.webkit.CookieSyncManager
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
@@ -17,11 +17,15 @@ import androidx.fragment.app.Fragment
 import com.example.cryptowallet.databinding.ActivityMainBinding
 import com.example.cryptowallet.fragments.*
 import com.example.cryptowallet.network.networkcalls.LogoutNetwork
+import com.example.cryptowallet.network.networkcalls.UserNetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import android.webkit.ValueCallback
+import android.webkit.CookieSyncManager
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -146,9 +150,9 @@ class MainActivity : AppCompatActivity() {
             )
             Repository.tempAccessToken = null
 
-            //logoutNetwork.logout {
-              //  Log.e("LOGOUT:", it.toString())
-           // }
+            logoutNetwork.logout {
+                Log.e("LOGOUT:", it.toString())
+            }
             CookieSyncManager.createInstance(this)
             val cookieManager = CookieManager.getInstance()
             cookieManager.removeAllCookie()
