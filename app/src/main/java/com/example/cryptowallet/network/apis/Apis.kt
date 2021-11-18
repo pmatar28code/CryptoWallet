@@ -72,4 +72,10 @@ interface Apis {
         @Field("amount")amount:String,
         @Field("currency")currency:String,//BTC
     ): Call<SendMoney.Data>
+
+    @Headers("Accept: application/json")
+    @GET("oauth/revoke")
+    fun logout(@Header("Authorization") token:String
+    ):Call<Any>
+
 }

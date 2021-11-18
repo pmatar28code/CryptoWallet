@@ -1,20 +1,27 @@
 package com.example.cryptowallet
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.webkit.CookieManager
+import android.webkit.CookieSyncManager
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import com.example.cryptowallet.databinding.ActivityMainBinding
 import com.example.cryptowallet.fragments.*
+import com.example.cryptowallet.network.networkcalls.LogoutNetwork
 import com.example.cryptowallet.utilities.EncSharedPreferences
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -30,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }
+    @Inject
+    lateinit var logoutNetwork: LogoutNetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,13 +119,13 @@ class MainActivity : AppCompatActivity() {
     private fun handleDrawerMenu(menuItem: MenuItem) {
         when (menuItem.itemId) {
             R.id.logout -> {
-                drawerMenuFunctionForLogout()
+                drawerMenuFunctionForLogout(this)
             }
             else -> false
         }
     }
 
-    fun drawerMenuFunctionForLogout(){
+    fun drawerMenuFunctionForLogout(context:Context){
         val dialog = BottomSheetDialog(this)
         val view = layoutInflater.inflate(R.layout.bottom_sheet_menu, null)
         val btnClose = view.findViewById<Button>(R.id.idBtnDismiss)
@@ -129,6 +138,22 @@ class MainActivity : AppCompatActivity() {
             EncSharedPreferences.saveToEncryptedSharedPrefsString(
                 keyStringCode,"",this@MainActivity
             )
+            codeFromShared = ""
+            EncSharedPreferences.saveToEncryptedSharedPrefsString(
+                keyStringAccesskey,
+                "",
+                this@MainActivity
+            )
+            Repository.tempAccessToken = null
+
+            //logoutNetwork.logout {
+              //  Log.e("LOGOUT:", it.toString())
+           // }
+            CookieSyncManager.createInstance(this)
+            val cookieManager = CookieManager.getInstance()
+            cookieManager.removeAllCookie()
+
+            findViewById<BottomNavigationView>(R.id.bottom_navigation_container).isGone = true
             val intent = Intent(
                 this@MainActivity, MainActivity::class.java
             )
