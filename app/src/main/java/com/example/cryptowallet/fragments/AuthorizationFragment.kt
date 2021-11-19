@@ -68,8 +68,9 @@ class AuthorizationFragment: Fragment(R.layout.fragment_authorization) {
                             MainActivity.keyStringAccesskey, jsonAccessToken,
                             requireContext()
                         )
+                        getUserAndListAccountsFromNetwork()
                     }
-                    getUserAndListAccountsFromNetwork()
+
                     return true
                 }
                 return false
